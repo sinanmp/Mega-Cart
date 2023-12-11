@@ -1,0 +1,347 @@
+<header>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+  <!-- Jumbotron -->
+  <div class="px-2 nav-div text-center"
+    style="background-color: #392539 !important ;justify-content: center; height: 70px;">
+
+    <div class="container-fluid">
+      <div class="row gy-3">
+        <!-- Left elements -->
+        <div class="col-lg-2 col-sm-4 col-4">
+          <a href="/" class="float-start">
+            <h2 style="font-weight: 400;color: #ffff; font-family: 'Jockey One', sans-serif;"><span
+                style="font-family: 'Itim', cursive; ">M</span>ega<span
+                style="color: #BF7DC1; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; font-weight: 400;">Cart.</span>
+            </h2>
+          </a>
+        </div>
+        <!-- Left elements -->
+
+        <!-- Center elements -->
+        <!-- Center elements -->
+
+        <!-- Right elements -->
+        <div class="col-lg-5 col-md-12 col-12" style="visibility: hidden;">
+          <div class="input-group float-center">
+            <div class="form-outline bg-white" style="border-radius: 5px;">
+              <input type="search" id="form1" class="form-control" />
+              <label class="form-label" for="form1">Search</label>
+            </div>
+            <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Right elements -->
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+
+</header>
+<style>
+    body{
+          background: #cd9cf2;
+          background: -webkit-radial-gradient(center, ellipse cover, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+          background: radial-gradient(ellipse at center,rgb(207, 176, 231),rgba(246, 243, 255, 1)); 
+          
+        }
+</style>
+
+<body>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" />
+
+  <title>Account Details</title>
+  <section style=" min-height: 100vh;">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4 ">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <style>
+      
+        .modal-container {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          display: none;
+          z-index: 1;
+          width: 100%;
+        }
+      </style>
+      <% if(users && users.length> 0 && users[0].address && users[0].address.length > 0) {%>
+        <div class="modal-container" id="allAddresses" style="width: 600px;">
+          <div class="modal-content">
+
+            <button class="btn btn-danger mt-3 close-btn" style="z-index: 5; position: fixed;"
+              onclick="hideAllAddresses()">Close</button>
+            <% for(let i=0; i<users[0].address.length; i++) { %>
+
+              <div class="card mb-4">
+                <div style="display: flex; justify-content: right;">
+                  <a href="/update/address?id=<%=users[0].address[i]._id %>&pos=<%=a  %>"
+                    style="margin-top: 10px; margin-right: 10px; font-size: 20px;">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </a>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Address <%= i + 1 %>
+                  </h5>
+                  <p class="card-text">Locality: <%= users[0].address[i].locality %>
+                  </p>
+                  <p class="card-text">Country: <%= users[0].address[i].country %>
+                  </p>
+                  <p class="card-text">District: <%= users[0].address[i].district %>
+                  </p>
+                  <p class="card-text">State: <%= users[0].address[i].state %>
+                  </p>
+                  <p class="card-text">City: <%= users[0].address[i].city %>
+                  </p>
+                  <p class="card-text">Alternate Number: <%= users[0].address[i].altr_number %>
+                  </p>
+                  <p class="card-text">Pincode: <%= users[0].address[i].postcode %>
+                  </p>
+                  <!-- Add other address fields as needed -->
+                </div>
+                <div style="display: flex; width: 100%; justify-content: end; gap: 10px;">
+                  <a href="/changeIndex/api?email=<%=users[0].email %>&position=<%= i %>">
+                    <button style="width: 50px; height: 20px; font-size: 10px; margin-bottom: 10px;">Choose</button>
+                  </a>
+                  <a href="/address/delete?email=<%=users[0].email%>&id=<%=users[0].address[i]._id %>">
+                    <i style="margin-right: 20px; margin-bottom: 15px;" class="fa-solid fa-trash border"></i>
+                  </a>
+                </div>
+
+              </div>
+              <% } %>
+
+          </div>
+        </div>
+        <% } %>
+
+
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="card mb-4" style="height: 500px;">
+                <div class="card-body text-center">
+                  <h5 class="my-3">
+                    <%=users[0].username.toUpperCase()%>
+                  </h5>
+                  <p class="text-muted mb-1"></p>
+                  <br>
+                  <div class="d-flex justify-content-center mb-2">
+                    <% if(users[0].verified==false){ %>
+                      <a href="/user/verify?email=<%=users[0].email%>">
+                        <button type="button" class="btn btn-danger">Verify Your Email now</button>
+                      </a>
+                      <% }else{ %>
+                        <div class="verified-container mb-5">
+                          <span class="tick-icon">&#10004;</span> <!-- Unicode character for checkmark -->
+                          <span>Verified</span>
+                        </div>
+                        <% } %>
+                          <% if(users[0].block=='true' ){ %>
+                            <button type="button" style="height: 40px;" class="btn btn-danger ms-4">User
+                              Blocked</button>
+                            <% } %>
+                  </div>
+                  <div class="d-flex flex-column">
+                    <a href="/wallet" class="border-bottom text-dark-50" style="margin-bottom: 35px;"><i class="fa-solid fa-wallet"></i> Wallet</a>
+                    <a href="/user/orders" class="border-bottom" style="margin-bottom: 35px; color:  rgb(8, 8, 192);"><i class="fa fa-shopping-cart" aria-hidden="true"></i></i> My Orders</a>
+                    <a href="" class="border-bottom text-dark-50" style="margin-bottom: 35px; color: rgb(8, 8, 192);"><i class="fa-solid fa-gear"></i> Settings</a>
+                    <a href="/address/api?id=<%=users[0]._id  %>&email=<%=users[0].email %>"
+                      class="border-bottom tempor" style="margin-bottom: 35px; color: rgb(8, 8, 192);"><i style="color: rgb(8, 8, 192);" class="fa-solid fa-plus"></i> Add address</a>
+                    <a href="/api/logout">
+                      <button type="button" class="btn mb-2" style="background-color: #cd9cf2; color: white;">Logout</button>
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="card mb-4 mb-lg-0">
+
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="card mb-4" style="height: 500px;">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Full Name</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%=users[0].username %> <a
+                            href="/update/passCheck?email=<%=users[0].email %>&username=<%=users[0].username  %>"><i
+                              style="margin-left: 70px;" class="fa-regular fa-pen-to-square"></i></a>
+                      </p>
+
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%=users[0].email %>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Phone</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%=users[0].mobile %> <a
+                            href="/update/passCheck?email=<%=users[0].email %>&mobile=<%=users[0].mobile  %>"><i
+                              style="margin-left: 70px;" class="fa-regular fa-pen-to-square"></i></a>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div>
+
+                      <p class="mb-2" style="font-weight: 700;">Address <%= users[0].address.length===0?'':Number(a)+1
+                          %>
+                      </p>
+
+                      <!-- Display only the first address initially -->
+                      <% if(users && users.length> 0 && users[0].address && users[0].address.length > 0){ %>
+                        <div style="display: block; width: 300px; height: 200px;" class="border">
+
+                          <p class="text-muted mb-0" style="margin-left: 10px; font-size: 15px; margin-top: 5px;">locality :
+                            <%=users[0].address[a].locality %><br>Country : <%=users[0].address[a].country %>
+                                <br>District : <%=users[0].address[a]. district %><br>State:
+                                  <%=users[0].address[a].state %><br>City : <%=users[0].address[a].city %><br>Number :
+                                      <%=users[0].address[a].altr_number %><br>Pincode : <%=users[0].address[a].postcode
+                                          %><br>House No : <%=users[0].address[a].house_No
+                                           %>
+                          </p>
+
+                        </div>
+
+                        <% if(users[0].address.length>1){ %>
+                          <div class="col-md-12">
+                            <button class="btn" style="margin-top: 10px; margin-left: 120px;"
+                              onclick="showAllAddresses()">Show All Addresses <i class="fa-solid fa-eye"></i></button>
+                            <% }else{ %>
+                              <div style="display: flex; justify-content: end; width: 280px;">
+                                <a href="/address/delete?email=<%=users[0].email%>&id=<%=users[0].address[0]._id %>"
+                                  style="margin-top: -25px; text-decoration: none; color: gray; margin-right: 0px; font-size: 20px">
+                                  <i style="margin-right: 20px; margin-bottom: 15px;"
+                                    class="fa-solid fa-trash border"></i>
+                                </a>
+                                <a href="/update/address?id=<%=users[0].address[0]._id %>&pos=<%=a %>"
+                                  style="margin-top: -25px; margin-right: 10px; color: gray; font-size: 20px;">
+                                  <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                              </div>
+                              <% } %>
+                          </div>
+                          <% }else{ %>
+                            <a href="/address/api?id=<%=users[0]._id  %>&email=<%=users[0].email %>"
+                              class="border-bottom tempor" style="margin-bottom: 35px; color: black;"><i style="color: rgb(8, 8, 192);" class="fa-solid fa-plus"></i> Add address</a>
+                            <% } %>
+                    </div>
+                    
+                    <style>
+                      /* Center the modal */
+                      .modal-container {
+
+                        align-items: center;
+                        justify-content: center;
+                        height: 100vh;
+                      }
+
+                      body {
+                        height: 100vh;
+                      }
+
+                      /* Style for the modal content */
+                      .modal-content {
+                        background-color: white;
+                        padding: 20px;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                        max-height: 80vh;
+                        /* Set maximum height for scrolling */
+                        overflow-y: auto;
+                        /* Enable vertical scrolling */
+                      }
+
+                      /* Close button style */
+                      .close-btn {
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                      }
+
+                      body.fixed {
+                        overflow: hidden;
+                      }
+                    </style>
+
+                    <script>
+                      function showAllAddresses() {
+                        document.getElementById('allAddresses').style.display = 'flex';
+                        document.body.classList.add('fixed');
+                      }
+
+                      function hideAllAddresses() {
+                        document.getElementById('allAddresses').style.display = 'none';
+                        document.body.classList.remove('fixed');
+                      }
+                    </script>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+    </div>
+  </section>
+ 
+  <style>
+    body {
+      height: 100%;
+    }
+
+    .h-btn:hover {
+      background-color: blue;
+      color: white;
+    }
+
+    .verified-container {
+      display: flex;
+      align-items: center;
+      color: green;
+      font-weight: bold;
+    }
+
+    .tick-icon {
+      margin-right: 5px;
+    }
+  </style>
+
+</body>

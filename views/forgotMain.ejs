@@ -1,0 +1,263 @@
+<title>Mega Login</title>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mega Cart</title>
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <!--Main Navigation-->
+  <header>
+    <!-- Jumbotron -->
+    <div class="px-2 nav-div text-center"
+      style="background-color: #392539 !important ;justify-content: center; height: 70px;">
+
+      <div class="container-fluid">
+        <div class="row gy-3">
+          <!-- Left elements -->
+          <div class="col-lg-2 col-sm-4 col-4">
+            <a href="/" class="float-start">
+              <h2 style="font-weight: 400;color: #ffff; font-family: 'Jockey One', sans-serif;"><span
+                  style="font-family: 'Itim', cursive; ">M</span>ega<span
+                  style="color: #BF7DC1; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; font-weight: 400;">Cart.</span>
+              </h2>
+            </a>
+          </div>
+        </div>
+        <!-- Center elements -->
+
+        <!-- Right elements -->
+        <div class="col-lg-5 col-md-12 col-12" style="visibility: hidden;">
+          <div class="input-group float-center">
+            <div class="form-outline bg-white" style="border-radius: 5px;">
+              <input type="search" id="form1" class="form-control" />
+              <label class="form-label" for="form1">Search</label>
+            </div>
+            <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Right elements -->
+      </div>
+    </div>
+    </div>
+    <!-- Jumbotron -->
+
+  </header>
+
+  <div style="height: 86vh">
+    <section class="vh-86 gradient-custom">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card  text-dark" style="border-radius: 1rem;">
+              <div class="card-body p-4 text-center" style="height: 440px;">
+
+                <div class="mb-md-5 mt-md-4 pb-5">
+
+                  <div id="successModal" class="modal">
+                    <div class="modal-content">
+                      <a href="/login">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                      </a>
+                      <p>Password changed successfully!</p>
+                    </div>
+                  </div>
+
+
+
+                  <h2 class="fw-bold  mb-2">Chage Your Password</h2>
+                  <p class="text-dark-50 mb-5">Please enter password and conform password !</p>
+                  <% if (error==true && seccess==false){ %>
+                    <form action="/main/forgotPass?email=<%= email %>" method="post">
+                      <% } else { %>
+                        <form action="/main/forgotPass?email=<%= email %>" method="post" onsubmit="openSuccessModal();">
+                          <% } %>
+
+                            <div class="mb-5">
+                              <input type="password" id="typeEmailX" name="password" placeholder="Enter New Password"
+                                class="form-control form-control-lg"
+                                style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                            </div>
+
+                            <div class="mb-5">
+                              <input type="password" id="typePasswordX" name="conformpass"
+                                class="form-control form-control-lg" placeholder="Enter conform Password"
+                                style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                            </div>
+                            <% if(error){ %>
+                              <p style="color: red; margin-top: -40px;">Password and Conform Password is not Matching
+                              </p>
+                              <% } %>
+                                <button class="btn btn-lg px-5 mb-3" type="submit">Change</button>
+                        </form>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="text-center text-white"
+    style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">
+    <span style="opacity: .7; font-size: 13px; margin-bottom: 30px; margin-top: -30px;"> © 2020 Copyright:</span>
+    <a class="text-white" href="https://mdbootstrap.com/" style="opacity: .7; font-size: 12px;">MegaCart</a>
+  </footer>
+
+
+
+  <script>
+    // Get the modal
+    var successModal = document.getElementById('successModal');
+
+    // Function to display the modal
+    function openSuccessModal() {
+      successModal.style.display = 'block';
+    }
+
+    // Function to close the modal
+    function closeModal() {
+      successModal.style.display = 'none';
+    }
+
+  </script>
+
+  <!-- Footer -->
+
+  <!-- End of .container -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+  <script>
+
+
+
+  </script>
+</body>
+
+</html>
+
+
+<style>
+  .card-body {
+    height: 500px;
+    border-radius: 40px;
+    border: 0px solid #000;
+    background: #FFF;
+    box-shadow: 1px 11 100px rgba(0, 0, 0, 0.07);
+
+  }
+
+  .login {
+    color: #777;
+    text-align: center;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  .btn {
+    background-color: #392539;
+    color: white;
+    border-radius: 30px;
+  }
+
+  .btn:hover {
+    background-color: #392539;
+    color: white;
+  }
+
+  .nav-div {
+    height: 80px;
+  }
+
+  @media (max-width: 760px) {
+    .nav-div {
+      height: 60px;
+    }
+
+    .width-user {
+      visibility: hidden;
+    }
+
+    footer {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      bottom: 0;
+      position: fixed;
+    }
+  }
+
+  @media (min-width: 760px) and (max-width: 990px) {
+    .nav-div {
+      height: 70px;
+    }
+
+  }
+
+  footer {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    bottom: 0;
+    position: fixed;
+  }
+</style>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color: black;
+  }
+</style>

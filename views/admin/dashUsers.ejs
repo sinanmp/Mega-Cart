@@ -1,0 +1,115 @@
+<link rel="stylesheet" href="css/admindash.css">
+
+
+
+<%- include('include2/adminbase') %>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" />
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+
+            <div>
+
+                <input type="text" name="name" placeholder="Search Here" id="name-search" style="width: 30%;
+            padding: .6em 1em;
+            margin: .5em 0;
+            border: 1px solid gray;
+            font-family: 'Barlow', sans-serif;
+            font-size: 1em;
+            border-radius: 10px;">
+                <i class="fa fa-search"></i>
+            </div>
+
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Users List</h3>
+                        <i class='bx bx-search'></i>
+                        <i class='bx bx-filter'></i>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th> No &nbsp;&nbsp;&nbsp;</th>
+                                <th>Username</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let i=0; i < users.length; i++) { %>
+                                <tr style="border-bottom: .4px solid gray; cursor: pointer;"
+                                    onclick="userDetails('<%=users[i]._id%>')">
+                                    <td></td>
+                                    <td style="color: blue;">
+                                        <%=i+1%>
+                                    </td>
+                                    <td>
+                                        <%=users[i].username %>
+                                    </td>
+                                    <td>
+                                        <%=users[i].mobile%>
+                                    </td>
+                                    <td>
+                                        <%=users[i].email%>
+                                    </td>
+                                    <td>
+                                        <% if(users[i].status=='Active' ){ %>
+                                            <button class="btn btn-success" style="width: 100px;">
+                                                <%=users[i].status %>
+                                            </button>
+                                            <% }else{ %>
+                                                <button class="btn" style="width: 100px; border: 2px solid gray;">
+                                                    <%=users[i].status %>
+                                                </button>
+                                                <% } %>
+                                    </td>
+
+                                    <% if(users[i].block=="true" ){ %>
+                                        <td><a href="/api/block/?email=<%=users[i].email%>"><button type="button"
+                                                    style="width: 100px;" class="btn btn-danger">Unblock</button></a>
+                                        </td>
+                                        <% }else{ %>
+                                            <td><a href="/api/block/?email=<%=users[i].email%>"><button type="button"
+                                                        style="width: 100px;" class="btn btn-success">Block</button></a>
+                                            </td>
+                                            <% }%>
+                                </tr>
+                                <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+
+        </main>
+        <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/adminbase.js"></script>
+
+    <script>
+        function userDetails(id) {
+            const userId = `/user-details?id=${id}`
+            window.location.href = userId;
+        }   
+    </script>
+    </body>
+
+    </html>

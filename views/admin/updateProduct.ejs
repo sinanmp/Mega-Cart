@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- OWL Carousel -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <!-- Showmore CSS -->
+    <link rel="stylesheet" href="css/showMoreItems-theme.min.css">
+</head>
+
+<body>
+
+    <%- include('include2/adminbase.ejs') %>
+
+    <section style="position: relative; left: 7%;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-title text-center mt-3">
+                                    <h3>Update Product</h3>
+                                </div>
+
+                                <div class="card-body">
+                                    <form action="/api/update/product?id=<%=products._id %>" method="POST">
+                                        <div class="form-group">
+                                            <label for="productName">Product Name:</label>
+                                            <input type="text" name="prd_name" class="form-control"
+                                                value="<%=products.pname%>" id="productName"
+                                                placeholder="Enter Product Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productDescription">Description:</label>
+                                            <input type="text" name="description" value="<%=products.description%>"
+                                                class="form-control" id="productDescription"
+                                                placeholder="Enter Description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productCategory">Category:</label>
+                                            <select name="category" id="productCategory" class="form-control">
+                                                <option value="" selected disabled>
+                                                    <%=products.category%>
+                                                </option>
+                                                <option value="Smartphone">Smartphone</option>
+                                                <option value="Laptop">Laptop</option>
+                                                <option value="Watches">Watches</option>
+                                                <option value="Speakers">Speakers</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productDescription">Brand Name:</label>
+                                            <input type="text" name="brand" class="form-control"
+                                                id="productBrand" value="<%=products.brand  %>" placeholder="Enter Brand Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productPrice">Product Price:</label>
+                                            <input type="number" name="price" class="form-control"
+                                                value="<%=products.price  %>" id="productPrice"
+                                                placeholder="Enter Product Price">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productDiscount">Product Discount/%:</label>
+                                            <input type="number" name="discount" class="form-control"
+                                                value="<%=products.discount  %>" id="productDiscount"
+                                                placeholder="Enter Product Discount">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productStock">Product Stock:</label>
+                                            <input type="number" name="stock" class="form-control"
+                                                value="<%=products.stock  %>" id="productStock"
+                                                placeholder="Enter Product Stock">
+                                        </div>
+                                        <button class="btn btn-dark mt-4" style="position: relative; left: 50%; transform: translateX(-55%);" type="submit">Update Product</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

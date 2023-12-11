@@ -1,0 +1,499 @@
+<%- include('include/wnav') %>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+  <style>
+    .rounded-4 {
+      border-radius: 4px;
+    }
+
+    .main-image {
+      max-width: auto;
+      max-height: auto;
+      margin: auto;
+    }
+
+    #zoomed-image-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #zoomed-image {
+      max-width: 80%;
+      max-height: 80%;
+    }
+  </style>
+
+  <!-- content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row gx-5">
+        <aside class="col-lg-6">
+          <div class="rounded-4  d-flex justify-content-center" style="aspect-ratio: 1/1; margin-bottom: -130px;">
+            <a data-fslightbox="mygalley" class="rounded-4" data-type="image" style="cursor: pointer;">
+              <img id="zoom-image" class="rounded-4 main-image fit" src="/primg/<%=product.prd_images[0]%>" />
+            </a>
+          </div>
+          <div id="zoomed-image-container">
+            <img id="zoomed-image" src="" alt="Zoomed Image">
+          </div>
+
+          <div class="d-flex justify-content-center mb-3">
+            <% for(let i=0; i<product.prd_images.length;i++){ %>
+
+                <a onclick="imgchange('/primg/<%=product.prd_images[i]%>')" data-fslightbox="mygalley"
+                  style="cursor: pointer;" class="border mx-1 myimage rounded-2" data-type="image" class="item-thumb">
+                  <img width="50" height="60" style="object-fit: contain;" class="rounded-2 myimage1" src="/primg/<%=product.prd_images[i]%>" /> </a>
+             
+              <% } %>
+          
+
+
+          <!-- thumbs-wrap.// -->
+          <!-- gallery-wrap .end// -->
+        </aside>
+        <main class="col-lg-6">
+          <div class="ps-lg-3">
+            <h4 class="title text-dark">
+              <%=product.pname%>
+            </h4>
+            <div class="d-flex flex-row my-3">
+              <div class="text-warning mb-1 me-2">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span class="ms-1">
+                  4.5
+                </span>
+              </div>
+              <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>
+                <%=product.stock%>
+              </span>
+              <% if(product.stock==0){ %>
+                <span class="text-danger ms-2">Out of stock</span>
+                <% }else{ %>
+              <span class="text-success ms-2">In stock</span>
+              <% } %>
+            </div>
+
+            <div class="mb-3">
+              <span class="h5">
+                <% var discount = product.discount %>
+                <% var Odiscount = product.price * discount / 100 %>
+                <% var showPrice= product.price-Odiscount %>
+                ₹<%=Math.floor(showPrice)  %>
+              </span>
+              <span class="text-muted">/per box</span>
+              <p style="color: green;">-<%=product.discount  %>% Off <span class="h6 text-black" style="text-decoration: line-through; opacity: .5;">₹<%= product.price %></span></p>
+               
+            </div>
+            <p>
+              <%=product.description%>
+            </p>
+
+
+
+            <hr />
+
+            <div class="row mb-4">
+              <div class="col-md-4 col-6">
+                <label class="mb-2">Size</label>
+                <select class="form-select border border-secondary" style="height: 35px;">
+                  <option>Small</option>
+                  <option>Medium</option>
+                  <option>Large</option>
+                </select>
+              </div>
+              <!-- col.// -->
+            
+            </div>
+            <% if(product.catStatus==false || product.unlist==true){ %>
+              <h6 style="color: red; margin-left: 10px;">Product is not Available</h6>
+              <% }else if(product.stock==0){ %>
+                <h6 style="color: red; margin-left: 10px;">Products Out Of stock</h6>
+                <% }else{ %>
+                  <% if(email){ %>
+                      <a class="btn  shadow-0"
+                        style="background-color: #392539; color: white; font-weight: bolder; border-radius: 30px; height: 40px;">
+                        <form action="/checkout?prId=<%=product._id %>" method="post">
+                          <%let prPrice=Math.floor(showPrice)  %>
+                          <input type="number" name="totalsum" value="<%=prPrice %>" hidden>
+                          <button type="submit" style="background-color: #392539;border: none; color: white; font-size: 15px; margin-top: -3px; font-weight: 500;"> Buy
+                            Now </button>
+                        </form></a>
+                        <% }else{ %>
+                          <a class="btn  shadow-0"
+                          style="background-color: #392539; color: white; font-weight: bolder; border-radius: 30px; height: 40px;">
+                            <button onclick="showPopup()" style="background-color: #392539;border: none; color: white; font-size: 15px; margin-top: -3px; font-weight: 500;"> Buy
+                              Now </button>
+                            </a>
+                          <% } %>
+                    
+                  <% } %>
+                  <% if(cart.length==1&&email){%>
+                    <a href="/cart/api?email=<%=email%>&&id=<%=product._id  %>" class="btn  shadow-0"
+                      style="background-color:#FFA530; color: white; font-weight: bolder; border-radius: 30px; height: 40px;">
+                      <i class="me-1 fa fa-shopping-basket"></i> remove from cart</a>
+                    <% }else{ %>
+                      <% if(email){ %>
+                      <a href="/cart/api?email=<%=email%>&&id=<%=product._id%>&&stock=<%=product.stock  %>" class="btn  shadow-0"
+                        style="background-color: #BF7DC1; color: white; font-weight: bolder; border-radius: 30px; height: 40px;">
+                        <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+                        <% }else{ %>
+                          <a  onclick="showPopup()" class="btn  shadow-0"
+                            style="background-color: #BF7DC1; color: white; font-weight: bolder; border-radius: 30px; height: 40px;">
+                            <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+                            <% } %>
+
+                      <% } %>
+                      <%if(wishdata) {%>
+                        <a href="/wish/api?email=<%=email%>&id=<%=product._id  %>"
+                          class="btn btn-light border border-secondary py-2 icon-hover px-3" style="color: red;"> <i
+                            class="me-1 fa fa-heart fa-lg" style="color: red;"></i> Saved </a>
+                            <% }else{ %>
+                              <% if(email){ %>
+                              <a href="/wish/api?email=<%=email%>&id=<%=product._id  %>"
+                                class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i
+                                  class="me-1 fa fa-heart fa-lg"></i> Save </a>
+                                  <% }else{ %>
+                                    <a onclick="showPopup()"
+                                      class="btn btn-light border border-secondary py-2 icon-hover px-3"> <i
+                                        class="me-1 fa fa-heart fa-lg"></i> Save </a>
+                                    <% } %>
+                              <% } %>
+                            <% if(product.stock<=15 && product.stock>6){ %>
+                              <h6 style="color: red; margin-left: 10px; margin-top: 20px; font-style: italic; font-weight: bold;">
+                                Hurry, Limited Stock Available!
+                              </h6>
+                            <% }else if(product.stock<=6 && product.stock>=1){ %>         
+                              <h6 style="color: red; margin-left: 10px; margin-top: 20px; font-style: italic; font-weight: bold;">
+                                Hurry, Only <%=product.stock  %> Stock Available!
+                              </h6>
+                            <% } %>
+                        <!-- Your webpage content here -->
+                        
+                        <!-- Popup content -->
+                        <div id="overlay"></div>
+                        <div id="popup">
+                          <div style="display: flex; width: 100%; justify-content: end;">
+                            <span style="font-size: 13px;" id="popup-close" onclick="closePopup()">✖ Close</span>
+                          </div>
+                          <p id="popup-message">Please login or register</p>
+                          <!-- Add login and register links or buttons here -->
+                          <a href="/login">
+                            <button id="login-button">Login</button>
+                          </a>
+                          <a href="/signup">
+                            <button id="register-button">Register</button>
+                          </a>
+                        </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+  <!-- content -->
+
+  <section class="bg-light border-top py-4">
+    <div class="container">
+      <div class="row gx-4">
+        <div class="col-lg-8 mb-4">
+          <div class="border rounded-2 px-3 py-2 bg-white">
+            <!-- Pills navs -->
+            <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+              <li class="nav-item d-flex" role="presentation">
+                <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1"
+                  data-mdb-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1"
+                  aria-selected="true">Specification</a>
+              </li>
+              <li class="nav-item d-flex" role="presentation">
+                <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2"
+                  data-mdb-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2"
+                  aria-selected="false">Warranty info</a>
+              </li>
+              <li class="nav-item d-flex" role="presentation">
+                <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3"
+                  data-mdb-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3"
+                  aria-selected="false">Shipping info</a>
+              </li>
+              <li class="nav-item d-flex" role="presentation">
+                <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4"
+                  data-mdb-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4"
+                  aria-selected="false">Seller profile</a>
+              </li>
+            </ul>
+            <!-- Pills navs -->
+
+            <!-- Pills content -->
+            <div class="tab-content" id="ex1-content">
+              <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+                <p>
+                  With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet,
+                  consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                  enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                  consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                  nulla
+                  pariatur.
+                </p>
+                <div class="row mb-2">
+                  <div class="col-12 col-md-6">
+                    <ul class="list-unstyled mb-0">
+                      <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
+                      <li><i class="fas fa-check text-success me-2"></i>Lorem ipsum dolor sit amet, consectetur</li>
+                      <li><i class="fas fa-check text-success me-2"></i>Duis aute irure dolor in reprehenderit</li>
+                      <li><i class="fas fa-check text-success me-2"></i>Optical heart sensor</li>
+                    </ul>
+                  </div>
+                  <div class="col-12 col-md-6 mb-0">
+                    <ul class="list-unstyled">
+                      <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
+                      <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
+                      <li><i class="fas fa-check text-success me-2"></i>Modern style and design</li>
+                    </ul>
+                  </div>
+                </div>
+                <table class="table border mt-3 mb-2">
+                  <tr>
+                    <th class="py-2">Display:</th>
+                    <td class="py-2">13.3-inch LED-backlit display with IPS</td>
+                  </tr>
+                  <tr>
+                    <th class="py-2">Processor capacity:</th>
+                    <td class="py-2">2.3GHz dual-core Intel Core i5</td>
+                  </tr>
+                  <tr>
+                    <th class="py-2">Camera quality:</th>
+                    <td class="py-2">720p FaceTime HD camera</td>
+                  </tr>
+                  <tr>
+                    <th class="py-2">Memory</th>
+                    <td class="py-2">8 GB RAM or 16 GB RAM</td>
+                  </tr>
+                  <tr>
+                    <th class="py-2">Graphics</th>
+                    <td class="py-2">Intel Iris Plus Graphics 640</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                Tab content or sample information now <br />
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+                officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              </div>
+              <div class="tab-pane fade mb-2" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                Another tab content or sample information now <br />
+                Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt
+                mollit anim id est laborum.
+              </div>
+              <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
+                Some other tab content or sample information now <br />
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+                officia deserunt mollit anim id est laborum.
+              </div>
+            </div>
+            <!-- Pills content -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script src="../server/controller/cartController.js"></script>
+  </section>
+  <%- include('include/footer') %>
+
+
+
+    <!-- Include Elevate Zoom -->
+
+    <script>
+      function showPopup() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+        // Set the error message in the popup
+       
+      }
+    
+      function closePopup() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+      }
+    
+      // Other scripts...
+    </script>
+    
+
+    <script>
+
+
+
+
+
+      $(document).ready(function () {
+        // Initialize Elevate Zoom
+        $('#zoom-image').elevateZoom({
+          zoomType: 'inner',
+          cursor: 'crosshair',
+          zoomWindowFadeIn: 500,
+          zoomWindowFadeOut: 500,
+          onComplete: function () {
+            // Show the zoomed image in the separate container
+            $('#zoomed-image').attr('src', $('#zoom-image').data('elevateZoom').getGalleryList()[0].src);
+            $('#zoomed-image-container').show();
+          },
+          onClose: function () {
+            // Hide the zoomed image container when zoom is closed
+            $('#zoomed-image-container').hide();
+          }
+        });
+      });
+    </script>
+
+
+    <script>
+      function imgchange(img) {
+        var imageElement = document.querySelector('.main-image');
+        imageElement.src = img
+
+      }
+    </script>
+
+
+
+
+
+<style>
+  /* Styles for the popup */
+  #popup {
+      border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+
+  /* Styles for the overlay background */
+  #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  /* Styles for the close button */
+  #popup-close {
+      cursor: pointer;
+      margin-top: -15px;
+      margin-right: -15px;
+
+  }
+
+  /* Styles for the login button */
+  #login-button {
+      cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #BF7DC1;
+      color: white;
+      border: none;
+      border-radius: 5px;
+  }
+  #register-button{
+    cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      margin-left: 10px;
+      background-color: #392539;
+      color: white;
+      border: none;
+      border-radius: 5px;
+  }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get the quantity input and buttons
+        var quantityInput = document.getElementById('quantity-input');
+        var decreaseBtn = document.getElementById('decrease-btn');
+        var increaseBtn = document.getElementById('increase-btn');
+
+        // Add click event listeners to the buttons
+        decreaseBtn.addEventListener('click', function () {
+          updateQuantity(-1);
+        });
+
+        increaseBtn.addEventListener('click', function () {
+          updateQuantity(1);
+        });
+
+        // Function to update the quantity
+        function updateQuantity(change) {
+          // Get the current quantity value
+          var currentQuantity = parseInt(quantityInput.value) || 0;
+
+          // Update the quantity based on the change
+          if (currentQuantity === 10) {
+            document.getElementById("limitr").style.display = 'block'
+            document.getElementById("limitr").innerHTML = 'Product stock reached'
+
+
+          } else {
+            var newQuantity = currentQuantity + change;
+
+            // Ensure the quantity is not negative
+            newQuantity = Math.max(0, newQuantity);
+
+            // Update the input field with the new quantity
+            quantityInput.value = newQuantity;
+          }
+        }
+      });
+
+    </script>

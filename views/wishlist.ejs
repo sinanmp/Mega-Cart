@@ -1,0 +1,120 @@
+<!-- include header -->
+<%- include('include/header') %>
+<!-- /include header -->
+
+<style>
+
+
+
+    .unavailable-text {
+        color: red;
+        position: absolute; /* Set absolute positioning */
+        bottom: 0; /* Position at the bottom */
+        left: 0; /* Position at the left */
+        right: 0; /* Position at the right */
+        margin-bottom: 5px; /* Adjust margin as needed */
+    }
+</style>
+
+<!-- wishItems + summary -->
+<section class="my-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- wishItems -->
+            <div class="col-lg-9">
+                <div class="card shadow-0 border-0 " style="background: transparent;">
+                    <div class="m-4">
+                        <h4 class="card-title mb-4">Your Shopping Wishlist</h4>
+                        <% if(wishItems.length > 0){ %>
+                            <% for (let i = 0; i < wishItems.length; i++){ %>
+                                <div class="row gy-3 mb-4 wishlist-item border rounded p-3" onclick="singlePrd('<%=wishItems[i]._id%>')">
+                                    <div class="col-lg-5 productsdiv">
+                                        <div class="me-lg-5">
+                                            <div class="d-flex">
+                                                <img src="primg/<%= wishItems[i].prd_images[0] %>"
+                                                    class="border rounded me-3"
+                                                    style="width: 96px; height: 96px;" />
+                                                <div class="">
+                                                    <a href="#" class="nav-link">
+                                                        <%= wishItems[i].pname %>
+                                                    </a>
+                                                    <p class="text-muted">
+                                                        <%= wishItems[i].category %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                                        <div class="">
+                                            <select style="width: 100px;" class="form-select me-4">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                            </select>
+                                        </div>
+                                        <div class="">
+                                            <text class="h6">$1156.00</text> <br />
+                                            <small class="text-muted text-nowrap">₹ <%= wishItems[i].price %>/ per item </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                                        <div class="float-md-end">
+                                            <!-- Changed the Love button to Add to Cart -->
+                                            <a href="/wishlist/addtoCart?id=<%=wishItems[i]._id%>&email=<%=email  %>">
+                                                <button class="btn btn-light border px-2 icon-hover-primary">
+                                                    <i class="fas fa-shopping-cart fa-lg px-1 text-success"></i>
+                                                    Add to Cart
+                                                </button>
+                                            </a>                                    
+                                            <a  href="/remove/wishlist?id=<%= wishItems[i]._id %>&&email=<%=email  %>"
+                                                class="btn btn-light border text-danger icon-hover-danger">Remove</a>                                             
+                                        </div>
+                                    </div>
+                                    <% if(wishItems[i].catStatus == false || wishItems[i].unlist == true){ %>
+                                        <!-- Move the "Product Not Available" text inside the border -->
+                                        <h6 class="unavailable-text">Product Not Available</h6>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        <% } else{ %>
+                            <p>No items in the wishlist</p>
+                        <% } %>
+                    </div>
+
+                    <div class="border-top pt-4 mx-4 mb-4">
+                        <p><i class="fas fa-truck text-muted fa-lg"></i> Free Delivery within 1-2 weeks</p>
+                        <p class="text-muted">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- wishItems + summary -->
+<style>
+    body{
+        background: #cd9cf2;
+        background: -webkit-radial-gradient(center, ellipse cover, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+        background: radial-gradient(ellipse at center,rgba(246, 243, 255, 1), rgba(205, 156, 242, 1)); 
+
+    }
+</style>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+<script>
+    // Function to add item to the cart
+    function singlePrd(itemId) {
+        // Add your logic to handle adding items to the cart
+        const productId = `/single/prd?id=${itemId}`;
+         window.location.href = productId;
+    }
+</script>
+</body>
+<!-- include footer -->
+<%- include('include/footer') %>
+<!-- /include footer -->
+</html>

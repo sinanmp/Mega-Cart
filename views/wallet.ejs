@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-2eMEV1INlEV5JBHr1/sbDZeezgrypL7XGNB5tkID7MzROFh9D8eVveb+Y9k5aZVOSFvP4D2rs9ZxTJjfOBL2Ug==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<body >
+
+
+    <header>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+        <!-- Jumbotron -->
+        <div class="px-2 nav-div text-center"
+          style="background-color: #392539 !important ;justify-content: center; height: 70px;">
+      
+          <div class="container">
+            <div class="row gy-3">
+              <!-- Left elements -->
+              <div class="col-lg-2 col-sm-4 col-4">
+                <a href="/" class="float-start">
+                  <h2 style="font-weight: 400;color: #ffff; font-family: 'Jockey One', sans-serif;"><span
+                      style="font-family: 'Itim', cursive; ">M</span>ega<span
+                      style="color: #BF7DC1; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; font-weight: 400;">Cart.</span>
+                  </h2>
+                </a>
+              </div>
+              <!-- Left elements -->
+      
+              <!-- Center elements -->
+      
+            </div>
+            <!-- Center elements -->
+      
+            <!-- Right elements -->
+            <div class="col-lg-5 col-md-12 col-12" style="visibility: hidden;">
+              <div class="input-group float-center">
+                <div class="form-outline bg-white" style="border-radius: 5px;">
+                  <input type="search" id="form1" class="form-control" />
+                  <label class="form-label" for="form1">Search</label>
+                </div>
+                <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Right elements -->
+          </div>
+        </div>
+        </div>
+        <!-- Jumbotron -->
+      
+      </header>
+    
+
+
+      <div class="container my-5" style="min-height: 100vh;">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-4">My Wallet</h5>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-2">Username:</p>
+                            <p class="mb-2" id="total-price-before"><%=userData.username.toUpperCase() %></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-2">Wallet Balance:</p>
+                            <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(userData.wallet.totalAmount ) %>
+                            <p class="mb-3" style="font-weight: 500;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(userData.wallet.totalAmount ) %></p>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-2">Available Balance:</p>
+                            <p class="mb-4 fw-bold" style="font-weight: 500;" id="total-price"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(userData.wallet.totalAmount ) %></p>
+                        </div>
+                        <button onclick="showForm()" id="Addbtn"
+                            class="btn btn-block mb-2" style="background-color: #BF7DC1; color: white; height: 40px;">Add More</button>
+                        <form id="formid">
+                            <hr>
+                            <button type="button" style="width: 100px; height: 40px;" class="btn mb-4 border" onclick="hideForm()">Close</button>
+                            <div class="form-group">
+                                <label for="amount">Amount:</label>
+                                <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount">
+                                <p style="color: red;" id="amountError"></p>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-block"
+                                style="background-color: #BF7DC1; height: 40px;" onclick="showPopup()">Add Money</button>
+                                <div id="overlay"></div>
+                                <div id="popup">
+                                  <div style="display: flex; width: 100%; justify-content: end;">
+                                    <span style="font-size: 13px;" id="popup-close" onclick="closePopup()">✖ Close</span>
+                                  </div>
+                                  <p id="popup-message"></p>
+                                  <!-- Add login and register links or buttons here -->
+                                    <button type="submit" id="login-button">Conform</button>
+                                    <button type="button" onclick="closePopup()" id="register-button">Cancel</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <a id="history" onclick="openHistoryModal()" style="position: relative; left: 42%; top: 19px; color: rgb(43, 43, 143);"><i class="fa-solid fa-clock-rotate-left"></i> Transaction history</a>
+        
+    </div>
+    
+    <div class="modal fade" id="successModal1" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Amount Added Successfully</h5>
+                    <button type="button" onclick="removeSecc()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Your amount has been added successfully.
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" onclick="removeSecc()" class="btn" style="width: 100px; height: 40px; background-color: #BF7DC1;" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- transatcions history modal can see here -->
+    <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="historyModalLabel">Transaction History</h5>
+                    <button  onclick="showfilter()" type="button" style="width: 100px; height: 40px; position: relative;left: 34%;top: -3px;" class="btn border" id="filbtn">Filter</button>
+                    <button  onclick="clearfilter()" type="button" style="width: 130px; height: 40px; position: relative;left: 30%;top: -3px; display: none;" class="btn border" id="clearFilter">Clear Filter</button>
+                    <button type="button" onclick="closeHistoryModal()" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="dateFilterForm" style="display: none;">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <label for="startDate" class="form-label">Start Date:</label>
+                                <input type="date"  id="startDate" name="startDate" class="form-control">
+                            </div>
+                            <div class="flex-grow-1">
+                                <label for="endDate" class="form-label">End Date:</label>
+                                <input type="date" id="endDate" name="endDate" class="form-control">
+                            </div>
+                        </div>  
+                    </form>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Transactions</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let i=userData.wallet?.transactions.length - 1; i >= 0; i--) { %>
+                                <tr class="transaction-row">
+                                    <td><%=userData.wallet.transactions[i].description  %></td>
+                                    <% const transactionDateTime = new Date(userData.wallet.transactions[i].date); %>
+                                    <td><%= transactionDateTime.toLocaleTimeString('en-IN') %></td>
+                                    <% const transactionDate = new Date(userData.wallet.transactions[i].date); %>
+                                    <td style="display: none;"><%= transactionDate %></td>
+                                    <td><%= transactionDate.toLocaleDateString('en-IN') %></td>
+                                    <% if(userData.wallet?.transactions[i]?.category == 'deposit') { %>
+                                        <td style="color: rgb(10, 175, 10);">+<%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(userData.wallet?.transactions[i]?.amount) %></td>
+                                    <% } else { %>
+                                        <td style="color:red;">-<%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(userData.wallet?.transactions[i]?.amount) %></td>
+                                    <% } %>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" style="width: 100px; height: 40px; background-color: #BF7DC1;" onclick="closeHistoryModal()" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  
+
+    <footer class="text-center text-white"
+        style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">
+        <span style="opacity: .7; font-size: 13px;"> © 2020 Copyright:</span>
+        <a class="text-white" href="https://mdbootstrap.com/" style="opacity: .7; font-size: 12px; ">MegaCart</a>
+    </footer>
+
+    <script>
+        document.getElementById("dateFilterForm").addEventListener("change",()=>{
+            filterTransactions()
+        })
+
+        function clearfilter(){
+            document.getElementById("filbtn").style.display='block'
+            document.getElementById("clearFilter").style.display='none'
+            document.getElementById('endDate').value=''
+            document.getElementById('startDate').value=''
+            document.getElementById("dateFilterForm").style.display='none'
+            const rows = document.getElementsByClassName('transaction-row');
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display=''
+             }
+        }
+
+       function showfilter(){
+        document.getElementById("dateFilterForm").style.display='block'
+        document.getElementById("filbtn").style.display='none'
+        document.getElementById("clearFilter").style.display='block'
+       }
+
+
+       function filterTransactions(){
+        let startDate = new Date(document.getElementById('startDate').value);
+        let endDate = new Date(document.getElementById('endDate').value);
+        
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+
+        console.log(typeof endDate, endDate)
+        const rows = document.getElementsByClassName('transaction-row');
+        
+    for (let i = 0; i < rows.length; i++) {
+        const transactionDateText = rows[i].querySelector('td:nth-child(3)').innerText;
+        const transactionDate=new Date(transactionDateText)
+        transactionDate.setHours(0, 0, 0, 0);
+        console.log(transactionDate ,typeof transactionDate , endDate , typeof endDate)
+        if (startDate && endDate) {
+            if (transactionDate >= startDate && transactionDate <= endDate || transactionDate >= startDate && endDate=="Invalid Date"|| startDate=='Invalid Date' && endDate=="Invalid Date") {
+                rows[i].style.display=''
+            }else{
+                console.log(transactionDate <= endDate)
+                rows[i].style.display = 'none';
+            }
+        } else {
+            rows[i].style.display = '';
+        }
+
+       }
+    }
+    </script>
+
+    <style>
+    #history:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+
+        #formid {
+            display: none;
+        }
+        #popup {
+      border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+
+  /* Styles for the overlay background */
+  #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  /* Styles for the close button */
+  #popup-close {
+      cursor: pointer;
+      margin-top: -15px;
+      margin-right: -15px;
+
+  }
+
+  /* Styles for the login button */
+  #login-button {
+      cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #BF7DC1;
+      color: white;
+      border: none;
+      border-radius: 5px;
+  }
+  #register-button{
+    cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      margin-left: 10px;
+      background-color: #392539;
+      color: white;
+      border: none;
+      border-radius: 5px;
+  }
+    </style>
+        <script src="https://kit.fontawesome.com/6bb7f02898.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+        <!-- Your other script tags -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+
+    <script>
+        function openHistoryModal() {
+        // Trigger the modal using JavaScript
+        $('#historyModal').modal('show');
+    }
+
+    function closeHistoryModal(){
+        $('#historyModal').modal('hide');
+    }
+
+        function removeSecc(){
+            $('#successModal1').modal('hide');
+            document.getElementById("Addbtn").style.display = 'block';
+            document.getElementById("formid").style.display = 'none';
+            window.location.href='/wallet'
+        }
+
+     
+    function razorpayPayment(request){
+
+        var options = {
+        key: 'rzp_test_SGIPZznrxrrn7R',
+        amount: request.amount, 
+        currency: 'INR',
+        name: 'Mega Cart',
+        description: 'Adding Wallet',
+        image: 'your_logo_url',
+        order_id: request.razorpay_order_id,
+        handler: function (response) {
+            const upamount=request.amount/100
+          $.ajax({
+            url:`/wallet/dataUpdate?amount=${upamount}&email=${'<%=email%>'}`,
+            method:'get',
+            data:null,
+            success:(response)=>{
+                if(response){
+                    $(document).ready(function(){
+                $('#successModal1').modal('show');
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('popup').style.display = 'none';
+                       });
+                }
+            }
+            
+          })
+        },
+        };
+        var rzp = new Razorpay(options);
+        rzp.open()
+
+    }     
+   
+
+
+        $("#formid").submit((e) => {
+        e.preventDefault();  // Add this line to prevent the default form submission
+        $.ajax({
+            url: `/wallet-add?email=${'<%=email%>'}`,
+            method: 'post',
+            data: $('#formid').serialize(),
+            success: (response) => {
+                if (response) {
+                    razorpayPayment(response);
+                }
+            },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('AJAX Request Failed:', textStatus, errorThrown);
+            // Handle the error here, you can show an alert or update the UI accordingly
+            alert('Failed to submit the order. Please try again.');
+        }
+    });
+});
+
+    </script>
+
+
+
+    
+    <script>
+       
+        function showForm() {
+            var form = document.getElementById("formid");
+            document.getElementById("Addbtn").style.display = 'none';
+            form.style.display = 'block';
+            document.getElementById("history").style.display='none'
+        }
+    
+        function hideForm() {
+            document.getElementById("Addbtn").style.display = 'block';
+            document.getElementById("formid").style.display = 'none';
+            document.getElementById("history").style.display='block'
+        }
+        function showPopup() {
+    const amount = document.getElementById("amount").value;
+    if(amount<100 && amount){
+        document.getElementById("amountError").innerHTML = "Minumum Amount Should be 100";
+        return
+    }
+    if (amount > 99 && amount <= 100000) {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+        document.getElementById('popup-message').innerHTML = `Please confirm Your Adding ₹${amount} Rupees`;
+        document.getElementById("amountError").innerHTML = '';
+    } else {
+        if (amount >= 100000) {
+            document.getElementById("amountError").innerHTML = "You can only add less than 1 Lakh";
+        } else {
+            document.getElementById("amountError").innerHTML = "Please Enter  Amount";
+        }
+    }
+}
+          
+            function closePopup() {
+              document.getElementById('overlay').style.display = 'none';
+              document.getElementById('popup').style.display = 'none';
+            }
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,286 @@
+<title>Mega Sign Up</title>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mega Cart</title>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <!--Main Navigation-->
+  <header>
+    <!-- Jumbotron -->
+    <div class="p-2 nav-div text-center" style="background-color: #392539 !important;">
+
+      <div class="container-fluid">
+        <div class="row gy-3">
+          <!-- Left elements -->
+          <div class="col-lg-2 col-sm-4 col-4">
+            <a href="/" class="float-start">
+              <h2 style="font-weight: 400;color: #ffff; font-family: 'Jockey One', sans-serif;"><span
+                  style="font-family: 'Itim', cursive; ">M</span>ega<span
+                  style="color: #BF7DC1; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; font-weight: 400;">Cart.</span>
+              </h2>
+            </a>
+          </div>
+          <!-- Center elements -->
+
+          <!-- Right elements -->
+          <div class="col-lg-5 mb-2 col-md-12 col-12" style="visibility: hidden;">
+            <div class="input-group float-center">
+              <div class="form-outline bg-white" style="border-radius: 5px;">
+                <input type="search" id="form1" class="form-control" />
+                <label class="form-label" for="form1">Search</label>
+              </div>
+              <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <!-- Right elements -->
+        </div>
+      </div>
+    </div>
+    <!-- Jumbotron -->
+
+  </header>
+  <div style="height: 86vh;">
+    <section class="vh-86 gradient-custom" id="signup">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card  text-dark" style="border-radius: 1rem;">
+              <div class="card-body p-4 text-center">
+
+                <div class="mb-md-5 mt-md-0 pb-5">
+
+                  <h2 class="fw-bold login  mb-4">Sign Up</h2>
+             
+
+
+                  <body>
+                    <form action="/api/create" method="post">
+                      <div class="mb-4">
+                        <input type="text" class="form-control form-control-lg" placeholder="Username" name="username"
+                          style="border-radius: 10px;
+                                background: rgba(217, 217, 217, 0.50);" />
+                      </div>
+
+                      <div class="mb-4">
+                        <input type="email" id="typeEmailX" name="email" placeholder="Email"
+                          class="form-control form-control-lg"
+                          style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                      </div>
+
+                      <div class="mb-4">
+                        <input type="text " class="form-control form-control-lg" placeholder="Mobile" name="mobile"
+                          style="border-radius: 10px;
+                                  background: rgba(217, 217, 217, 0.50);" />
+                      </div>
+
+                      <div class="mb-4">
+                        <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg"
+                          placeholder="Password" style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                      </div>
+
+                      <div class="mb-4">
+                        <input type="password" id="typePasswordX" name="confirmpassword" placeholder="Confirm Password"
+                          class="form-control form-control-lg"
+                          style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                      </div>
+                      <div id="overlay"></div>
+                      <div id="popup">
+                        <div style="display: flex; width: 100%; justify-content: end;">
+                          <span style="font-size: 13px;" id="popup-close" onclick="closePopup()">✖ Close</span>
+                        </div>
+                        <p id="popup-message">Please verify/login your account</p>
+                        <p style="font-size: 10px;">you need to <span style="color: red;">verify</span> your email for make purchases in the cart</p>
+                        <!-- Add login and register links or buttons here --> 
+                          <button type="submit" id="login-button">Send OTP</button>
+                      </div>
+                      <button class="btn btn-lg px-5 mb-3" id="signup-btn" onclick="showPopup()" type="button">Signup</button>
+                         
+                    </form>
+                    <div
+                      style="display: flex; width: 100%; justify-content: end; position: absolute; margin-top: -95px; margin-left: -50px;">
+                      <% if(registrationError==true){ %>
+                        <script>
+                          document.getElementById("typeEmailX").style.border = "solid red 1px"
+                        </script>
+                        <h6 style="position: absolute; text-align: end; color: red; font-size: 13px;">email already
+                          exist </h6>
+                        <% }%>
+                          <% if ( bodyEmitty){%>
+                            <h6 style="position: absolute;color: red; font-size: 13px;">Please fill the all details</h6>
+                            <% }%>
+                              <% if(passwordnotMatch){ %>
+                                <script>
+                                  document.getElementById("typePasswordX").style.border = "solid 1px red"
+                                </script>
+                                <h6 style="position: absolute;color: red; font-size: 13px;">Password is not matching
+                                </h6>
+                                <% } %>
+                    </div>
+                  </body>
+
+                  </html>
+
+                  <div>
+                    <p class="mb-0">Don't have an account? <a href="login" class="text-dark-50 fw-bold">Login</a>
+                    </p>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer class="text-center text-white"
+    style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">
+    <span style="opacity: .7; font-size: 13px; margin-bottom: 30px; margin-top: -30px;"> © 2020 Copyright:</span>
+    <a class="text-white" href="https://mdbootstrap.com/" style="opacity: .7; font-size: 12px;">MegaCart</a>
+  </footer>
+
+  <script src="js/otp.js"></script>
+
+
+
+  <script>
+          function showPopup() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+        // Set the error message in the popup
+       
+      }
+    
+      function closePopup() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+      }
+  </script>
+  <style>
+     #popup {
+      border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+
+  /* Styles for the overlay background */
+  #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  /* Styles for the close button */
+  #popup-close {
+      cursor: pointer;
+      margin-top: -15px;
+      margin-right: -15px;
+
+  }
+
+  /* Styles for the login button */
+  #login-button {
+      cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #392539;
+      color: white;
+      border: none;
+      border-radius: 5px;
+  }
+    .card-body {
+      height: 550px;
+      border-radius: 40px;
+      border: 0px solid #000;
+      background: #FFF;
+      box-shadow: 1px 11 100px rgba(0, 0, 0, 0.07);
+    }
+
+    .login {
+      color: #777;
+      text-align: center;
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+    }
+
+    .btn {
+      background-color: #392539;
+      color: white;
+      border-radius: 30px;
+    }
+
+    .btn:hover {
+      background-color: #392539;
+      color: white;
+    }
+
+    @media (max-width: 760px) {
+      .nav-div {
+        height: 60px;
+      }
+
+      .width-user {
+        visibility: hidden;
+      }
+
+      footer {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        bottom: 0;
+        position: fixed;
+      }
+    }
+
+    @media (min-width: 760px) and (max-width: 990px) {
+      .nav-div {
+        height: 70px;
+      }
+    }
+
+    footer {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      bottom: 0;
+      position: fixed;
+    }
+  </style>

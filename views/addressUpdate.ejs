@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Address Form</title>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <form method="post" action="/update/add?id=<%=address._id %>&pos=<%=pos  %>">
+            <div class="form-group">
+                <label for="locality">Locality</label>
+                <input type="text" class="form-control" id="locality" name="locality" value="<%=address.locality  %>"
+                    placeholder="Enter Locality">
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" class="form-control" id="country" name="country" value="<%=address.country  %>"
+                    placeholder="Enter Country">
+            </div>
+            <div class="form-group">
+                <label for="district">District</label>
+                <input type="text" class="form-control" id="district" name="district" value="<%=address.district  %>"
+                    placeholder="Enter District">
+            </div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" class="form-control" id="state" value="<%=address.state  %>" name="state"
+                    placeholder="Enter State">
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" <%=address.city %> placeholder="Enter
+                City">
+            </div>
+            <div class="form-group">
+                <label for="altr_number">Alternate Number</label>
+                <input type="number" class="form-control" id="altr_number" value="<%=address.altr_number  %>"
+                    name="altr_number" placeholder="Enter Alternate Number">
+            </div>
+
+            <div class="form-group">
+                <label for="locality">House No</label>
+                <input type="number" class="form-control" id="HouseNumber" name="HouseNumber" value="<%=address.house_No %>"
+                    placeholder="Enter Your House Number">
+            </div>
+
+            <div class="form-group">
+                <label for="postcode">Postcode</label>
+                <input type="number" class="form-control" id="postcode" value="<%=address.postcode %>" name="postcode"
+                    placeholder="Enter Postcode">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

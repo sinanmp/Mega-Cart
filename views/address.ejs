@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Address Form</title>
+</head>
+
+<body>
+
+    <header>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+        <!-- Jumbotron -->
+        <div class="px-2 nav-div text-center"
+          style="background-color: #392539 !important ;justify-content: center; height: 70px;">
+      
+          <div class="container">
+            <div class="row gy-3">
+              <!-- Left elements -->
+              <div class="col-lg-2 col-sm-4 col-4">
+                <a href="/" class="float-start">
+                  <h2 style="font-weight: 400;color: #ffff; font-family: 'Jockey One', sans-serif;"><span
+                      style="font-family: 'Itim', cursive; ">M</span>ega<span
+                      style="color: #BF7DC1; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; font-weight: 400;">Cart.</span>
+                  </h2>
+                </a>
+              </div>
+              <!-- Left elements -->
+      
+              <!-- Center elements -->
+      
+            </div>
+            <!-- Center elements -->
+      
+            <!-- Right elements -->
+            <div class="col-lg-5 col-md-12 col-12" style="visibility: hidden;">
+              <div class="input-group float-center">
+                <div class="form-outline bg-white" style="border-radius: 5px;">
+                  <input type="search" id="form1" class="form-control" />
+                  <label class="form-label" for="form1">Search</label>
+                </div>
+                <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+            <!-- Right elements -->
+          </div>
+        </div>
+        </div>
+        <!-- Jumbotron -->
+      
+      </header>
+
+
+    <div class="container mt-5">
+        <form method="post" action="/address/add?id=<%=id  %>">
+            <div class="form-group">
+                <label for="locality">Locality</label>
+                <input type="text" class="form-control" id="locality"  name="locality" placeholder="Enter Locality">
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" class="form-control" id="country" name="country" placeholder="Enter Country">
+            </div>
+            <div class="form-group">
+                <label for="district">District</label>
+                <input type="text" class="form-control" id="district" name="district" placeholder="Enter District">
+            </div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" class="form-control" id="state" name="state" placeholder="Enter State">
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City">
+            </div>
+            <div class="form-group">
+                <label for="altr_number">Alternate Number</label>
+                <input type="number" class="form-control" id="altr_number" name="altr_number"
+                    placeholder="Enter Alternate Number">
+            </div>
+
+            <div class="form-group">
+                <label for="altr_number">House No</label>
+                <input type="number" class="form-control" id="HouseNumber" name="HouseNumber"
+                    placeholder="Enter Your House Number">  
+            </div>
+
+            <div class="form-group">
+                <label for="postcode">Postcode</label>
+                <input type="number" class="form-control" id="postcode" name="postcode" placeholder="Enter Postcode">
+            </div>
+            <div style="display: flex; justify-content: center;" class="mb-5 mt-3">
+                <button type="submit"  class="btn mb-3 mt-4" style="background-color: #392539; color: white; width: 150px;">Submit</button>
+            </div>
+           
+        </form>
+    </div>
+
+    <footer class="text-center text-white"
+style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">
+<span style="opacity: .7; font-size: 13px; margin-bottom: 30px; margin-top: -30px;"> © 2020 Copyright:</span>
+<a class="text-white" href="https://mdbootstrap.com/" style="opacity: .7; font-size: 12px; ">MegaCart</a>
+</footer>
+
+<style>
+     body{
+          background: #cd9cf2;
+          background: -webkit-radial-gradient(center, ellipse cover, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+          background: radial-gradient(ellipse at center,rgba(246, 243, 255, 1),rgb(207, 176, 231)); 
+          
+        }
+</style>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

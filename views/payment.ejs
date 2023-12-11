@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>payment</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+</head>
+<style>
+       body {
+            background-color: #f5f5f5;
+        }
+        .container {
+            
+            text-align: center;
+        }
+        button {
+            margin-top: 20px;
+            background-color: #800080; /* Purple color */
+            border: none;
+        }
+        .form-check-label {
+            font-size: 20px;
+           
+            margin-bottom: 10px; /* Add margin for better spacing */
+        }
+        .form-check-input {
+            width: 30px;
+            height: 30px;
+        }
+</style>
+<body>
+  <% let check=false %>
+  <header>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+    <!-- Jumbotron -->
+    <div class="px-2 nav-div text-center"
+      style="background-color: #392539 !important ;justify-content: center; height: 70px;">
+  
+      <div class="container">
+        <div class="row gy-3">
+          <!-- Left elements -->
+          <div class="col-lg-2 col-sm-4 col-4">
+            <a href="/" class="float-start">
+              <h2 style="font-weight: 400;color: #ffff; font-family: 'Jockey One', sans-serif;"><span
+                  style="font-family: 'Itim', cursive; ">M</span>ega<span
+                  style="color: #BF7DC1; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; font-weight: 400;">Cart.</span>
+              </h2>
+            </a>
+          </div>
+          <!-- Left elements -->
+  
+          <!-- Center elements -->
+  
+        </div>
+        <!-- Center elements -->
+  
+        <!-- Right elements -->
+        <div class="col-lg-5 col-md-12 col-12" style="visibility: hidden;">
+          <div class="input-group float-center">
+            <div class="form-outline bg-white" style="border-radius: 5px;">
+              <input type="search" id="form1" class="form-control" />
+              <label class="form-label" for="form1">Search</label>
+            </div>
+            <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Right elements -->
+      </div>
+    </div>
+    </div>
+    <!-- Jumbotron -->
+  
+  </header>
+
+
+
+  <div class="container-fluid" style="margin-top: 21px; min-height: 86vh;">
+    <div class="text-center">
+      <h1 class="mb-4">Choose a Payment Option</h1>
+  </div>
+
+  <form id="paymentForm" style="margin-top: 30px;">
+    <div class="container">
+
+      <div class="form-check mb-2" style="    margin-left: -71px;">
+        <input class="form-check-input" type="radio" style="margin-left: -37px; margin-top: 8px;" onclick="showPayment();codAndOnline()" name="payment" id="razorpay" value="razorpay">
+        <label class="form-check-label ml-1" style="margin-top: 7px;" for="razorpay">Online Payment</label>
+      </div>
+    
+
+      <% if(totalSumofWallet < details.totalsum) {%>
+        <div class="form-check mb-2" style="margin-left: -154px;">
+          <input class="form-check-input"  disabled style="margin-left: -40px; margin-top: 2px; opacity: .6;" type="radio" onclick="showPayment()" name="payment" id="walletMain" value="wallet">
+          <label class="form-check-label" style="opacity: .6;" for="cod">Wallet <span style="color: red;font-size: 13px;position: absolute;top: 6px;left: 54%;font-weight: 500;">Wallet Only have <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSumofWallet) %></span></label>
+      </div>
+        <% }else{ %>
+      <div class="form-check mb-2" style="margin-left: -154px;">
+        <input  class="form-check-input" style="margin-left: -40px; margin-top: 2px;" type="radio" onclick="showPayment()" name="payment" id="walletMain" value="wallet">
+        <label id="curruntBalance" class="form-check-label" for="cod">Wallet <span style="    color: rgb(13, 169, 13);font-size: 13px;position: absolute;top: 6px;left: 54%;font-weight: 500;">Wallet Available Balance is <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSumofWallet) %></span></label>
+    </div>
+    <% } %>
+      <div class="form-check">
+        <input class="form-check-input" style="margin-left: -40px; margin-top: 2px;" type="radio" onclick="showPayment();codAndOnline()" name="payment" id="cod" value="cod">
+        <label class="form-check-label" for="cod">Cash on Delivery (COD)</label>
+    </div>
+      </div>
+    <div style="position: relative;left: 50%;top: 1rem; transform: translateX(-50%);">
+       <div class="card shadow-0 mx-auto" style="width: 54rem;">
+        <p style="margin-top: 10px; margin-left: 20px;font-weight: 500;">Order Summary:</p>
+        <div class="card-body rounded" style="background: white;">
+          <div class="d-flex justify-content-between">
+            <p class="mb-2">Total price:</p>
+            <p class="mb-2" style="font-weight: 500;" id="total-price-before" >
+              <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+            </p>
+          </div>
+          <div class="d-flex justify-content-between">
+            <p class="mb-2">Total Items</p>
+            <p class="mb-2 text-success">
+              <%=prLength  %>
+            </p>
+          </div>
+          <hr />
+
+          <div class="justify-content-between" id="takingfrom" style="display: none;">
+            <p style="color: red;">Taking From Wallet:</p>
+            <p class="mb-2 fw-bold"  style="font-weight: 500; color: red;">
+              - <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+            </p>
+          </div>
+          <div class="d-flex justify-content-between">
+            <p class="mb-2">Total price:</p>
+            <p class="mb-2" style="font-weight: 500;" id="total-price">
+              <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+            </p>
+          </div>
+                 <button style="background-color: #BF7DC1; color: white; width: 100px; height: 40px;" disabled id="rzp-button" class="btn  w-100 shadow-0 mb-2" type="submit">Place Order</button> 
+        </div>
+      </div>
+    </div>
+    </form>
+    
+</div>
+
+
+
+<footer class="text-center text-white" style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">
+  <span style="opacity: .7; font-size: 13px; margin-bottom: 30px; margin-top: -30px;"> © 2020 Copyright:</span>
+  <a class="text-white" href="https://mdbootstrap.com/" style="opacity: .7; font-size: 12px; ">MegaCart</a>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- Your other script tags -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+<script>
+document.getElementById("walletMain").addEventListener("click", () => {
+  let totalPriceElement = document.getElementById("total-price");
+  document.getElementById("takingfrom").style.display='flex'
+  totalPriceElement.innerHTML = '₹0.00';
+});
+
+ function codAndOnline(){
+  let totalPriceElement = document.getElementById("total-price");
+  document.getElementById("takingfrom").style.display='none'
+  totalPriceElement.innerHTML = `<%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>`;
+ }
+
+
+  function razorpayPayment(order) {
+    console.log(order)
+      var options = {
+        "key": "rzp_test_SGIPZznrxrrn7R",
+        "amount": order.amount,
+        "currency": "INR",
+        "name": "MegaCart",
+        "description": "Test Transaction",
+        "image": "",
+        "handler": function(response) {
+          console.log(order)
+          $.ajax({
+                  url: `/order-route?prId=${'<%=prId%>'}`,
+                  method: 'post',
+                  data:{order},
+                  success: function(response) {
+                      if(response.errorforStock){
+                        alert("out of stock")
+                        return
+                      }
+                      window.location.href = response.url;
+                  },
+                  error: function(jqXHR, textStatus, errorThrown) {
+                      console.error('AJAX Request Failed:', textStatus, errorThrown);
+                      alert('Failed to submit the order. Please try again.');
+                  }
+              });
+              },
+        "order_id": order.razorpay_order_id,  
+        "prefill": {
+          "name": order.name,
+          "email": order.email,
+          "contact": "9000090000"
+        },
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#392539;"
+        }
+      };
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+  $("#paymentForm").submit((e) => {
+    e.preventDefault();  // Add this line to prevent the default form submission
+    $.ajax({
+        url: `/submit/order?prId=${'<%=prId%>'}`,
+        method: 'post',
+        data: $('#paymentForm').serialize(),
+        success: (response) => {
+          if(response.errorforStock){
+              alert("out of stock")
+              return
+            }
+            if (response.url) {
+                return window.location.href = response.url;
+            }
+            console.log(response.error)
+            razorpayPayment(response);
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            console.error('AJAX Request Failed:', textStatus, errorThrown);
+            // Handle the error here, you can show an alert or update the UI accordingly
+            alert('Failed to submit the order. Please try again.');
+        }
+    });
+});
+
+  function showPayment(){
+    document.getElementById('rzp-button').disabled = false;
+   }
+</script>
+
+  
+</body>
+</html>

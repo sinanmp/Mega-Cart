@@ -1,0 +1,623 @@
+<!-- include header -->
+<%- include('include/header') %>
+  <!-- /include header -->
+<% let check=false %>
+  <!-- cartItems + summary -->
+  <section class=" my-5">
+    <div class="container">
+      <div class="row">
+        <!-- cartItems -->
+        <div class="col-lg-9">
+          <div class="card border shadow-0" style="background: white;">
+            <div class="m-4">
+              <h4 class="card-title mb-4">Your shopping cartItems</h4>
+              <% if(cartItems.length>0){ %>
+                <% for (let i=0;i<cartItems.length;i++){ %>
+                  <div class="row gy-3 mb-4">
+                    <div class="col-lg-5 outofstock" onclick="userdetails('<%=cartItems[i].prId%>')">
+                      <div class="me-lg-5">
+                        <div class="d-flex">
+                          <div style="width: auto;height: auto;">
+                            <img src="primg/<%= cartItems[i].prd_images[0] %>"  class="border rounded me-3"
+                            style="width: 70px; height: 96px; object-fit: fill;" />
+                          </div>
+                          <div>
+                            <a href="#" class="nav-link">
+                              <%= cartItems[i].pname %>
+                            </a>
+                            <p class="text-muted">
+                              <%= cartItems[i].category %>
+                            </p>
+                            <% if(cartItems[i].catStatus==false||cartItems[i].unlist==true ){ %>
+                              <p style="color: red;">Product Not available </p>
+                              <%  check=true %>
+                              <style>
+                                .outofstock {
+                                  opacity: 90%;
+                                  pointer-events: none;
+                                }
+                              </style>
+                              <% }else{ %>
+
+                                <script>
+                                  document.querySelector('.outofstock').classList.remove('outofstock')
+                                </script>
+                                <% } %>
+                                <% if(cartItems[i].stock==0){ %>
+                                  <% check=true %>
+                                  <p style="color: red;">Out of stock</p>
+                                  <% }else{ %>
+                                    <p style="margin-bottom: 0; margin-top: 5px; color: green; font-size: 12px;"><%=cartItems[i].stock%> items In Stock</p>
+                                    <% } %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                      <!-- <div class="col-md-4 col-6 mb-3">
+                    <label class="mb-2 d-block">Quantity</label>
+                    <div class="input-group mb-3" style="width: 170px;">
+                        <button class="btn btn-white border border-secondary px-3" type="button" id="decrease-btn" data-mdb-ripple-color="dark">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="text" class="form-control text-center border border-secondary" placeholder="1" aria-label="Example text with button addon" aria-describedby="button-addon1" id="quantity-input" />
+                        <button class="btn btn-white border border-secondary px-3" type="button" id="increase-btn" data-mdb-ripple-color="dark">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div> -->
+                      <div class="">
+                        <% var discount=cartItems[i].discount %>
+                        <% var disPrice=cartItems[i].price * discount/100 %>
+                        <% var showPrice=cartItems[i].price-disPrice %>
+                    <!-- Inside the loop where you display cart items --> 
+                      <text class="h6" id="total-price-product-<%=cartItems[i].prId %>">
+                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(cartItems[i].cartQhantity * showPrice) %>
+                      </text> <br />
+
+                        <small class="text-muted text-nowrap"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(showPrice) %>/ per item </small>
+                      </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                      <div class="col-md-4 col-6 mb-3">
+                        <label class="mb-2 d-block">Quantity</label>
+                        <div class="input-group mb-3 quantity-container" style="width: 170px;" >
+                          <a href="javascript:void(0);" class="decrease-link" data-prid="<%=cartItems[i].prId %>">
+                            <button class="btn btn-white border border-secondary px-3 decrease-btn" type="button">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </a>
+                          
+                          <!-- Quantity input -->
+                          <input type="text" id="quantity-<%=cartItems[i].prId %>" style="width: 50px;" class="text-center quantity-input" disabled placeholder="<%=cartItems[i].cartQhantity %>" />
+                          
+                          <!-- Increment button -->
+                          <a href="javascript:void(0);" class="increase-link" data-prid="<%=cartItems[i].prId %>">
+                            <button class="btn btn-white border border-secondary px-3 increase-btn" type="button">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="margin-top: 47px;"
+                      class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                      <div class="float-md-end">
+                        <a href="/wish/api/cart?email=<%=email%>&id=<%=cartItems[i].prId %>" class="btn btn-light border px-2 icon-hover-primary"><i
+                            class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
+                        <a href="#" onclick="showRemovePopup('<%=cartItems[i].prId %>')"
+                          class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <% if( cartItems[i].stock < cartItems[i].cartQhantity){ %>
+                    <% check=true %>
+                    <% } %>
+
+                  <% } %>
+                    <% }else{ %>
+                      <p>No Items In cartItems</p>
+                      <% } %>
+
+
+            </div>
+
+            <div class="border-top pt-4 mx-4 mb-4">
+              <p><i class="fas fa-truck text-muted fa-lg"></i> Free Delivery within 1-2 weeks</p>
+              <p class="text-muted">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- cartItems -->
+        <!-- summary -->
+        <div class="col-lg-3">
+
+          <div class="card shadow-0 " style="background-color: transparent;">
+            <div class="card-body rounded" style="background: white;">
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Total price:</p>
+                <p class="mb-2" id="total-price-before" >
+                  <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(totalPrice) %>
+                </p>
+              </div>
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Total Items</p>
+                <p class="mb-2 text-success">
+                  <%=cartItems.length %>
+                </p>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between">
+                <p class="mb-2">Total price:</p>
+                <p class="mb-2 fw-bold" id="total-price">
+                  <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(totalPrice) %>
+                </p>
+              </div>
+              <% if(cartItems.length==0){ %>
+                  <input type="hidden"  name="totalsum" value="<%= totalPrice %>" hidden>
+                     <button onclick="showPopupAdd()" style="background-color: #BF7DC1; color: white;" class="btn  w-100 shadow-0 mb-2" type="submit">Make Purchase </button> 
+                <% }else{ %>
+                  <% if(check==true){ %>
+                    <input type="hidden"  name="totalsum" value="<%= totalPrice %>" hidden>
+                    <button onclick="showError()" class="btn  w-100 shadow-0 mb-2" style="background-color: #BF7DC1; color: white;" type="submit">Make Purchase </button> 
+                  <% }else{ %>
+                    <form action="/checkout" method="post">
+                      <input type="hidden" id="hiddenInput"  name="totalsum" value="<%= totalPrice %>" hidden>
+                         <button class="btn  w-100 shadow-0 mb-2" style="background-color: #BF7DC1; color: white;" type="submit">Make Purchase </button> 
+                    </form>
+                    <% } %>
+                  <% } %>
+       
+              <div class="mt-3">
+                    <a href=" /" class="btn btn-light w-100 border mt-2"> Back to shop </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- summary -->
+      </div>
+    </div>
+    <div id="overlayAdd"></div>
+    <div id="popupAdd">
+      <div style="display: flex; width: 100%; justify-content: end;">
+        <span style="font-size: 13px;" id="popup-close" onclick="closePopupAdd()">✖ Close</span>
+      </div>
+      <p id="popup-message">Please Add items To cart</p>
+      <!-- Add login and register links or buttons here -->
+      <a href="/">
+        <button id="register-button">Go to Shop</button>
+      </a>
+    </div>
+
+
+  <!-- popup messeges---------------------------- -->
+
+    <div id="overlayError"></div>
+    <div id="popupError">
+      <div style="display: flex; width: 100%; justify-content: end;">
+        <span style="font-size: 13px;" id="popup-close" onclick="closePopupError()">✖ Close</span>
+      </div>
+      <p id="popup-message">Please Remove the Unavailable/out of stock Products From cart</p>
+      <!-- Add login and register links or buttons here -->
+     
+        <button onclick="closePopupError()" id="register-button" style="width: 60px;">Ok</button>
+
+    </div>
+
+    <div id="reachedPopup"></div>
+    <div id="popupreached">
+      <div style="display: flex; width: 100%; justify-content: end;">
+        <span style="font-size: 13px;" id="popup-close" onclick="closePopupReached()">✖ Close</span>
+      </div>
+      <p id="popup-reched-messege"></p>
+      <!-- Add login and register links or buttons here -->
+     
+        <button onclick="closePopupReached()" id="register-button" style="width: 60px;">Ok</button>
+
+    </div>
+
+    <div id="remove-conform"></div>
+    <div id="popum-remove">
+      <div style="display: flex; width: 100%; justify-content: end;">
+        <span style="font-size: 13px;" id="popup-close" onclick="closeRemove()">✖ Close</span>
+      </div>
+      <p id="popup-messege">Are You Sure to remove This </p>
+      <!-- Add login and register links or buttons here -->
+     
+        <button onclick="closeRemove()" id="register-button" style="width: 60px;">No</button>
+         <button  onclick="gotoRemove()"  id="login-button" style="width: 60px;">Yes</button>
+    </div>
+
+
+  </section>
+  <!-- cartItems + summary -->
+  <style>
+     body{
+          background: #cd9cf2;
+          background: -webkit-radial-gradient(center, ellipse cover, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+          background: radial-gradient(ellipse at center,rgb(207, 176, 231),rgba(246, 243, 255, 1)); 
+          
+        }
+  </style>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+
+
+  <!-- quantity updation -->
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Function to update quantity and recalculate total price
+      function updateQuantity(prId, delta) {
+        fetch(`/count/update-quantity?id=${prId}&delta=${delta}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+              if(data.stockQuantity==data.newQuantity){
+                if(delta==-1){
+                  if(data.stockQuantity && data.newQuantity){
+                    window.location.href=`/cart?email=${'<%=email%>'}`
+                  }
+                }else{
+                  if(!data.stockQuantity){
+                    console.log(data.stockQuantity)
+                    reachedFunction(data.stockQuantity,prId)
+                  }
+                
+                }
+                
+              }  
+            
+            if (data.success) {
+              // Update the UI to reflect the new quantity
+              var quantityElement = document.getElementById(`quantity-${prId}`);
+              if (quantityElement) {
+                quantityElement.value = data.newQuantity
+              }
+              recalculateTotalPrice(prId);  
+            } else {
+              console.error("Error:", data.message);
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+      }
+  
+      // Function to recalculate total price for a specific product based on its current quantity
+     // Function to recalculate total price for a specific product based on its current quantity
+      function recalculateTotalPrice(prId) {
+    fetch(`/count/get-total-price`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log("Updated Total Price:", data.productTotalPrices[prId]);       
+        var totalPriceElement = document.getElementById(`total-price-product-${prId}`);
+        var totalPrice = document.getElementById("total-price");
+        var totalPriceBerore = document.getElementById("total-price-before");
+        var hiddenInput= document.getElementById("hiddenInput")
+        
+  
+    if (totalPriceElement) {
+      totalPriceElement.textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(data.productTotalPrices[prId]);
+    }
+
+    if (totalPrice) {
+      totalPrice.textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(data.totalPrice);
+      totalPriceBerore.textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(data.totalPrice);
+      hiddenInput.value=data.totalPrice
+    }
+
+      } else {
+        console.error("Error:", data.message);
+      }               
+    })                       
+    .catch(error => {
+      console.error("Error:", error);
+    });
+}
+
+  
+      // Decrease button click event
+      document.querySelectorAll(".decrease-link").forEach(function (link) {
+        console.log(link, "this is link");
+        link.addEventListener("click", function () {
+          var prId = this.getAttribute("data-prid");
+          updateQuantity(prId, -1);
+        });
+      });
+  
+      // Increase button click event
+      document.querySelectorAll(".increase-link").forEach(function (link) {
+        link.addEventListener("click", function () {
+          var prId = this.getAttribute("data-prid");
+          updateQuantity(prId, 1);
+        });
+      });
+    });
+  </script>
+  
+
+
+  <script>
+
+
+
+function showPopupAdd() {
+        document.getElementById('overlayAdd').style.display = 'block';
+        document.getElementById('popupAdd').style.display = 'block';
+        // Set the error message in the popup
+       
+      }
+    
+      function closePopupAdd() {
+        document.getElementById('overlayAdd').style.display = 'none';
+        document.getElementById('popupAdd').style.display = 'none';
+      }
+
+
+
+        function showPopup() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+        // Set the error message in the popup
+       
+      }
+    
+      function closePopup() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+      }
+
+      function showError() {
+        document.getElementById('overlayError').style.display = 'block';
+        document.getElementById('popupError').style.display = 'block';
+        // Set the error message in the popup
+       
+      }
+    
+      function closePopupError() {
+        document.getElementById('overlayError').style.display = 'none';
+        document.getElementById('popupError').style.display = 'none';
+      }
+
+      function reachedFunction(messege,prId){
+        const mg=document.getElementById(`quantity-${prId}`)
+        console.log(mg.value)
+        const messege1= messege?messege:mg.value
+        document.getElementById('reachedPopup').style.display = 'block';
+        document.getElementById('popupreached').style.display = 'block';
+        document.getElementById("popup-reched-messege").innerText=`Only ${messege1} stocks are Available`
+
+      }
+
+      function closePopupReached(){
+        document.getElementById('reachedPopup').style.display = 'none';
+        document.getElementById('popupreached').style.display = 'none';
+      }
+      let curruntId
+      function showRemovePopup(id){
+        curruntId=id
+        document.getElementById('remove-conform').style.display = 'block';
+        document.getElementById('popum-remove').style.display = 'block';
+      }
+
+      function closeRemove(){
+        document.getElementById('remove-conform').style.display = 'none';
+        document.getElementById('popum-remove').style.display = 'none';
+      }
+
+      function gotoRemove(){
+        closeRemove()
+        window.location.href = "/remove/cart?id=" + curruntId;
+      }
+
+  </script>
+
+
+  <script>
+    function userdetails(id) {
+      const productDetailURL = `/single/prd?id=${id}`;
+
+      window.location.href = productDetailURL;
+    }
+
+  </script>
+  </body>
+  <!-- include footer -->
+  <%- include('include/footer') %>
+    <!-- /include footer -->
+
+    </html>
+
+<style>
+  #remove-conform{
+    display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+}
+
+#popum-remove{
+      border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+}
+</style>  
+
+
+<style>
+
+  #reachedPopup{
+    display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }    
+
+  #popupreached{
+    border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+
+  #overlayAdd{
+    display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  #popupAdd{
+    border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+
+
+  #overlayError{
+    display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  #popupError{
+    border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+
+
+   #popup {
+      border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+
+  /* Styles for the overlay background */
+  #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  /* Styles for the close button */
+  #popup-close {
+      cursor: pointer;
+      margin-top: -15px;
+      margin-right: -15px;
+
+  }
+
+  /* Styles for the login button */
+  #login-button {
+      cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #BF7DC1;
+      color: white;
+      border: none;
+      border-radius: 5px;
+  }
+  #register-button{
+    cursor: pointer;
+      margin-top: 20px;
+      padding: 10px;
+      margin-left: 10px;
+      background-color: #392539;
+      color: white;
+      border: none;
+      border-radius: 5px;
+  }
+</style>
