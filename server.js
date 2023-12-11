@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
+const connectMongo=require("connect-mongo")
 const bodyparser = require("body-parser");
 const path = require("path");
 dotenv.config()
@@ -9,13 +10,12 @@ const connectDB = require("./server/database/connection");
 connectDB()
 const session = require("express-session")
 
-app.use(
-  session({
-    secret: "mega cart",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+app.use(session({
+  secret: 'mega cart',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: 'mongodb+srv://admin:1234@cluster2.nn7wbmp.mongodb.net/' }),
+}));
 
 
 
