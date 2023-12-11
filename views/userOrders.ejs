@@ -1,6 +1,6 @@
 
 
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
@@ -60,82 +60,76 @@
                 <div class="col-lg-9">
                     <% if (data.length> 0) { %>
                         <% for (let i=0; i < data.length; i++) { %>-
-                            <div class="card mb-4" onclick="details('<%=data[i]._id%>')" style="cursor: pointer;">
-                                <div class="card-body">
-                                    <p style="font-size: 12px;" class="card-title">Order ID: <span
-                                            style="font-weight: bold;">
-                                            <%= data[i]._id %>
-                                        </span></p>
-                                    <% for (let j=0; j < data[i].products.length; j++) { %>
-                                       <% if(data[i].products.cartQhantity>=2){ %>
-                                        <% for(let k=0;k<data[i]?.products[j]?.cartQhantity.length;k++){ %>
+                          <div class="card mb-4" onclick="details('<%=data[i]._id%>')" style="cursor: pointer;">
+                            <div class="card-body">
+                                <p style="font-size: 12px;" class="card-title">Order ID: <span style="font-weight: bold;"><%= data[i]._id %></span></p>
+                                <% for (let j = 0; j < data[i].products.length; j++) { %>
+                                    <% if (data[i].products[j].cartQuantity >= 2) { %>
+                                        <% for (let k = 0; k < data[i]?.products[j]?.cartQuantity; k++) { %>
+                                            <div class="row gy-3 mt-4">
+                                                <div class="col-2">
+                                                    <img src="/primg/<%= data[i].products[j].prd_images[0] %>" class="img-fluid"
+                                                        style="height: 100px; width: 90px; object-fit: contain;"
+                                                        alt="<%= data[i].products[j].pname %>" />
+                                                </div>
+                                                <div class="col-8 d-flex flex-column align-items-start d-flex justify-content-center">
+                                                    <h6 class="card-subtitle mb-2 text-muted text-center">
+                                                        <%= data[i].products[j].pname %>
+                                                    </h6>
+                                                    <p class="card-text text-muted text-center">
+                                                        <%= data[i].products[j].category %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } else { %>
                                         <div class="row gy-3 mt-4">
                                             <div class="col-2">
-                                                <img src="/primg/<%= data[i].products[j].prd_images[0] %>"
-                                                    class="img-fluid" style="height: 100px; width: 90px; object-fit: contain;" alt="<%= data[i].products[j].pname %>" />
+                                                <img src="/primg/<%= data[i].products[j].prd_images[0] %>" class="img-fluid"
+                                                    style="height: 100px; width: 90px; object-fit: contain;"
+                                                    alt="<%= data[i].products[j].pname %>" />
                                             </div>
-                                            <div
-                                                class="col-8 d-flex flex-column align-items-start d-flex justify-content-center">
+                                            <div class="col-8 d-flex flex-column align-items-start d-flex justify-content-center">
                                                 <h6 class="card-subtitle mb-2 text-muted text-center">
                                                     <%= data[i].products[j].pname %>
                                                 </h6>
                                                 <p class="card-text text-muted text-center">
                                                     <%= data[i].products[j].category %>
-                                                </p> 
+                                                </p>
                                             </div>
-                                        </div>
-                                        <% } %>
-                                        <% }else{ %>
-
-                                          <div class="row gy-3 mt-4">
-                                            <div class="col-2">
-                                                <img  src="/primg/<%= data[i].products[j].prd_images[0] %>"
-                                                    class="img-fluid" style="height: 100px; width: 90px; object-fit: contain;" alt="<%= data[i].products[j].pname %>" />
-                                            </div>
-                                            <div
-                                                class="col-8 d-flex flex-column align-items-start d-flex justify-content-center">
-                                                <h6 class="card-subtitle mb-2 text-muted text-center">
-                                                    <%= data[i].products[j].pname %>
-                                                </h6>
-                                                <p class="card-text text-muted text-center">
-                                                    <%= data[i].products[j].category %>
-                                                </p> 
-                                            </div>
-                                            <div class="col-2 d-flex align-items-center">
+                                            <div class="col-12 col-md-2 d-flex align-items-center mt-2 mt-md-0">
                                               <% let statusDoc %>
-                                              <% if(data[i].status=="pending" || data[i].status=='Shipped'){ %>
-                                                <% let pid %>
-                                                <% if(data[i].prId){ %>
-                                                  <% pid=data[i].prId %>
-                                                  <% }else{ %>
-                                                    <% pid=data[i]._id %>
-                                                    <% } %>
-                                                <a href="/cancel/order?orderId=<%=pid %>">
-                                                  <button class="btn btn-outline-primary"
-                                                  >Cancel</button>
-                                                </a>  
-                                                <% }else if(data[i].status=='Canceled'){ %>
-                                                  <button class="btn btn-outline-danger"
-                                                  >Canceled</button>
-                                                  <% }else if(data[i].status=='Returned'){ %>
-                                                    <button class="btn btn-outline-warning"
-                                                    >Returned</button>
-                                                    <% }else if(data[i].status=='Delivered') {%>
-                                                      <button class="btn btn-outline-success"
-                                                      >Delivered</button>
-                                                      <% } %>
-                                            </div>
+                                              <% if (data[i].status == "pending" || data[i].status == 'Shipped') { %>
+                                                  <% let pid %>
+                                                  <% if (data[i].prId) { %>
+                                                      <% pid = data[i].prId %>
+                                                  <% } else { %>
+                                                      <% pid = data[i]._id %>
+                                                  <% } %>
+                                                  <a href="/cancel/order?orderId=<%=pid %>" class="btn btn-outline-primary btn-sm">
+                                                      Cancel
+                                                  </a>
+                                              <% } else if (data[i].status == 'Canceled') { %>
+                                                  <button class="btn btn-outline-danger btn-sm" disabled>
+                                                      Canceled
+                                                  </button>
+                                              <% } else if (data[i].status == 'Returned') { %>
+                                                  <button class="btn btn-outline-warning btn-sm" disabled>
+                                                      Returned
+                                                  </button>
+                                              <% } else if (data[i].status == 'Delivered') { %>
+                                                  <button class="btn btn-outline-success btn-sm" disabled>
+                                                      Delivered
+                                                  </button>
+                                              <% } %>
+                                          </div>
+                                          
                                         </div>
-
-                                          <% } %>
-                                        <% } %>
-                                            <script>
-                                                function returnProduct(orderId, productId) {
-                                                    alert('Return product clicked! Order ID: ' + orderId + ', Product ID: ' + productId);
-                                                }
-                                            </script>
-                                         </div>
-                                     </div>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+                        
                                      <% } %>
                                          <% } else { %>
                                               <p>No Items In Orders</p>

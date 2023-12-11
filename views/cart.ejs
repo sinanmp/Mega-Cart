@@ -16,102 +16,91 @@
               <% if(cartItems.length>0){ %>
                 <% for (let i=0;i<cartItems.length;i++){ %>
                   <div class="row gy-3 mb-4">
-                    <div class="col-lg-5 outofstock" onclick="userdetails('<%=cartItems[i].prId%>')">
-                      <div class="me-lg-5">
-                        <div class="d-flex">
-                          <div style="width: auto;height: auto;">
-                            <img src="primg/<%= cartItems[i].prd_images[0] %>"  class="border rounded me-3"
-                            style="width: 70px; height: 96px; object-fit: fill;" />
-                          </div>
-                          <div>
-                            <a href="#" class="nav-link">
-                              <%= cartItems[i].pname %>
-                            </a>
-                            <p class="text-muted">
-                              <%= cartItems[i].category %>
-                            </p>
-                            <% if(cartItems[i].catStatus==false||cartItems[i].unlist==true ){ %>
-                              <p style="color: red;">Product Not available </p>
-                              <%  check=true %>
-                              <style>
-                                .outofstock {
-                                  opacity: 90%;
-                                  pointer-events: none;
-                                }
-                              </style>
-                              <% }else{ %>
-
-                                <script>
-                                  document.querySelector('.outofstock').classList.remove('outofstock')
-                                </script>
-                                <% } %>
-                                <% if(cartItems[i].stock==0){ %>
-                                  <% check=true %>
-                                  <p style="color: red;">Out of stock</p>
-                                  <% }else{ %>
-                                    <p style="margin-bottom: 0; margin-top: 5px; color: green; font-size: 12px;"><%=cartItems[i].stock%> items In Stock</p>
+                    <div class="col-lg-5">
+                        <div class="me-lg-5">
+                            <div class="d-flex">
+                                <div style="width: auto; height: auto;">
+                                    <img src="primg/<%= cartItems[i].prd_images[0] %>" class="border rounded me-3"
+                                        style="width: 70px; height: 96px; object-fit: fill;" />
+                                </div>
+                                <div>
+                                    <a href="#" class="nav-link">
+                                        <%= cartItems[i].pname %>
+                                    </a>
+                                    <p class="text-muted">
+                                        <%= cartItems[i].category %>
+                                    </p>
+                                    <% if (cartItems[i].catStatus == false || cartItems[i].unlist == true) { %>
+                                    <p style="color: red;">Product Not available </p>
+                                    <% check = true %>
+                                    <style>
+                                        .outofstock {
+                                            opacity: 90%;
+                                            pointer-events: none;
+                                        }
+                                    </style>
+                                    <% } else { %>
+                                    <script>
+                                        document.querySelector('.outofstock').classList.remove('outofstock')
+                                    </script>
                                     <% } %>
-                          </div>
+                                    <% if (cartItems[i].stock == 0) { %>
+                                    <% check = true %>
+                                    <p style="color: red;">Out of stock</p>
+                                    <% } else { %>
+                                    <p style="margin-bottom: 0; margin-top: 5px; color: green; font-size: 12px;">
+                                        <%= cartItems[i].stock %> items In Stock
+                                    </p>
+                                    <% } %>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
                     <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                      <!-- <div class="col-md-4 col-6 mb-3">
-                    <label class="mb-2 d-block">Quantity</label>
-                    <div class="input-group mb-3" style="width: 170px;">
-                        <button class="btn btn-white border border-secondary px-3" type="button" id="decrease-btn" data-mdb-ripple-color="dark">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <input type="text" class="form-control text-center border border-secondary" placeholder="1" aria-label="Example text with button addon" aria-describedby="button-addon1" id="quantity-input" />
-                        <button class="btn btn-white border border-secondary px-3" type="button" id="increase-btn" data-mdb-ripple-color="dark">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div> -->
-                      <div class="">
-                        <% var discount=cartItems[i].discount %>
-                        <% var disPrice=cartItems[i].price * discount/100 %>
-                        <% var showPrice=cartItems[i].price-disPrice %>
-                    <!-- Inside the loop where you display cart items --> 
-                      <text class="h6" id="total-price-product-<%=cartItems[i].prId %>">
-                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(cartItems[i].cartQhantity * showPrice) %>
-                      </text> <br />
-
-                        <small class="text-muted text-nowrap"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(showPrice) %>/ per item </small>
-                      </div>
+                        <div class="">
+                            <% var discount=cartItems[i].discount %>
+                            <% var disPrice=cartItems[i].price * discount/100 %>
+                            <% var showPrice=cartItems[i].price-disPrice %>
+                            <text class="h6" id="total-price-product-<%=cartItems[i].prId %>">
+                                <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(cartItems[i].cartQhantity * showPrice) %>
+                            </text> <br />
+                            <small class="text-muted text-nowrap">
+                                <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(showPrice) %>/ per item
+                            </small>
+                        </div>
                     </div>
                     <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                      <div class="col-md-4 col-6 mb-3">
-                        <label class="mb-2 d-block">Quantity</label>
-                        <div class="input-group mb-3 quantity-container" style="width: 170px;" >
-                          <a href="javascript:void(0);" class="decrease-link" data-prid="<%=cartItems[i].prId %>">
-                            <button class="btn btn-white border border-secondary px-3 decrease-btn" type="button">
-                              <i class="fas fa-minus"></i>
-                            </button>
-                          </a>
-                          
-                          <!-- Quantity input -->
-                          <input type="text" id="quantity-<%=cartItems[i].prId %>" style="width: 50px;" class="text-center quantity-input" disabled placeholder="<%=cartItems[i].cartQhantity %>" />
-                          
-                          <!-- Increment button -->
-                          <a href="javascript:void(0);" class="increase-link" data-prid="<%=cartItems[i].prId %>">
-                            <button class="btn btn-white border border-secondary px-3 increase-btn" type="button">
-                              <i class="fas fa-plus"></i>
-                            </button>
-                          </a>
+                        <div class="col-md-4 col-6 mb-3">
+                            <label class="mb-2 d-block">Quantity</label>
+                            <div class="input-group mb-3 quantity-container" style="width: 170px;">
+                                <a href="javascript:void(0);" class="decrease-link" data-prid="<%=cartItems[i].prId %>">
+                                    <button class="btn btn-white border border-secondary px-3 decrease-btn" type="button">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </a>
+                                <!-- Quantity input -->
+                                <input type="text" id="quantity-<%=cartItems[i].prId %>" style="width: 50px;" class="text-center quantity-input" disabled placeholder="<%=cartItems[i].cartQhantity %>" />
+                                <!-- Increment button -->
+                                <a href="javascript:void(0);" class="increase-link" data-prid="<%=cartItems[i].prId %>">
+                                    <button class="btn btn-white border border-secondary px-3 increase-btn" type="button">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </a>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                    <div
-                      class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2 remove-div">
-                      <div class="float-md-end">
-                        <a href="/wish/api/cart?email=<%=email%>&id=<%=cartItems[i].prId %>" class="btn btn-light border px-2 icon-hover-primary"><i
-                            class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-                        <a href="#" onclick="showRemovePopup('<%=cartItems[i].prId %>')"
-                          class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
-                      </div>
+                    <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2 remove-div">
+                        <div class="float-md-end">
+                            <a href="/wish/api/cart?email=<%=email%>&id=<%=cartItems[i].prId %>"
+                                class="btn btn-light border px-2 icon-hover-primary">
+                                <i class="fas fa-heart fa-lg px-1 text-secondary"></i>
+                            </a>
+                            <a href="#" onclick="showRemovePopup('<%=cartItems[i].prId %>')"
+                                class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
+                        </div>
                     </div>
-                  </div>
+                </div>
+                
 
                   <% if( cartItems[i].stock < cartItems[i].cartQhantity){ %>
                     <% check=true %>
