@@ -463,7 +463,7 @@ exports.updateCheck = (req, res) => {
   const username = req.query.username
   const mobile = req.query.mobile
   if (username) {
-    res.render("checkPass", { email: email, username: username, mobile: null })
+    res.render("checkPass", { email: email, username: username, mobile: null })  
   } else {
     res.render("checkPass", { email: email, mobile: mobile, username: null })
   }

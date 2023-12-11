@@ -113,42 +113,42 @@
         <label class="form-check-label" for="cod">Cash on Delivery (COD)</label>
     </div>
       </div>
-    <div style="position: relative;left: 50%;top: 1rem; transform: translateX(-50%);">
-      <div class="card shadow mx-auto" style="max-width: 54rem;">
-        <p class="m-3 font-weight-bold">Order Summary:</p>
-        <div class="card-body rounded bg-white">
-            <div class="d-flex justify-content-between mb-2">
-                <p>Total price:</p>
-                <p class="font-weight-bold" id="total-price-before">
-                    <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
-                </p>
-            </div>
-            <div class="d-flex justify-content-between mb-2">
-                <p>Total Items</p>
-                <p class="text-success">
-                    <%= prLength %>
-                </p>
-            </div>
-            <hr />
+      <div class="container mt-3">
+        <div class="card shadow mx-auto" style="max-width: 54rem;">
+            <p class="m-3 font-weight-bold">Order Summary:</p>
+            <div class="card-body rounded bg-white">
+                <div class="d-flex justify-content-between mb-2">
+                    <p>Total price:</p>
+                    <p class="font-weight-bold" id="total-price-before">
+                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <p>Total Items</p>
+                    <p class="text-success">
+                        <%= prLength %>
+                    </p>
+                </div>
+                <hr />
     
-            <div class="justify-content-between" id="takingfrom" style="display: none;">
-              <p style="color: red;">Taking From Wallet:</p>
-              <p class="mb-2 fw-bold"  style="font-weight: 500; color: red;">
-                - <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
-              </p>
+                <div class="justify-content-between" id="takingfrom" style="display: none;">
+                    <p style="color: red;">Taking From Wallet:</p>
+                    <p class="mb-2 fw-bold" style="font-weight: 500; color: red;">
+                        - <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+                    </p>
+                </div>
+    
+                <div class="d-flex justify-content-between mb-2">
+                    <p>Total price:</p>
+                    <p class="font-weight-bold" id="total-price">
+                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+                    </p>
+                </div>
+                <button class="btn btn-block" style="background-color: #BF7DC1; color: white; height: 40px;" disabled id="rzp-button" type="submit">Place Order</button>
             </div>
-  
-            <div class="d-flex justify-content-between mb-2">
-                <p>Total price:</p>
-                <p class="font-weight-bold" id="total-price">
-                    <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
-                </p>
-            </div>
-            <button class="btn btn-block" style="background-color: #BF7DC1; color: white; height: 40px;" disabled id="rzp-button" type="submit">Place Order</button>
         </div>
     </div>
     
-    </div>
     </form>
     
 </div>
