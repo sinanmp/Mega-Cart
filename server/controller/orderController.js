@@ -111,11 +111,13 @@ exports.submitOrder = async (req, res) => {
                 }
                 await NewOrder.save();
                 await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
-                await cartDb.updateOne({prId:id},{$inc:{stock:-1}})
+                console.log(id)
+             const updateddata= await cartDb.updateOne({prId:id},{$inc:{stock:-1}});
+                console.log(updateddata+"   its updated")
                 res.json({ url:`/order/success`});
              }
-        } catch (error) {
-            console.log("its coming try catch")
+        } catch (error) {         
+            console.log("its coming try catch")       
             console.log(error)
             res.send(error);
         }

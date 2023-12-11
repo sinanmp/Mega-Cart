@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
-const MongoStore=require("connect-mongo")
 const bodyparser = require("body-parser");
 const path = require("path");
 dotenv.config()
@@ -13,14 +12,13 @@ const session = require("express-session")
 app.use(session({
   secret: 'mega cart',
   resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: 'mongodb+srv://admin:1234@cluster2.nn7wbmp.mongodb.net/' }),
+  saveUninitialized: false
 }));
 
 
 
 app.use(methodOverride('_method'));
-
+  
 
 const PORT = process.env.PORT || 5000;
 
