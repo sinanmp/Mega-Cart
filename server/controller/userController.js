@@ -459,15 +459,15 @@ exports.adDelete = (req, res) => {
 
 
 exports.updateCheck = (req, res) => {
-  const email = req.query.email
-  const username = req.query.username
-  const mobile = req.query.mobile
-  if (username) {
-    res.render("checkPass", { email: email, username: username, mobile: null })  
-  } else {
-    res.render("checkPass", { email: email, mobile: mobile, username: null })
-  }
-
+  // const email = req.query.email
+  // const username = req.query.username
+  // const mobile = req.query.mobile
+  // if (username) {
+  //   res.render("checkPass", { email: email, username: username, mobile: null })  
+  // } else {
+  //   res.render("checkPass", { email: email, mobile: mobile, username: null })
+  // }
+  res.send("ya its working")
 }
 
 
