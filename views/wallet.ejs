@@ -116,7 +116,7 @@
                 </div>
             </div>    
         </div>
-        <a id="history" onclick="openHistoryModal()" style="position: relative; left: 42%; top: 19px; color: rgb(43, 43, 143);"><i class="fa-solid fa-clock-rotate-left"></i> Transaction history</a>
+        <a id="history" class="history-a-tag" onclick="openHistoryModal()" style="position: relative;  top: 19px; color: rgb(43, 43, 143);"><i class="fa-solid fa-clock-rotate-left "></i> Transaction history</a>
         
     </div>
     
@@ -146,8 +146,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="historyModalLabel">Transaction History</h5>
-                    <button  onclick="showfilter()" type="button" style="width: 100px; height: 40px; position: relative;left: 34%;top: -3px;" class="btn border" id="filbtn">Filter</button>
-                    <button  onclick="clearfilter()" type="button" style="width: 130px; height: 40px; position: relative;left: 30%;top: -3px; display: none;" class="btn border" id="clearFilter">Clear Filter</button>
+                    <button  onclick="showfilter()" type="button"  style="width: 100px; height: 40px; position: relative;top: -3px;" class="btn border filterShow" id="filbtn">Filter</button>
+                    <button  onclick="clearfilter()" type="button"  style="width: 130px; height: 40px; position: relative;top: -3px; display: none;" class="btn border hideFilter" id="clearFilter">Clear Filter</button>
                     <button type="button" onclick="closeHistoryModal()" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -329,6 +329,27 @@
       border: none;
       border-radius: 5px;
   }
+  .history-a-tag{
+    left: 42%;
+  }
+  .hideFilter{
+    left: 30%
+  }
+  .filterShow{
+    left:34%
+  }
+  @media screen and (max-width: 500px) {
+    .filterShow{
+    left:3%
+  }
+  .hideFilter{
+    left: 3%
+  }
+  .history-a-tag{
+    left: 27%;
+  }
+}
+
     </style>
         <script src="https://kit.fontawesome.com/6bb7f02898.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
