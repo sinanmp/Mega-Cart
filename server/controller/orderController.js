@@ -21,7 +21,7 @@ exports.submitOrder = async (req, res) => {
         try {
           
             const data = await productdb.findOne({ _id: id });
-            if(data.stock==0){
+            if(data.stock<=0){
                 res.json({errorforStock:"no Stock"})
                 return
             } 
