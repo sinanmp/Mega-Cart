@@ -188,7 +188,7 @@ exports.updateQuantity = async (req, res) => {
       await cartDb.updateOne({ prId: prId, email: req.session.isAuth }, { $set: { cartQhantity: newQuantity } });
       res.json({ success: true, newQuantity: newQuantity ,stockQuantity:stockQuantity});
     } else {
-      res.json({ success: false, message: "Quantity cannot be less than 1" });
+      res.json({ success: false, message  : "Quantity cannot be less than 1" });
     }
   } catch (error) {
     console.error("Error updating quantity:", error);

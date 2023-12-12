@@ -66,6 +66,12 @@
         border: none;
         border-radius: 5px;
     }
+    body{
+      overflow-x: hidden;
+      margin-right: 0;
+      padding: 0;
+      padding-left: 0;
+    }
   </style>
 </head>
 
@@ -208,6 +214,7 @@
   width: 100%;
   height: auto;
   transition: transform 0.3s ease-in-out;
+  cursor: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"%3E%3Cg fill="%23000"%3E%3Cpath fill="none" d="M0 0h24v24H0z"%3E%3C/path%3E%3Cpath d="M21.7 21.3l-6-6a9.5 9.5 0 1 0-1.4 1.4l6 6a1 1 0 0 0 1.4 0 1 1 0 0 0 0-1.4zM10 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"%3E%3C/path%3E%3Cpath d="M10.5 11H13v2h-2v1.5a.5.5 0 0 1-1 0V13H7v-2h2V9.5a.5.5 0 0 1 1 0V11z"%3E%3C/path%3E%3Ccircle cx="12" cy="12" r="1.5"%3E%3C/circle%3E%3C/g%3E%3C/svg%3E') 15 15, auto;
 }
 
 .overlay {
@@ -223,6 +230,7 @@
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+
 }
 
 .overlay p {
@@ -237,7 +245,7 @@
     <div class="container">
       <div class="row gx-5">
         <aside class="col-lg-6">
-          <div class="container rounded-4 d-flex justify-content-center mb-3 image-container" style="width: 400px; height: 400px;">
+          <div class="container rounded-4 d-flex justify-content-center mb-3 image-container" style="max-width: 400px; max-height: 400px;">
             <a style="cursor: pointer;" id="imageLink">
                 <img id="zoomImage" class="rounded-4 main-image zoom-image fit img-fluid" style="object-fit: contain; aspect-ratio: 1/1;" src="/primg/<%=product.prd_images[0]%>" alt="Product Image">
             </a>
@@ -548,7 +556,7 @@
         const yPercentage = (offsetY / offsetHeight) * 100;
 
         zoomImage.style.transformOrigin = `${xPercentage}% ${yPercentage}%`;
-        zoomImage.style.transform = 'scale(1.7)'; // Adjust the scale factor as needed
+        zoomImage.style.transform = 'scale(1.5)'; // Adjust the scale factor as needed
 
         overlay.style.opacity = 1;
     });
