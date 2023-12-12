@@ -89,8 +89,13 @@
                             <p class="mb-2">Available Balance:</p>
                             <p class="mb-4 fw-bold" style="font-weight: 500;" id="total-price"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(userData.wallet.totalAmount ) %></p>
                         </div>
+                        <% if(userData.verified==true){ %>
                         <button onclick="showForm()" id="Addbtn"
                             class="btn btn-block mb-2" style="background-color: #BF7DC1; color: white; height: 40px;">Add More</button>
+                            <% }else{ %>
+                                <button onclick="YouNeedVerify()" id="Addbtn"
+                                class="btn btn-block mb-2" style="background-color: #BF7DC1; color: white; height: 40px;">Add More</button>
+                                <% } %>
                         <form id="formid">
                             <hr>
                             <button type="button" style="width: 100px; height: 40px;" class="btn mb-4 border" onclick="hideForm()">Close</button>
@@ -199,6 +204,18 @@
             </div>
         </div>
     </div>
+
+    <div id="overlayError"></div>
+    <div id="youNeedtoverify">
+      <div style="display: flex; width: 100%; justify-content: end;">
+        <span style="font-size: 13px;" id="popup-close" onclick="veryfiColose()">✖ Close</span>
+      </div>
+      <p id="popup-message">You Need to Verify your Email !</p>
+      <!-- Add login and register links or buttons here -->
+      <a href="/user/verify?email=<%=userData.email%>">
+        <button type="button" id="register-button" style="width: 100px;">Verify Now</button>
+      </a>
+    </div>
     
   
 
@@ -230,6 +247,17 @@
         document.getElementById("filbtn").style.display='none'
         document.getElementById("clearFilter").style.display='block'
        }
+
+       
+       function YouNeedVerify(){
+          document.getElementById('overlayError').style.display = 'block';
+        document.getElementById('youNeedtoverify').style.display = 'block';
+        }
+
+        function veryfiColose(){
+          document.getElementById('overlayError').style.display = 'none';
+        document.getElementById('youNeedtoverify').style.display = 'none';
+        }
 
 
        function filterTransactions(){
@@ -263,6 +291,22 @@
     </script>
 
     <style>
+            #youNeedtoverify{
+        border-radius: 6px;
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: #f8f8f8;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+    }
     #history:hover{
         text-decoration: underline;
         cursor: pointer;
@@ -308,6 +352,17 @@
       margin-right: -15px;
 
   }
+  #overlayError{
+    display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
 
   /* Styles for the login button */
   #login-button {

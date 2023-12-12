@@ -84,7 +84,7 @@
         }
       </style>
       <% if(users && users.length> 0 && users[0].address && users[0].address.length > 0) {%>
-        <div class="modal-container" id="allAddresses" style="width: 600px;">
+        <div class="modal-container container" id="allAddresses" style="max-width: 550px;">
           <div class="modal-content">
 
             <button class="btn btn-danger mt-3 close-btn" style="z-index: 5; position: fixed;"
@@ -273,6 +273,18 @@
 
   <style>
     /* Center the modal */
+    /* #allAddresses{
+      width: 500px;
+    }
+
+
+
+    @media screen and(min-width: 450px) {
+      #allAddresses{
+        width: 385px;
+      }
+      
+    } */
     .modal-container {
 
       align-items: center;

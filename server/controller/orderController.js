@@ -19,7 +19,12 @@ exports.submitOrder = async (req, res) => {
     const id = req.query.prId;
     if (id) {
         try {
+          
             const data = await productdb.findOne({ _id: id });
+            if(data.stock==0){
+                res.json({errorforStock:"no Stock"})
+                return
+            } 
            console.log(req.session.OrderInfo.locality+"   this is the best rout session")
             const NewOrder = {
                 email: req.session.OrderInfo.email,
@@ -74,7 +79,7 @@ exports.submitOrder = async (req, res) => {
                     });
                 });
             }else {
-                const NewOrder =new orderDb({
+                const NewOrder =new orderDb({   
                     email: req.session.OrderInfo.email,
                     username: req.session.OrderInfo.username,
                     products: data,
@@ -88,7 +93,8 @@ exports.submitOrder = async (req, res) => {
                         AlternateNumber: req.session.OrderInfo.altr_number
                     },
                     PaymentMethod: req.body.payment
-                });
+                });   
+                
                 if(req.body.payment=='wallet'){
                     const transaction = {
                         date: new Date(),
@@ -112,7 +118,7 @@ exports.submitOrder = async (req, res) => {
                 await NewOrder.save();
                 await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
                 console.log(id)
-             const updateddata= await cartDb.updateOne({prId:id},{$inc:{stock:-1}});
+             const updateddata= await cartDb.updateMany({prId:id},{$inc:{stock:-1}});
                 console.log(updateddata+"   its updated")
                 res.json({ url:`/order/success`});
              }
@@ -128,8 +134,14 @@ exports.submitOrder = async (req, res) => {
 
     try {
         const prdata = await cartDb.find({ email: req.session.isAuth });
- 
+        for (let i=0; i<prdata.length;i++){
+            if(prdata[i].cartQhantity>prdata[i].stock){
+                res.json({errorforStock:"no Stock"})
+                return
+            }
+        }
         
+           console.log(prdata+" this is prdata dkjfisafjadsifjdsifie")
             NewOrder = {
                 email: req.session.OrderInfo.email,
                 username: req.session.OrderInfo.username,
@@ -202,12 +214,6 @@ exports.submitOrder = async (req, res) => {
                     },
                     PaymentMethod: req.body.payment
                 })
-
-                if(NewOrder.products[i].cartQhantity>NewOrder.products[i].stock){
-                    res.json({errorforStock:"no Stock"})
-                    return
-                }
-
                 
                 if(req.body.payment=='wallet'){
                     const transaction = {
@@ -231,7 +237,7 @@ exports.submitOrder = async (req, res) => {
                 }
                await cartOrder.save()
                await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
-               await cartDb.updateOne({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+               await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
             }
             await cartDb.deleteMany({email:req.session.isAuth})
             res.json({ url:`/order/success`});
@@ -329,10 +335,9 @@ exports.orderRoute= async(req,res)=>{
             },
             PaymentMethod: NewOrder.PaymentMethod
         });
-        
         await NewOrder2.save()
         await productdb.updateOne({_id:id},{$inc:{stock:-1}})
-        await cartDb.updateOne({prId:id},{$inc:{stock:-1}})
+        await cartDb.updateMany({prId:id},{$inc:{stock:-1}})
         res.json({ url:`/order/success`});
         return
    }else{
@@ -341,7 +346,7 @@ exports.orderRoute= async(req,res)=>{
         const NewOrder1=new orderDb({
             email: NewOrder.email,
             username: NewOrder.username,
-            products: NewOrder.products[i],
+            products: NewOrder.products[i],  
             totalAmount:NewOrder.totalAmount,
             shippingAddress: {
                 locality:NewOrder.shippingAddress.locality,
@@ -353,20 +358,15 @@ exports.orderRoute= async(req,res)=>{
             },
             PaymentMethod: NewOrder.PaymentMethod
         })
-        if(NewOrder1.products[i].cartQhantity>NewOrder1.products[i].stock){
-            res.json({errorforStock:"out of stock"})
-            return
-        }
         await NewOrder1.save()
         const q = Number(NewOrder.products[i].cartQhantity);
         await productdb.updateOne({_id:NewOrder.products[i].prId},{$inc:{stock:-q}})
-        await cartDb.updateOne({prId:NewOrder.products[i].prId},{$inc:{stock:-q}})
+        await cartDb.updateMany({prId:NewOrder.products[i].prId},{$inc:{stock:-q}})
     }
         await cartDb.deleteMany({email:req.session.isAuth})
         console.log("its coming in else case")
         res.json({ url:`/order/success`});
    }
-
 }
 
 

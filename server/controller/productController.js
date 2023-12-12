@@ -66,36 +66,35 @@ exports.updateProcduct = (req, res) => {
 }
 
 
-exports.productUpdate = (req, res) => {
+exports.productUpdate = async (req, res) => {
     const productId = req.query.id
-    console.log(productId + "  this is product id")
-    productDb.updateOne({ _id: productId }, {
-        $set: {
-            pname: req.body.prd_name,
-            description: req.body.description,
-            category: req.body.category,
-            price: req.body.price,
-            discount:req.body.discount,
-            brand:req.body.brand,
-            stock:req.body.stock
-        }
-    }).then(pdata => {
-        cartDb.updateOne({prId:productId},{$set:{   pname: req.body.prd_name,
-            description: req.body.description,
-            category: req.body.category,
-            price: req.body.price,
-            discount:req.body.discount,
-            stock:req.body.stock}})
-        .then(data=>{
-            console.log(pdata)
-            // res.redirect("/admin-products")
-            res.send("<script>alert('product updated successfully!'); window.location='/admin-products';</script>");
-            console.log("data updated successfull!")
+    try {
+        console.log(productId + "  this is product id")
+       await productDb.updateOne({ _id: productId }, {
+            $set: {
+                pname: req.body.prd_name,
+                description: req.body.description,
+                category: req.body.category,
+                price: req.body.price,
+                discount:req.body.discount,
+                brand:req.body.brand,
+                stock:req.body.stock
+            }
         })
-    }).catch(err => {
+          await cartDb.updateMany({prId:productId},{$set:{   pname: req.body.prd_name,
+                description: req.body.description,
+                category: req.body.category,
+                price: req.body.price,
+                discount:req.body.discount,
+                stock:req.body.stock}})
+            
+                res.send("<script>alert('product updated successfully!'); window.location='/admin-products';</script>");
+                console.log("data updated successfull!")
+        
+    } catch (error) {
         res.send("<script>alert('Delete failed!'); window.location='/admin-products';</script>");
-    })
-
+        console.log("try catch errorr in product update block")
+    }
 }
 
 

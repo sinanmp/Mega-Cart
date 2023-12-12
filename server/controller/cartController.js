@@ -134,7 +134,11 @@ exports.cart = (req, res) => {
             categoryDb.find({status:true})
             .then(catData=>{
               const productQhuantity = cartData.map(item => item.cartQhantity);
-              res.render("cart", { cartItems: cartData, totalPrice: sum, email: email,wishdata:wishdata,catogories:catData,email:email})
+              userDb.findOne({email:email})
+              .then(userData=>{
+                res.render("cart", { cartItems: cartData, totalPrice: sum, email: email,wishdata:wishdata,catogories:catData,email:email,userData:userData})
+              })
+             
             })
           })
           
