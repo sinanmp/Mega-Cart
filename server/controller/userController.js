@@ -653,7 +653,6 @@ exports.checkoutFetch=(req,res)=>{
 
 
 exports.addressPostCheckout=(req,res)=>{
-  const id= req.query.id
   const userEmail = req.session.isAuth;
   const total=req.body.total
   const prId=req.query.prId
@@ -668,7 +667,7 @@ exports.addressPostCheckout=(req,res)=>{
     house_No: req.body.HouseNumber
   };
 
-  userDb.updateOne({ _id: id },
+  userDb.updateOne({ email: userEmail },
     { $push: { address: newAddress } })
     .then(data => {
       axios.get(`http://localhost:3000/api/checkout?&email=${userEmail}`)

@@ -126,10 +126,9 @@ exports.changeAddress=(req,res)=>{
 
 
 exports.checkoutAddAddress=(req,res)=>{  
-    const email=req.query.prId
-    const id = req.query.id
+    const prId=req.query.prId
     const total= req.body.total
-    res.render("checkoutAddAddress.ejs",{id:id,total:total,prId:prId})  
+    res.render("checkoutAddAddress.ejs",{total:total,prId:prId})  
 }
 
 
