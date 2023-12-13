@@ -30,7 +30,7 @@ exports.submitOrder = async (req, res) => {
                 email: req.session.OrderInfo.email,
                 username: req.session.OrderInfo.username,
                 products: data,
-                totalAmount: req.session.OrderInfo.totalsum,
+                totalAmount: req.session.totalPriceinPrid,
                 shippingAddress: {
                     locality: req.session.OrderInfo.locality,
                     Address: req.session.OrderInfo.address,
@@ -48,7 +48,7 @@ exports.submitOrder = async (req, res) => {
                 console.log("its coming success is very dangersly")
                 const randomOrderID = Math.floor(Math.random() * 1000000).toString();
                 const options = {
-                    amount: req.session.OrderInfo.totalsum,  
+                    amount: req.session.totalPriceinPrid,  
                     currency: "INR",  
                     receipt: randomOrderID,
                 };      
@@ -60,7 +60,7 @@ exports.submitOrder = async (req, res) => {
                             res.status(200).send({
                                 razorSuccess: true,
                                 msg: "order created",
-                                amount: req.session.OrderInfo.totalsum*100,
+                                amount: req.session.totalPriceinPrid*100,
                                 key_id: process.env.KEY_VALUE,
                                 name: "Sinan",
                                 contact: "9037317210",
@@ -83,7 +83,7 @@ exports.submitOrder = async (req, res) => {
                     email: req.session.OrderInfo.email,
                     username: req.session.OrderInfo.username,
                     products: data,
-                    totalAmount: req.session.OrderInfo.totalsum,
+                    totalAmount: req.session.totalPriceinPrid,
                     shippingAddress: {
                         locality: req.session.OrderInfo.locality,
                         Address: req.session.OrderInfo.address,
@@ -99,7 +99,7 @@ exports.submitOrder = async (req, res) => {
                     const transaction = {
                         date: new Date(),
                         category: 'purchase',
-                        amount: req.session.OrderInfo.totalsum,
+                        amount: req.session.totalPriceinPrid,
                         description:"Item Ordered"
                     };
 
@@ -108,7 +108,7 @@ exports.submitOrder = async (req, res) => {
                     const updatedUser = await userDb.findOneAndUpdate(
                       { email: req.session.OrderInfo.email },
                       {
-                          $inc: { 'wallet.totalAmount':-req.session.OrderInfo.totalsum },
+                          $inc: { 'wallet.totalAmount':req.session.totalPriceinPrid },
                           $push: { 'wallet.transactions': transaction }
                       },
                       { new: true }
@@ -146,7 +146,7 @@ exports.submitOrder = async (req, res) => {
                 email: req.session.OrderInfo.email,
                 username: req.session.OrderInfo.username,
                 products: prdata,
-                totalAmount: req.session.OrderInfo.totalsum,
+                totalAmount:req.session.totalPriceinPrid,
                 shippingAddress: {
                     locality: req.session.OrderInfo.locality,
                     Address: req.session.OrderInfo.address,
@@ -167,7 +167,7 @@ exports.submitOrder = async (req, res) => {
             console.log("its coming success is very dangersly")
             const randomOrderID = Math.floor(Math.random() * 1000000).toString();
             const options = {
-                amount: req.session.OrderInfo.totalsum,  
+                amount:req.session.totalPriceinPrid,  
                 currency: "INR",  
                 receipt: randomOrderID,
             };      
@@ -179,7 +179,7 @@ exports.submitOrder = async (req, res) => {
                         res.status(200).send({
                             razorSuccess: true,
                             msg: "order created",
-                            amount: req.session.OrderInfo.totalsum*100,
+                            amount: req.session.totalPriceinPrid*100,
                             key_id: process.env.KEY_VALUE,
                             name: "Sinan",
                             contact: "9037317210",
@@ -203,7 +203,7 @@ exports.submitOrder = async (req, res) => {
                     email: req.session.OrderInfo.email,
                     username: req.session.OrderInfo.username,
                     products: NewOrder.products[i],
-                    totalAmount: req.session.OrderInfo.totalsum,
+                    totalAmount: req.session.totalPriceinPrid,
                     shippingAddress: {
                         locality: req.session.OrderInfo.locality,
                         Address: req.session.OrderInfo.address,
@@ -219,7 +219,7 @@ exports.submitOrder = async (req, res) => {
                     const transaction = {
                         date: new Date(),
                         category: 'purchase',
-                        amount: req.session.OrderInfo.totalsum,
+                        amount: req.session.totalPriceinPrid,
                         description:"Item Ordered"
                     };
 
@@ -228,7 +228,7 @@ exports.submitOrder = async (req, res) => {
                     const updatedUser = await userDb.findOneAndUpdate(
                       { email: req.session.OrderInfo.email },
                       {
-                          $inc: { 'wallet.totalAmount':-req.session.OrderInfo.totalsum},
+                          $inc: { 'wallet.totalAmount':req.session.totalPriceinPrid},
                           $push: { 'wallet.transactions': transaction }
                       },
                       { new: true }
@@ -324,7 +324,7 @@ exports.orderRoute= async(req,res)=>{
             email: NewOrder.email,
             username: NewOrder.username,
             products: NewOrder.products,
-            totalAmount:NewOrder.totalAmount,
+            totalAmount:req.session.totalPriceinPrid,
             shippingAddress: {
                 locality:NewOrder.shippingAddress.locality,
                 Address: NewOrder.shippingAddress.Address,
@@ -347,7 +347,7 @@ exports.orderRoute= async(req,res)=>{
             email: NewOrder.email,
             username: NewOrder.username,
             products: NewOrder.products[i],  
-            totalAmount:NewOrder.totalAmount,
+            totalAmount:req.session.totalPriceinPrid,
             shippingAddress: {
                 locality:NewOrder.shippingAddress.locality,
                 Address: NewOrder.shippingAddress.Address,

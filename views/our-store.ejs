@@ -786,9 +786,23 @@
   <!-- Copyright -->
 </footer>   
 <script>
-          function singlePrd(id) {
-              const productId = `/single/prd?id=${id}`;
-              window.location.href = productId;
+          function singlePrd(prId) {
+            console.log('Sending request with prId:', prId);
+          fetch('/setSession', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prId }),
+        })
+        .then(() => {
+          const productId = '/single/prd';
+          window.location.href = productId;
+        })
+        .catch(error => {
+          console.error('Error setting session:', error);
+          // Handle the error as needed
+        });
             }
 </script>
   <!-- Footer -->

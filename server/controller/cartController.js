@@ -6,8 +6,8 @@ const categoryDb=require("../model/categorySchema")
 
 
 exports.addtocart = (req, res) => {
-  const email = req.query.email;
-  const id = req.query.id;
+  const email = req.session.isAuth;
+  const id = req.session.prId;
   userDb.findOne({ email: email })
     .then(data => {
       if(data){
@@ -21,13 +21,12 @@ exports.addtocart = (req, res) => {
             price:productData.price,
             discount:productData.discount,   
             description:productData.description,
-            stock:productData.stock,
+            stock:productData.stock,  
             prd_images:productData.prd_images,
             category:productData.category,
             catStatus:productData.catStatus,
             unlist:productData.unlist,
             discountedPrice:productData.discountedPrice
-            
           });
           cartDb.findOne({email:email,prId:id})
           .then(cartdata=>{
@@ -36,7 +35,7 @@ exports.addtocart = (req, res) => {
               cartDb.deleteOne({ prId: id, email: email })
                 .then(data => {
                   // Display error popup
-                  res.redirect(`/single/prd?id=${id}`);
+                  res.redirect(`/single/prd`);
                 })
                 .catch(err => {
                   console.log("product not removed from cart")
@@ -45,7 +44,7 @@ exports.addtocart = (req, res) => {
               cart.save()
               .then(data => {
                 req.session.addtocart = true;
-                res.redirect(`/single/prd?id=${id}`);
+                res.redirect(`/single/prd`);
               })
             }
           })
@@ -103,56 +102,53 @@ exports.wishlistToCart=(req,res)=>{
 
 
 
-exports.cart = (req, res) => {
-  const email = req.session.isAuth
-  cartDb.find({email:email}).then(cartData => {
+exports.cart = async (req, res) => {
+  try {
+    req.session.prId = null;
+    const email = req.session.isAuth;
 
-    const productIds = cartData.map(item => item.prId);
+    const cartData = await cartDb.find({ email: email });
 
-    productDb.find({ _id: { $in: productIds } })
-      .then(data => {
-        console.log(data)
-        let sum = 0;
-        for (let i = 0; i < data.length; i++) {
-          cartDb.findOne({prId:data[i]._id,email:req.session.isAuth})
-          .then(data1=>{
-            const discount=data[i].discount
-            const disPrice=data[i].price * discount/100
-            const showPrice1=data[i].price-disPrice
-            const count=showPrice1*data1.cartQhantity
-            sum = sum + count
+    const productIds = cartData.map((item) => item.prId);
 
-          })
-         
+    const data = await productDb.find({ _id: { $in: productIds } });
 
-        }
-        wishdb.find({email:email})
-        .then(wishdata=>{
-          console.log(data) 
-          cartDb.find({email:email})
-          .then(cartData=>{
-            categoryDb.find({status:true})
-            .then(catData=>{
-              const productQhuantity = cartData.map(item => item.cartQhantity);
-              userDb.findOne({email:email})
-              .then(userData=>{
-                res.render("cart", { cartItems: cartData, totalPrice: sum, email: email,wishdata:wishdata,catogories:catData,email:email,userData:userData})
-              })
-             
-            })
-          })
-          
-        })
- 
-      })
-      .catch(err => {
-        console.error('Error:', err);  
-        res.status(500).send('Internal Server Error');
+    let sum = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const data1 = await cartDb.findOne({
+        prId: data[i]._id,
+        email: req.session.isAuth,
       });
-  }).catch(err => {
-    console.error('Error:', err);  
+
+      const discount = data[i].discount;
+      const disPrice = data[i].price * (discount / 100);
+      const showPrice1 = data[i].price - disPrice;
+      const count = showPrice1 * data1.cartQhantity;
+
+      sum += count;
+    }
+
+    req.session.totalPriceinPrid = sum;
+
+    const wishdata = await wishdb.find({ email: email });
+    const catData = await categoryDb.find({ status: true });
+    const productQhuantity = cartData.map((item) => item.cartQuantity);
+    const userData = await userDb.findOne({ email: email });
+
+    res.render("cart", {
+      cartItems: cartData,
+      totalPrice: sum,
+      email: email,
+      wishdata: wishdata,
+      catogories: catData,
+      email: email,
+      userData: userData,
+    });
+  } catch (err) {
+    console.error('Error:', err);
     res.status(500).send('Internal Server Error');
-  });
+  }
 };
 
 
@@ -218,7 +214,7 @@ exports.getTotalPrice = async (req, res) => {
       totalPrice += productTotal;
       productTotalPrices[item.prId] = productTotal;
     });
-
+    req.session.totalPriceinPrid=totalPrice
     res.json({ success: true, totalPrice: totalPrice, productTotalPrices: productTotalPrices });
   } catch (error) {
     console.error("Error calculating total price:", error);

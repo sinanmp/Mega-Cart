@@ -21,8 +21,7 @@
 <body>
     <div id="preloader"></div>
     <div class="container mt-5">
-        <form method="post" action="/address/addPostCheckout?prId=<%= prId || '' %>">
-            <input type="number" name="total" value="<%=total  %>" hidden name="" id="">
+        <form method="post" action="/address/addPostCheckout">
             <div class="form-group">
                 <label for="locality">Locality</label>
                 <input type="text" class="form-control" id="locality" name="locality" placeholder="Enter Locality">

@@ -127,7 +127,7 @@
                 <div class="d-flex justify-content-between mb-2">
                     <p>Total price:</p>
                     <p class="font-weight-bold" id="total-price-before">
-                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalAmount) %>
                     </p>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
@@ -141,14 +141,14 @@
                 <div class="justify-content-between" id="takingfrom" style="display: none;">
                     <p style="color: red;">Taking From Wallet:</p>
                     <p class="mb-2 fw-bold" style="font-weight: 500; color: red;">
-                        - <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+                        - <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalAmount) %>
                     </p>
                 </div>
     
                 <div class="d-flex justify-content-between mb-2">
                     <p>Total price:</p>
                     <p class="font-weight-bold" id="total-price">
-                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>
+                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalAmount) %>
                     </p>
                 </div>
                 <button class="btn btn-block" style="background-color: #BF7DC1; color: white; height: 40px;" disabled id="rzp-button" type="submit">Place Order</button>
@@ -183,7 +183,7 @@ document.getElementById("walletMain").addEventListener("click", () => {
  function codAndOnline(){
   let totalPriceElement = document.getElementById("total-price");
   document.getElementById("takingfrom").style.display='none'
-  totalPriceElement.innerHTML = `<%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(details.totalsum) %>`;
+  totalPriceElement.innerHTML = `<%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalAmount) %>`;
  }
 
 

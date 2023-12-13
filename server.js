@@ -8,6 +8,7 @@ const methodOverride = require('method-override');
 const connectDB = require("./server/database/connection");
 connectDB()
 const session = require("express-session")
+app.use(express.json());
 
 app.use(session({
   secret: 'mega cart',

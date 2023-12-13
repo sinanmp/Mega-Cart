@@ -199,6 +199,7 @@ exports.find = (req, res) => {
 
 
 exports.userHome = async (req, res) => {
+  req.session.prId=null
   const searchQuery = req.query.search; 
   try {
     const Nemail = req.session.isAuth;
@@ -252,8 +253,9 @@ exports.logout = (req, res) => {
 }
 
 exports.singlePrd = (req, res) => {
-  console.log(req.query.id)
-  const prId = req.query.id;
+  
+  const prId = req.session.prId;
+  console.log(prId)
   const { quantity } = req.body;
   console.log(quantity + "product quantity")
   console.log(prId + "this is prId")
@@ -444,7 +446,7 @@ exports.changeIndex = (req, res) => {
 
 
 exports.adDelete = (req, res) => {
-  const email = req.query.email;
+  const email = req.session.isAuth;
   const id = req.query.id;
   console.log(id)
   console.log(`Attempting to remove address with _id: ${id} for email: ${email}`);
@@ -654,8 +656,8 @@ exports.checkoutFetch=(req,res)=>{
 
 exports.addressPostCheckout=(req,res)=>{
   const userEmail = req.session.isAuth;
-  const total=req.body.total
-  const prId=req.query.prId
+  const price=req.session.totalPriceinPrid
+  const prId=req.session.prId
   const newAddress = {
     locality: req.body.locality,
     country: req.body.country,
@@ -675,7 +677,7 @@ exports.addressPostCheckout=(req,res)=>{
         const userData=response.data
         const address=userData.address
         const index=req.query.index ||address.length-1
-          res.render("checkout",{userData:response.data,total:total,a:index,prId:prId})
+          res.render("checkout",{userData:response.data,total:price,a:index,prId:prId})
       })
     }).catch(err => {
       res.send(err)
@@ -787,4 +789,13 @@ exports.fetchTotalWalletAmount=async(req,res)=>{
   const email=req.query.email
   const data= await userDb.findOne({email:email})
   res.send(data)
+}
+
+
+
+exports.takeProductPrice=async(req,res)=>{
+  const id=req.query.id
+ const prdata=await productDb.findOne({_id:id})
+
+ res.send(prdata)
 }

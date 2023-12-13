@@ -83,13 +83,26 @@ exports.redirectForgot = (req, res) => {
 }
 
 exports.checkout=(req,res)=>{
-    const totalPrice=req.body.totalsum
     const userEmail = req.session.isAuth;
     const index=req.query.index || 0
-    const prId=req.query.prId
+    const prId=req.session.prId
+    let totalPrice
     if(prId){
+        axios.get(`http://localhost:3000/take/productPrice?&id=${prId}`)
+        .then(prdata=>{
+            data=prdata.data
+            price=Math.floor(data.discountedPrice)
+            console.log(price,"  this is product price")
+            totalPrice=price
+            req.session.totalPriceinPrid=price  
+        })
         req.session.prLength=null
+        console.log("its coming here")
+    }else{
+        console.log(req.session.totalPriceinPrid+" kasdjfasodjfaosihgfnjasoergjhferargheua")
+        totalPrice=req.session.totalPriceinPrid
     }
+
     axios.get(`http://localhost:3000/api/checkout?&email=${userEmail}`)
     .then(response=>{
         axios.get(`http://localhost:3000/cart/count?&email=${userEmail}`)
@@ -114,10 +127,10 @@ exports.checkout=(req,res)=>{
 
 
 exports.changeAddress=(req,res)=>{
-       const prId=req.query.prId
+       const prId=req.session.prId
         const index=req.query.index ||0
         const userEmail = req.session.isAuth;
-        const price=req.body.total
+        const price=req.session.totalPriceinPrid
     axios.get(`http://localhost:3000/api/checkout?&email=${userEmail}`)
     .then(response=>{
         res.render("checkout",{userData:response.data,total:price,a:index,prId:prId})
@@ -126,9 +139,8 @@ exports.changeAddress=(req,res)=>{
 
 
 exports.checkoutAddAddress=(req,res)=>{  
-    const prId=req.query.prId
-    const total= req.body.total
-    res.render("checkoutAddAddress.ejs",{total:total,prId:prId})  
+    const prId=req.session.prId
+    res.render("checkoutAddAddress.ejs",{prId:prId})  
 }
 
 
@@ -168,15 +180,14 @@ exports.payment=(req,res)=>{
     req.session.OrderInfo=req.body
     console.log(req.session.OrderInfo.locality+" this is address req.body")
     console.log(req.body.email+'  this is body')
-    const prId=req.query.prId
+    const prId=req.session.prId
     prLength=req.session.prLength
     req.session.prLength=null
     axios.get(`http://localhost:3000/fetch-wallet-total?email=${req.session.isAuth}`)
     .then(response=>{
             const totalSumofWallet=response.data?.wallet?.totalAmount
-      
             console.log(totalSumofWallet)
-            res.render("payment",{prId:prId?prId:null,details:req.body,prLength:prLength?prLength:1,totalSumofWallet:totalSumofWallet})
+            res.render("payment",{prId:prId?prId:null,totalAmount:req.session.totalPriceinPrid,details:req.body,prLength:prLength?prLength:1,totalSumofWallet:totalSumofWallet})
 
     })
     
@@ -192,4 +203,12 @@ exports.wallet=(req,res)=>{
         res.render("wallet",{email:req.session.isAuth,userData:response.data})
     })
   
+}
+
+
+exports.setSession=(req,res)=>{
+    const { prId } = req.body;
+    console.log('Received prId:', prId);
+    req.session.prId = prId;
+    res.send('Session updated');
 }

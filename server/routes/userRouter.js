@@ -13,6 +13,8 @@ router.get("/userDetails", userServices.userDeatails)
 router.get("/otp", (req, res) => {
     res.render("otp")
 })
+
+router.get("/take/productPrice",userController.takeProductPrice)
 router.get("/single/prd", userController.singlePrd)
 router.get("/cart", cartController.cart)
 router.get("/cartTo/wishlist",wishlistController.cartToWishlist)
@@ -48,12 +50,13 @@ router.post("/address/addPostCheckout",userController.addressPostCheckout)
 router.post("/checkout/address",userServices.changeAddress)
 router.post("/chekcout/addAddress",userServices.checkoutAddAddress)
 router.get("/api/checkout",userController.checkoutFetch)
-router.post("/checkout",userServices.checkout) 
+router.get("/checkout",userServices.checkout) 
 router.get("/forgot/get", userServices.forgotget)
 router.post("/send/otp/forgot", userController.sendOtpForgot)
 router.post("/forgot/Verify", userController.forgotVerify)  
 router.post("/main/forgotPass", userController.mainforgetPass)
 router.get("/forgot/Verify", userServices.redirectForgot)
+router.post("/setSession",userServices.setSession)
 
 
       

@@ -163,15 +163,12 @@
               <% if(userData.verified==true){ %>
 
               <% if(cartItems.length==0){ %>
-                  <input type="hidden"  name="totalsum" value="<%= totalPrice %>" hidden>
                      <button onclick="showPopupAdd()" style="background-color: #BF7DC1; color: white;" class="btn  w-100 shadow-0 mb-2" type="submit">Make Purchase </button> 
                 <% }else{ %>
                   <% if(check==true){ %>
-                    <input type="hidden"  name="totalsum" value="<%= totalPrice %>" hidden>
                     <button onclick="showError()" class="btn  w-100 shadow-0 mb-2" style="background-color: #BF7DC1; color: white;" type="submit">Make Purchase </button> 
                   <% }else{ %>
-                    <form action="/checkout" method="post">
-                      <input type="hidden" id="hiddenInput"  name="totalsum" value="<%= totalPrice %>" hidden>
+                    <form action="/checkout" method="get">
                          <button class="btn  w-100 shadow-0 mb-2" style="background-color: #BF7DC1; color: white;" type="submit">Make Purchase </button> 
                     </form>
                     <% } %>
@@ -473,10 +470,23 @@
 
 
   <script>
-    function userdetails(id) {
-      const productDetailURL = `/single/prd?id=${id}`;
-
-      window.location.href = productDetailURL;
+    function userdetails(prId) {
+      console.log('Sending request with prId:', prId);
+        fetch('/setSession', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prId }),
+        })
+        .then(() => {
+          const productId = '/single/prd';
+          window.location.href = productId;
+        })
+        .catch(error => {
+          console.error('Error setting session:', error);
+          // Handle the error as needed
+        });
     }
 
   </script>

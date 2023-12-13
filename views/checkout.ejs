@@ -91,7 +91,7 @@
                   <h5 class="card-title mb-3">checkout</h5>
                   <div class="row">
 
-                    <form action="/payment?prId=<%=prId %>" method="post">
+                    <form action="/payment" method="post">
                     <div class="col-6">
                       <p class="mb-0">Full name</p>
                       <div class="form-outline">
@@ -234,7 +234,6 @@
                           <!--Right -->
                           <div class="cancel-buttons" style="display: flex; gap: 1rem; ">
                             <a href="/" ><button type="button" class="btn btn-light border">Cancel</button></a>
-                            <input type="hidden" name="totalsum"   value="<%=total %>">
                             <button type="submit" style="background-color: #392539;color: white;" class="btn shadow-0 border">Continue</button>
                           </div>
                          
@@ -331,8 +330,7 @@
                 <%=userData.address[i].district%>,
                   <%=userData.address[i].country%>,
                     <%=userData.address[i].postcode%> &nbsp;&nbsp;
-                    <form action="/checkout/address?index=<%= i %>&prId=<%=prId  %>" method="post">
-                      <input type="number" hidden name="total" value="<%=total %>" id="">
+                    <form action="/checkout/address?index=<%= i %>" method="post">
                       <button type="submit"><a>Select</a> </button>
                     </form>
                   
@@ -341,9 +339,7 @@
           </p>
          <% } %>
          <p class="text-dark  mb-5 h">
-          <form action="/chekcout/addAddress?prId=<%=prId %>" method="post">
-
-            <input type="number" name="total" value="<%=total%>" hidden>
+          <form action="/chekcout/addAddress" method="post">
            <button type="submit">
             <a   data-bs-target="#changeAddressModal"
             style="color: #232F3E;text-decoration: underline;">Add Address</a>
