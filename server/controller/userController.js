@@ -107,7 +107,7 @@ exports.create = (req, res) => {
       } else {
         const hashedPass = bcrypt.hashSync(req.body.password, 10)
 
-        req.session.isAuth = req.body.email
+
 
         const users = new userDb({
           block: "false",

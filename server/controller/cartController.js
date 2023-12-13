@@ -183,7 +183,7 @@ exports.updateQuantity = async (req, res) => {
     const newQuantity = cartItem.cartQhantity + delta;
     const stockQuantity=cartItem.stock
 
-    if (newQuantity >= 1 && newQuantity<= stockQuantity) {
+    if (newQuantity >= 1 && newQuantity<= stockQuantity ||delta==-1 &&newQuantity >= 1) {
 
       await cartDb.updateOne({ prId: prId, email: req.session.isAuth }, { $set: { cartQhantity: newQuantity } });
       res.json({ success: true, newQuantity: newQuantity ,stockQuantity:stockQuantity});
