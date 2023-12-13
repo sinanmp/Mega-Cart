@@ -46,6 +46,16 @@
         <!-- Jumbotron -->
       
       </header>
+      <style>
+         #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+      </style>
 
 <head>
   <meta charset="UTF-8">
@@ -66,6 +76,7 @@
 </head>
 
 <body>
+  <div id="preloader"></div>
   <!-- include header -->
 
     <!-- /include header -->
@@ -278,6 +289,11 @@
             $('#checkoutForm1').submit();
         });
     });
+
+    var loader=document.getElementById("preloader");
+        window.addEventListener("load",function(){
+          loader.style.display="none"
+        })
 </script>
 
 

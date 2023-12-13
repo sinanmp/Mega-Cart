@@ -18,11 +18,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
   <style>
-
+   .error-border{
+    border: red solid 2px;
+   }
+   #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
   </style>
 </head>
 
 <body>
+  <div id="preloader"></div>
   <!--Main Navigation-->
   <header>
     <!-- Jumbotron -->
@@ -45,7 +56,7 @@
           <div class="col-lg-5 mb-2 col-md-12 col-12" style="visibility: hidden;">
             <div class="input-group float-center">
               <div class="form-outline bg-white" style="border-radius: 5px;">
-                <input type="search" id="form1" class="form-control" />
+                <input type="search" id="form1" class="" />
                 <label class="form-label" for="form1">Search</label>
               </div>
               <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
@@ -80,41 +91,44 @@
                         <input type="text" class="form-control form-control-lg" placeholder="Username" name="username"
                           style="border-radius: 10px;
                                 background: rgba(217, 217, 217, 0.50);" />
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="email" id="typeEmailX" name="email" placeholder="Email"
                           class="form-control form-control-lg"
                           style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="text " class="form-control form-control-lg" placeholder="Mobile" name="mobile"
                           style="border-radius: 10px;
                                   background: rgba(217, 217, 217, 0.50);" />
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg"
                           placeholder="Password" style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="password" id="typePasswordX" name="confirmpassword" placeholder="Confirm Password"
                           class="form-control form-control-lg"
                           style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
                       </div>
                       <div id="overlay"></div>
                       <div id="popup">
-                        <div style="display: flex; width: 100%; justify-content: end;">
-                          <span style="font-size: 13px;" id="popup-close" onclick="closePopup()">✖ Close</span>
-                        </div>
                         <p id="popup-message">Please verify/login your account</p>
                         <p style="font-size: 10px;">you need to <span style="color: red;">verify</span> your email for make purchases in the cart</p>
                         <!-- Add login and register links or buttons here --> 
                           <button type="submit" id="login-button">Send OTP</button>
+
                       </div>
-                      <button class="btn btn-lg px-5 mb-3" id="signup-btn" onclick="showPopup()" type="button">Signup</button>
+                      <button class="btn btn-lg px-5 mb-3" id="signup-btn"  type="button">Signup</button>
                          
                     </form>
                     <div
@@ -166,6 +180,32 @@
 
 
   <script>
+ document.getElementById("signup-btn").addEventListener("click", () => {
+  event.preventDefault();
+    const inputs = document.querySelectorAll(".form-control");
+    let success=true
+    inputs.forEach(input => {
+        const value = input.value
+        const errorMessage = input.nextElementSibling;
+
+      if (value === '') {
+          input.classList.add('error-border');
+          errorMessage.style.display = 'block';
+          success = false;
+      } else {
+          input.classList.remove('error-border');
+          errorMessage.style.display = 'none';
+      }
+    });
+
+    if(success==true){
+      showPopup();
+    
+    }
+   
+});
+
+
           function showPopup() {
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('popup').style.display = 'block';
@@ -177,6 +217,11 @@
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('popup').style.display = 'none';
       }
+
+      var loader=document.getElementById("preloader");
+                window.addEventListener("load",function(){
+                  loader.style.display="none"
+                })
   </script>
   <style>
      #popup {

@@ -4,11 +4,15 @@ const { users } = require("./adminRender");
 const { response } = require("express");
 
 exports.login = (req, res) => {
+    const errEmail=req.session.errEmail
     
-    res.render("login",{invalid:req.session.invalidMail},(err,html)=>{
+    res.render("login",{invalid:req.session.invalidMail,errEmail:errEmail,emailborder:req.session.emailborder,passborder:req.session.passborder},(err,html)=>{
         if(err){
             return
         }
+        delete req.session.passborder
+        delete req.session.emailborder
+        delete req.session.errEmail
         delete req.session.invalidMail
         req.session.registrationError=false
         res.send(html)

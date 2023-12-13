@@ -32,6 +32,14 @@
             width: 30px;
             height: 30px;
         }
+        #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
 </style>
 <body>
   <% let check=false %>
@@ -81,8 +89,7 @@
   
   </header>
 
-
-
+  <div id="preloader"></div>
   <div class="container-fluid" style="margin-top: 21px; min-height: 90vh;">
     <div class="text-center">
       <h1 class="mb-4">Choose a Payment Option</h1>
@@ -253,6 +260,11 @@ document.getElementById("walletMain").addEventListener("click", () => {
   function showPayment(){
     document.getElementById('rzp-button').disabled = false;
    }
+             
+   var loader=document.getElementById("preloader");
+            window.addEventListener("load",function(){
+            loader.style.display="none"
+            })
 </script>
 
   

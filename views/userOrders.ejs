@@ -52,7 +52,17 @@
     <!-- Jumbotron -->
 
   </header>
-
+  <style>
+           #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+  </style>
+  <div id="preloader"></div>
     <section class="bg-light my-5" style="min-height: 100vh;">
         <div class="container">
             <div class="row">
@@ -152,6 +162,12 @@
     const orderId = `/user-order/details?id=${id}`
     window.location=orderId
   }
+
+  var loader=document.getElementById("preloader");
+                window.addEventListener("load",function(){
+                loader.style.display="none"
+                })
+
 </script>
 
 

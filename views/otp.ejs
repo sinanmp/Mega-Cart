@@ -1,8 +1,20 @@
 <header>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+  <style>
+     #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+  </style>
   <!-- Jumbotron -->
+  <div id="preloader"></div>
   <div class="px-2 nav-div text-center"
     style="background-color: #392539 !important ;justify-content: center; height: 70px;">
 
@@ -204,6 +216,11 @@
       }
     });
   });
+
+  var loader=document.getElementById("preloader");
+        window.addEventListener("load",function(){
+          loader.style.display="none"
+        })
 </script>
 
 <style>

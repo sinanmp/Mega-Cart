@@ -6,10 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Address Form</title>
+    <style>
+         #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+    </style>
 </head>
 
 <body>
-
+    <div id="preloader"></div>
     <div class="container mt-5">
         <form method="post" action="/address/addPostCheckout?id=<%=id  %>&prId=<%=prId%>">
             <input type="number" name="total" value="<%=total  %>" hidden name="" id="">
@@ -56,6 +66,13 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+            var loader=document.getElementById("preloader");
+        window.addEventListener("load",function(){
+          loader.style.display="none"
+        })
+    </script>
 
 </body>
 

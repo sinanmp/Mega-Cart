@@ -6,8 +6,21 @@
     <title>Return/Cancelation Reason</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <style>
+       #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+   </style> 
 </head>
+
 <body>
+  
+  <div id="preloader"></div>
     <header>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,6 +128,12 @@
         // Display a success message or handle errors accordingly
         alert('Form submitted successfully!');
     }
+
+    var loader=document.getElementById("preloader");
+                window.addEventListener("load",function(){
+                loader.style.display="none"
+                })
+
 </script>
 
 

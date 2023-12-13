@@ -15,9 +15,20 @@
   <!-- MDB -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css">
+  <style>
+     #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+  </style>
 </head>
 
 <body>
+  <div id="preloader"></div>
   <header>
     <!-- Jumbotron -->
     <div class="px-2 nav-div text-center"
@@ -107,6 +118,10 @@
         keyboard: false
       });
     });
+    var loader=document.getElementById("preloader");
+        window.addEventListener("load",function(){
+          loader.style.display="none"
+        })
   </script>
   <footer class="text-center text-white"
     style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">

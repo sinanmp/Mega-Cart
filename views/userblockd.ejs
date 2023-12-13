@@ -4,7 +4,15 @@
   <p>Please check with the site admin if you believe this is a mistake.</p>
 </div>
 
+<div id="preloader"></div>
 
+<script>
+      var loader=document.getElementById("preloader");
+                window.addEventListener("load",function(){
+                loader.style.display="none"
+                })
+
+</script>
 <style>
   @import url('https://fonts.googleapis.com/css?family=Lato');
 
@@ -25,6 +33,14 @@
     align-items: center;
     background: linear-gradient(to bottom right, #EEE, #AAA);
   }
+  #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
 
   h1 {
     margin: 40px 0 20px;

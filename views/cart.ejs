@@ -2,10 +2,21 @@
 <%- include('include/header') %>
   <!-- /include header -->
 <% let check=false %>
+<style>
+    #preloader{
+  background: white url(images/load.gif) no-repeat  center;
+  background-size: 15%;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index:100;
+}
+
+</style>
   <!-- cartItems + summary -->
   <section class=" my-5">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <div id="preloader"></div>
     <div class="container">
       <div class="row">
         <!-- cartItems -->
@@ -276,7 +287,7 @@
                   if(data.stockQuantity && data.newQuantity){
                     window.location.href=`/cart?email=${'<%=email%>'}`
                   }
-                }else{
+                }else {
                   if(!data.stockQuantity){
                     console.log(data.stockQuantity)
                     reachedFunction(data.stockQuantity,prId)
@@ -450,6 +461,13 @@
         closeRemove()
         window.location.href = "/remove/cart?id=" + curruntId;
       }
+
+        
+  var loader=document.getElementById("preloader");
+        window.addEventListener("load",function(){
+          loader.style.display="none"
+        })
+      
 
   </script>
 

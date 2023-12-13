@@ -170,17 +170,21 @@ exports.find = (req, res) => {
               }
             }).catch(err => {
               req.session.invalidMail=true
+              req.session.errEmail=req.body.email
               res.redirect("/login");
               console.log(err);
             })
         } else {
-          req.session.invalidMail=true
+          req.session.passborder=true
+          req.session.errEmail=req.body.email
           res.redirect("/login"); 
           console.log("User not found invalid pass");
           // invalid password
         }
       } else {
-        req.session.invalidMail=true
+        //invalid email
+        req.session.emailborder=true
+        req.session.errEmail=req.body.email
         res.redirect("/login");
         console.log("User not found null");
         // null output

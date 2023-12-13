@@ -14,9 +14,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+    <style>
+          #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+    </style>
 </head>
 
 <body>
+    <div id="preloader"></div>
 
     <header class="px-2 nav-div text-center" style="background-color: #392539 !important; height: 70px;">
         <div class="container">
@@ -114,6 +125,14 @@
             }
         }
     </style>
+
+    <script>
+          
+    var loader=document.getElementById("preloader");
+            window.addEventListener("load",function(){
+            loader.style.display="none"
+            })
+    </script>
 
     <footer class="text-center text-white"
         style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">

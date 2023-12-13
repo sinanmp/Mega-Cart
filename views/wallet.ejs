@@ -16,11 +16,20 @@
    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <style>
+               #preloader{
+            background: white url(images/load.gif) no-repeat  center;
+            background-size: 15%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index:100;
+            }
+    </style>
 </head>
 <body >
 
-
+    <div id="preloader"></div>
     <header>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -486,6 +495,12 @@
         }
     });
 });
+
+var loader=document.getElementById("preloader");
+                window.addEventListener("load",function(){
+                loader.style.display="none"
+                })
+
 
     </script>
 
