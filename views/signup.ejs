@@ -22,7 +22,7 @@
     border: red solid 2px;
    }
    #preloader{
-            background: white url(images/load.gif) no-repeat  center;
+            background: white url(img/load.gif) no-repeat  center;
             background-size: 15%;
             height: 100vh;
             width: 100%;
@@ -91,34 +91,34 @@
                         <input type="text" class="form-control form-control-lg" placeholder="Username" name="username"
                           style="border-radius: 10px;
                                 background: rgba(217, 217, 217, 0.50);" />
-                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">this field is required</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="email" id="typeEmailX" name="email" placeholder="Email"
                           class="form-control form-control-lg"
                           style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
-                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">this field is required</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="text " class="form-control form-control-lg" placeholder="Mobile" name="mobile"
                           style="border-radius: 10px;
                                   background: rgba(217, 217, 217, 0.50);" />
-                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">this field is required</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="password" id="typePasswordX" name="password" class="form-control form-control-lg"
                           placeholder="Password" style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
-                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">this field is required</p>
                       </div>
 
                       <div class="mb-4">
                         <input type="password" id="typePasswordX" name="confirmpassword" placeholder="Confirm Password"
                           class="form-control form-control-lg"
                           style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
-                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">please fill this</p>
+                          <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">this field is required</p>
                       </div>
                       <div id="overlay"></div>
                       <div id="popup">
@@ -126,7 +126,9 @@
                         <p style="font-size: 10px;">you need to <span style="color: red;">verify</span> your email for make purchases in the cart</p>
                         <!-- Add login and register links or buttons here --> 
                           <button type="submit" id="login-button">Send OTP</button>
-
+                          <a href="/login">
+                            <button style="background-color: #BF7DC1;" type="button" id="login-button">Go To Login</button>
+                          </a>
                       </div>
                       <button class="btn btn-lg px-5 mb-3" id="signup-btn"  type="button">Signup</button>
                          
@@ -197,6 +199,7 @@
           errorMessage.style.display = 'none';
       }
     });
+
 
     if(success==true){
       showPopup();
