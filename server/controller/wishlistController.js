@@ -100,7 +100,7 @@ exports.wishAdd = (req, res) => {
 
 
   exports.goTowishlist=(req,res)=>{
-    const email=req.query.email
+    const email=req.session.isAuth
     wishdb.aggregate([
         {
           $match: { email: email }

@@ -252,6 +252,7 @@ exports.logout = (req, res) => {
 }
 
 exports.singlePrd = (req, res) => {
+  console.log(req.query.id)
   const prId = req.query.id;
   const { quantity } = req.body;
   console.log(quantity + "product quantity")
@@ -426,7 +427,7 @@ exports.addAddress = (req, res) => {
 
 
 exports.changeIndex = (req, res) => {
-  const email = req.query.email;
+  const email = req.session.isAuth;
   const adId = req.query.position;
 
   userDb.find({ email: email })
@@ -453,7 +454,7 @@ exports.adDelete = (req, res) => {
     { $pull: { address: { _id: id } } }
   )
     .then(data => {
-      res.redirect(`/userDetails?email=${email}`);
+      res.redirect(`/userDetails`);
     })
     .catch(err => {
       console.error(`Error removing address for email: ${email}`, err);
@@ -576,6 +577,7 @@ exports.updatePostAdd = (req, res) => {
 
 exports.sendOtpForgot = (req, res) => {
   const email = req.body.email
+  req.session.emailforVerify=email
   userDb.findOne({ email: email })
     .then(data => {
       if (data) {
@@ -591,14 +593,14 @@ exports.sendOtpForgot = (req, res) => {
 
 
 exports.forgotVerify = (req, res) => {
-  const email = req.query.email
+  const email = req.session.emailforVerify
   const bodyOtp = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4
 
   otpDb.findOne({ otp: bodyOtp })
     .then(data => {
       if (data.expiresAt > Date.now()) {
 
-        res.redirect(`/forgot/Verify?email=${email}`)
+        res.redirect(`/forgot/Verify`)
         otpDb.deleteOne({ otp: bodyOtp }).then()
       } else {
         res.send("otp timer is expired");
@@ -611,14 +613,14 @@ exports.forgotVerify = (req, res) => {
 
 
 exports.mainforgetPass = (req, res) => {
-  const email = req.query.email
+  const email = req.session.emailforVerify
   const pass = req.body.password
   const cpass = req.body.conformpass
   if (pass !== cpass) {
     req.session.passcpass = true;
     req.session.changesuccess = false;
     // res.send('working')
-    return res.redirect(`/forgot/Verify?email=${email}`);
+    return res.redirect(`/forgot/Verify`)
   }
   const hashedPass = bcrypt.hashSync(pass, 10)
   userDb.updateOne({ email: email }, { $set: { password: hashedPass, confirmpassword: hashedPass } })

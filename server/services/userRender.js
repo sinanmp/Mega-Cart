@@ -35,7 +35,7 @@ exports.signup = (req, res) => {
 }
 
 exports.userDeatails = (req, res) => {
-    const nemail = req.query.email
+    const nemail = req.session.isAuth
     const pos = req.query.position || 0;
     userDb.find({ email: nemail })
         .then(userdata => {
@@ -126,7 +126,7 @@ exports.changeAddress=(req,res)=>{
 
 
 exports.checkoutAddAddress=(req,res)=>{  
-    const prId=req.query.prId
+    const email=req.query.prId
     const id = req.query.id
     const total= req.body.total
     res.render("checkoutAddAddress.ejs",{id:id,total:total,prId:prId})  

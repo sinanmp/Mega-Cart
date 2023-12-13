@@ -104,7 +104,7 @@ exports.wishlistToCart=(req,res)=>{
 
 
 exports.cart = (req, res) => {
-  const email = req.query.email;
+  const email = req.session.isAuth
   cartDb.find({email:email}).then(cartData => {
 
     const productIds = cartData.map(item => item.prId);
@@ -114,7 +114,7 @@ exports.cart = (req, res) => {
         console.log(data)
         let sum = 0;
         for (let i = 0; i < data.length; i++) {
-          cartDb.findOne({prId:data[i]._id})
+          cartDb.findOne({prId:data[i]._id,email:req.session.isAuth})
           .then(data1=>{
             const discount=data[i].discount
             const disPrice=data[i].price * discount/100
@@ -164,7 +164,7 @@ exports.removeCart = (req, res) => {
   cartDb.deleteOne({ email: req.session.isAuth, prId: productId })
     .then(data => {
       console.log("its coming here")
-      res.redirect(`/cart?email=${req.session.isAuth}`)
+      res.redirect(`/cart`)
     }).catch(err => {
       res.send(err + "  this is remove catch error")
     })
@@ -212,12 +212,10 @@ exports.getTotalPrice = async (req, res) => {
     let totalPrice = 0;
     let productTotalPrices = {};
 
-    console.log(req.session.isAuth+"  this is fetch emial")
 
     cartItems.forEach(item => {
       const productTotal = item.cartQhantity * (item.price - (item.price * item.discount / 100));
       totalPrice += productTotal;
-
       productTotalPrices[item.prId] = productTotal;
     });
 

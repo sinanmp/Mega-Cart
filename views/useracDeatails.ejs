@@ -129,10 +129,10 @@
                   <!-- Add other address fields as needed -->
                 </div>
                 <div style="display: flex; width: 100%; justify-content: end; gap: 10px;">
-                  <a href="/changeIndex/api?email=<%=users[0].email %>&position=<%= i %>">
+                  <a href="/changeIndex/api?position=<%= i %>">
                     <button style="width: 50px; height: 20px; font-size: 10px; margin-bottom: 10px;">Choose</button>
                   </a>
-                  <a href="/address/delete?email=<%=users[0].email%>&id=<%=users[0].address[i]._id %>">
+                  <a href="/address/delete?id=<%=users[0].address[i]._id %>">
                     <i style="margin-right: 20px; margin-bottom: 15px;" class="fa-solid fa-trash border"></i>
                   </a>
                 </div>
