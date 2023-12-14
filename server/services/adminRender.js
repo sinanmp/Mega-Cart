@@ -80,3 +80,8 @@ exports.logout=(req,res)=>{
     res.redirect("/adminLogin") 
 }
 
+
+
+exports.GetCoupenPage=(req,res)=>{
+    res.render("admin/adminCoupen")
+}

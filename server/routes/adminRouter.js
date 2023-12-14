@@ -40,7 +40,7 @@ router.get("/user-details", adminServices.usersDetails);
 router.post("/change/status",orderController.changeStatus)
 
 
-//image
+//image 
 router.get("/image-delete", productController.removeImage)
 router.post("/upload/img", upload, productController.uploadImage);
 router.get("/add/images", productController.addImages)
@@ -49,7 +49,7 @@ router.get("/api/countUsers",adminController.countUsers)
 router.get("/api/countOrders",adminController.countOrders)
 
 
-//category
+//category managment
 router.get("/category/api", categoryController.category)
 router.get("/single/cat", categoryController.singleCat)
 router.get("/add/category", categoryController.addCategory)
@@ -59,6 +59,9 @@ router.get("/unlisted/cat", categoryController.unlist)
 router.get("/remove/funlist", categoryController.removeFUnlist)
 router.get("/admin/logout",adminServices.logout)
 
+
+//coupens managment
+router.get("/coupen/api",adminServices.GetCoupenPage)
 
 module.exports = router;
 
