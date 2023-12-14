@@ -13,6 +13,7 @@ const wishdb = require("../model/wishlistSchema")
 
 const axios=require("axios")
 
+dotenv.config()
 
 
 const razorpayInstance = new Razorpay({
@@ -53,19 +54,15 @@ const sendOTPVerificationeEmail = async (email) => {
       otp: OTP,
       createdAt: Date.now(),
       expiresAt: Date.now() + 300000
-    });
-
-    await newVerification.save().then(data => {
-      console.log("data inserted successfylly")
-    }).catch(err => {
-      console.log("data not inserted why")
     })
-
+    
     await transporter.sendMail(mailoption, (err) => {
       if (err) {
+        console.log(email)
         console.log(err + "  send email error");
         return;
       } else {
+         newVerification.save()
         console.log("Otp send successfully!");
       }
     });
@@ -78,8 +75,7 @@ const sendOTPVerificationeEmail = async (email) => {
 
 
 
-dotenv.config()
-//user finding for login
+
 
 
 

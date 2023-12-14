@@ -101,7 +101,7 @@
 
         <!-- Center elements -->
         <div class="order-lg-last col-lg-5 col-sm-8 col-8">
-          <div class="d-flex float-end">
+          <div class="d-flex float-end actionsHome"  >
             <% if(email){ %>
               <a href="/userDetails/?email=<%=email%>" class="me-1 py-1 px-3 nav-link" style="color: #FFF;"> <i
                   class="fas fa-user-alt m-1 me-md-2"></i>
@@ -135,7 +135,7 @@
         <!-- Center elements -->
 
         <!-- Right elements -->
-        <div class="col-lg-5 mt-md-4 col-md-12 col-12" style="visibility: hidden;">
+        <div class="col-lg-5 mt-md-4 col-md-12 col-12 searchBoxforHidden">
           <form action="/our-store" method="get">
           <div class="input-group  float-center">
             <div class="form-outline bg-white" style="border-radius: 5px;">
@@ -243,6 +243,23 @@
 .overlay p {
   margin: 0;
 }
+.searchBoxforHidden{
+  visibility: hidden;
+}
+
+@media only screen and (max-width: 992px) {
+   .searchBoxforHidden{
+    display: none;
+   }
+
+}
+
+@media only screen and (max-width: 768px) {
+  .actionsHome {
+    margin-top: 12px;
+  }
+
+}
 
   </style>
 
@@ -250,7 +267,7 @@
   <!-- content -->
   <section class="py-5">
     <div class="container">
-      <div class="row gx-5">
+      <div class="row">
         <aside class="col-lg-6">
           <div class="container rounded-4 d-flex justify-content-center mb-3 image-container" style="max-width: 400px; max-height: 400px;">
             <a style="cursor: pointer;" id="imageLink">
