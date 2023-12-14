@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/img/megacartFavicon.png">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <title>Address Form</title>
+  <title>MegaCart Update.net</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
@@ -38,12 +39,9 @@
         <div class="row gy-3">
           <!-- Left elements -->
           <div class="col-lg-2 col-sm-4 col-4">
-            <a href="/" class="float-start">
-              <h2 style="font-weight: 400;color: #ffff; font-family: 'Jockey One', sans-serif;"><span
-                  style="font-family: 'Itim', cursive; ">M</span>ega<span
-                  style="color: #BF7DC1; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px; font-weight: 400;">Cart.</span>
-              </h2>
-            </a>
+            <a href="/" class="float-md-none">
+              <img style="height: 30px;  margin-top: 13px;" src="/img/MegaCart Logo.png" alt="">
+              </a>
           </div>
         </div>
         <!-- Center elements -->
@@ -80,21 +78,21 @@
         </div>
         <div class="modal-body">
           <% if(username) {%>
-            <form action="/Update/userRender?email=<%=email%>&username=<%=username  %>" method="post">
+            <form action="/Update/userRender?username=<%=username  %>" method="post">
               <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
               </div>
-              <button type="submit" class="btn btn-primary mx-auto d-block mt-5">Submit</button>
+              <button type="submit" style="background-color: #392539; color: white;" class="btn mx-auto d-block mt-5">Submit</button>
             </form>
             <% }else{ %>
-              <form action="/Update/userRender?email=<%=email%>&mobile=<%=mobile %>" method="post">
+              <form action="/Update/userRender?mobile=<%=mobile %>" method="post">
                 <div class="form-group">
                   <label for="password">Password:</label>
                   <input type="password" class="form-control" id="password" name="password"
                     placeholder="Enter Password">
-                </div>
-                <button type="submit" class="btn btn-primary mx-auto d-block mt-5">Submit</button>
+                </div> 
+                <button type="submit" style="background-color: #392539; color: white;" class="btn mx-auto d-block mt-5">Submit</button>
               </form>
               <% } %>
         </div>

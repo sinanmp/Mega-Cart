@@ -83,6 +83,7 @@ exports.redirectForgot = (req, res) => {
 }
 
 exports.checkout=(req,res)=>{
+    req.session.paymentMidd=false
     const userEmail = req.session.isAuth;
     const index=req.query.index || 0
     const prId=req.session.prId
@@ -127,6 +128,8 @@ exports.checkout=(req,res)=>{
 
 
 exports.changeAddress=(req,res)=>{
+
+    req.session.paymentMidd=false
        const prId=req.session.prId
         const index=req.query.index ||0
         const userEmail = req.session.isAuth;
@@ -177,9 +180,10 @@ exports.userOrdersDeatails=(req,res)=>{
 
 
 exports.payment=(req,res)=>{
-    req.session.OrderInfo=req.body
-    console.log(req.session.OrderInfo.locality+" this is address req.body")
-    console.log(req.body.email+'  this is body')
+    req.session.paymentMidd='false'                                                                 
+    req.session.OrderInfo=req.body        
+    console.log(req.session.OrderInfo.locality+" this is address req.body")       
+    console.log(req.body.email+'  this is body') 
     const prId=req.session.prId
     prLength=req.session.prLength
     req.session.prLength=null

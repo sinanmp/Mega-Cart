@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Address Form</title>
+    <title>MegaCart UpdateAddress.net</title>
+    <link rel="icon" type="image/png" href="/img/megacartFavicon.png">
     <style>
         #preloader{
             background: white url(img/load.gif) no-repeat  center;
@@ -15,10 +16,60 @@
             position: fixed;
             z-index:100;
             }
+            body{
+          background: #cd9cf2;
+          background: -webkit-radial-gradient(center, ellipse cover, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+          background: radial-gradient(ellipse at center,rgba(246, 243, 255, 1),rgb(207, 176, 231)); 
+          
+        }
     </style>
 </head>
 
 <body>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
+          <!-- Jumbotron -->
+          <div class="px-2 nav-div text-center"
+            style="background-color: #392539 !important ;justify-content: center; height: 70px;">
+        
+            <div class="container">
+              <div class="row gy-3">
+                <!-- Left elements -->
+                <div class="col-lg-2 col-sm-4 col-4">
+                  <a href="/" class="float-md-none">
+                    <img style="height: 30px;  margin-top: 13px;" src="/img/MegaCart Logo.png" alt="">
+                    </a>
+                </div>
+                <!-- Left elements -->
+        
+                <!-- Center elements -->
+        
+              </div>
+              <!-- Center elements -->
+        
+              <!-- Right elements -->
+              <div class="col-lg-5 col-md-12 col-12" style="visibility: hidden;">
+                <div class="input-group float-center">
+                  <div class="form-outline bg-white" style="border-radius: 5px;">
+                    <input type="search" id="form1" class="form-control" />
+                    <label class="form-label" for="form1">Search</label>
+                  </div>
+                  <button type="button" class="btn btn-white shadow-0" style="background-color: #BF7DC1 ;">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- Right elements -->
+            </div>
+          </div>
+          </div>
+          <!-- Jumbotron -->
+        
+        </header>
+
     <div id="preloader"></div>
     <div class="container mt-5">
         <form method="post" action="/update/add?id=<%=address._id %>&pos=<%=pos  %>">
@@ -64,9 +115,17 @@
                 <input type="number" class="form-control" id="postcode" value="<%=address.postcode %>" name="postcode"
                     placeholder="Enter Postcode">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div style="display: flex; justify-content: center;" class="mb-5 mt-3">
+                <button type="submit"  class="btn mb-3 mt-4" style="background-color: #392539; color: white; width: 150px;">Submit</button>
+            </div>
         </form>
     </div>
+
+    <footer class="text-center text-white"
+    style="background: linear-gradient(180deg, #978699 -150.55%, rgb(24 2 27 / 90%) 80.99%); bottom: 0; width: 100%;">
+    <span style="opacity: .7; font-size: 13px; margin-bottom: 30px; margin-top: -30px;"> © 2020 Copyright:</span>
+    <a class="text-white" href="https://mdbootstrap.com/" style="opacity: .7; font-size: 12px; ">MegaCart</a>
+    </footer>
     <script>
             var loader=document.getElementById("preloader");
         window.addEventListener("load",function(){

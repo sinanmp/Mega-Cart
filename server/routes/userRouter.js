@@ -5,6 +5,7 @@ const userServices = require('../services/userRender')
 const cartController = require("../controller/cartController");
 const wishlistController=require("../controller/wishlistController")
 const orderController=require("../controller/orderController")
+const {paymentMiddleware} = require("../routes/middlewares/userMiddleware");
 
 router.get('/', userController.userHome)//home
 router.get('/login', userServices.login)
@@ -79,7 +80,7 @@ router.get ("/cancel/order",orderController.cancel)
 router.get("/api/reason",userServices.reason)
 router.post("/cancel/reason",orderController.cancelMain)
 router.get("/user-order/details",userServices.userOrdersDeatails)
-router.post("/payment",userServices.payment)
+router.post("/payment",paymentMiddleware,userServices.payment)
 router.post("/order-route",orderController.orderRoute)
 router.get("/cart/count",cartController.cartCountPr)
   

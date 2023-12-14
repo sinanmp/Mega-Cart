@@ -120,6 +120,7 @@ exports.submitOrder = async (req, res) => {
                 console.log(id)
              const updateddata= await cartDb.updateMany({prId:id},{$inc:{stock:-1}});
                 console.log(updateddata+"   its updated")
+                req.session.paymentMidd='true'
                 res.json({ url:`/order/success`});
              }
         } catch (error) {         
@@ -240,6 +241,7 @@ exports.submitOrder = async (req, res) => {
                await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
             }
             await cartDb.deleteMany({email:req.session.isAuth})
+            req.session.paymentMidd='true'
             res.json({ url:`/order/success`});
         }
      
@@ -338,6 +340,7 @@ exports.orderRoute= async(req,res)=>{
         await NewOrder2.save()
         await productdb.updateOne({_id:id},{$inc:{stock:-1}})
         await cartDb.updateMany({prId:id},{$inc:{stock:-1}})
+        req.session.paymentMidd='true'
         res.json({ url:`/order/success`});
         return
    }else{
@@ -365,6 +368,7 @@ exports.orderRoute= async(req,res)=>{
     }
         await cartDb.deleteMany({email:req.session.isAuth})
         console.log("its coming in else case")
+        req.session.paymentMidd='true'
         res.json({ url:`/order/success`});
    }
 }

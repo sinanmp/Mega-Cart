@@ -466,14 +466,14 @@ exports.adDelete = (req, res) => {
 
 
 exports.updateCheck = (req, res) => {
-  const email = req.query.email;
+  const email = req.session.isAuth;
   const username = req.query.username;
   const mobile = req.query.mobile;
   try {
     if (username) {
       res.render("CheckPass", { email: email, username: username, mobile: null });
     } else {
-      res.render("CheckPass", { email: email, username: username, mobile: null });
+      res.render("CheckPass", { email: email, username: null, mobile: mobile });
     }
   } catch (error) {
     console.error(error);
@@ -485,7 +485,7 @@ exports.updateCheck = (req, res) => {
 
 
 exports.updateUser = (req, res) => {
-  const email = req.query.email
+  const email = req.session.isAuth
   const username = req.query.username
   const mobile = req.query.mobile
   userDb.find({ email: email, password: req.body.password })
@@ -655,6 +655,7 @@ exports.checkoutFetch=(req,res)=>{
 
 
 exports.addressPostCheckout=(req,res)=>{
+  req.session.paymentMidd='false'
   const userEmail = req.session.isAuth;
   const price=req.session.totalPriceinPrid
   const prId=req.session.prId
