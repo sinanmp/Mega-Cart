@@ -14,7 +14,7 @@ const CouponSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  createdAt: {
+  createdAt: {       
     type: Date,
     default: Date.now,
   },

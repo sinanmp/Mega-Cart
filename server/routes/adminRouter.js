@@ -6,6 +6,7 @@ const productController = require("../controller/productController");
 const categoryController = require("../controller/categoryController")
 const adminAuthMiddleware=require("../routes/middlewares/adminMiddleware")
 const orderController=require("../controller/orderController")
+const coupenController=require("../controller/coupenController")
 const upload=require("../routes/middlewares/imageUpload")
 
 
@@ -62,6 +63,11 @@ router.get("/admin/logout",adminServices.logout)
 
 //coupens managment
 router.get("/coupen/api",adminServices.GetCoupenPage)
+router.get("/addCoupen/api",adminServices.addCoupen)
+router.post("/addCoupen/post",coupenController.addCoupenPost)
+router.get("/getCoupens",coupenController.getCoupens)
+router.get("/expiredCoupens",coupenController.expiredCoupens)
+router.get("/unlist/coupens",coupenController.unlistCoupens)
 
 module.exports = router;
 

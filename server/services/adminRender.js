@@ -83,5 +83,19 @@ exports.logout=(req,res)=>{
 
 
 exports.GetCoupenPage=(req,res)=>{
-    res.render("admin/adminCoupen")
+    axios
+    .get('http://localhost:3000/getCoupens')
+    .then(data=>{
+        const coupenDatas=data.data 
+        res.render("admin/adminCoupen",{coupens:coupenDatas})
+    }).catch(err=>{
+        res.send(err)
+    })
+  
+}
+
+
+
+exports.addCoupen=(req,res)=>{
+    res.render("admin/addCoupen")
 }

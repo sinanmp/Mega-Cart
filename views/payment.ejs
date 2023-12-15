@@ -102,7 +102,7 @@
       </div>
     
 
-      <% if(totalSumofWallet < details.totalsum) {%>
+      <% if(totalSumofWallet < totalAmount) {%>
         <div class="form-check mb-2" style="margin-left: -154px;">
           <input class="form-check-input"  disabled style="margin-left: -40px; margin-top: 2px; opacity: .6;" type="radio" onclick="showPayment()" name="payment" id="walletMain" value="wallet">
           <label class="form-check-label" style="opacity: .6;" for="cod">Wallet <span style="color: red;font-size: 13px;position: absolute;top: 6px;left: 54%;font-weight: 500;">Wallet Only have <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSumofWallet) %></span></label>

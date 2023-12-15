@@ -108,7 +108,7 @@ exports.submitOrder = async (req, res) => {
                     const updatedUser = await userDb.findOneAndUpdate(
                       { email: req.session.OrderInfo.email },
                       {
-                          $inc: { 'wallet.totalAmount':req.session.totalPriceinPrid },
+                          $inc: { 'wallet.totalAmount':-req.session.totalPriceinPrid },
                           $push: { 'wallet.transactions': transaction }
                       },
                       { new: true }
@@ -229,7 +229,7 @@ exports.submitOrder = async (req, res) => {
                     const updatedUser = await userDb.findOneAndUpdate(
                       { email: req.session.OrderInfo.email },
                       {
-                          $inc: { 'wallet.totalAmount':req.session.totalPriceinPrid},
+                          $inc: { 'wallet.totalAmount':-req.session.totalPriceinPrid},
                           $push: { 'wallet.transactions': transaction }
                       },
                       { new: true }
