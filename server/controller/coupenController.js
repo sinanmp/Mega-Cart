@@ -27,14 +27,22 @@ exports.getCoupens=async(req,res)=>{
 
 
 exports.expiredCoupens=async(req,res)=>{
-    const expiredCoupens=await coupenDb.find({active:false, expired:true})
-
+    const expiredCoupens = await coupenDb.find({ $or: [{ active: false }, { expired: true }] });
     res.render("admin/expiredCoupens",{coupens:expiredCoupens})
 }
 
 
 
-exports.unlistCoupens=(req,res)=>{
+exports.unlistCoupens=async(req,res)=>{
     const id=req.query.id
-    res.json(id)
+    await coupenDb.updateOne({_id:id},{$set:{expired:true,active:false}})
+    res.redirect("/coupen/api")
+}
+
+
+exports.restoreCoupens=async(req,res)=>{
+    const id=req.query.id
+    await coupenDb.updateOne({_id:id},{$set:{expired:false,active:true}})
+    res.redirect("/expiredCoupens")
+    
 }

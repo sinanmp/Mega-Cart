@@ -68,6 +68,7 @@ router.post("/addCoupen/post",coupenController.addCoupenPost)
 router.get("/getCoupens",coupenController.getCoupens)
 router.get("/expiredCoupens",coupenController.expiredCoupens)
 router.get("/unlist/coupens",coupenController.unlistCoupens)
+router.get("/restore/coupens",coupenController.restoreCoupens)
 
 module.exports = router;
 
