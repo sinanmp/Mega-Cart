@@ -53,7 +53,8 @@ const orderSchema = new mongoose.Schema({
     reasonCorR:{
     type: String,
     default:'none'
-   }
+   },
+   takingFromWallet:Number
 });
 
 const Order = mongoose.model('Order', orderSchema);

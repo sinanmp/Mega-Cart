@@ -19,7 +19,6 @@ exports.submitOrder = async (req, res) => {
     const id = req.query.prId;
     if (id) {
         try {
-          
             const data = await productdb.findOne({ _id: id });
             if(data.stock<=0){
                 res.json({errorforStock:"no Stock"})
@@ -47,6 +46,9 @@ exports.submitOrder = async (req, res) => {
             if (req.body.payment == 'razorpay') {
                 console.log("its coming success is very dangersly")
                 const randomOrderID = Math.floor(Math.random() * 1000000).toString();
+                if(req.session.DisplayAmount>=1){
+                    req.session.totalPriceinPrid=req.session.DisplayAmount
+                }
                 const options = {
                     amount: req.session.totalPriceinPrid,  
                     currency: "INR",  
@@ -79,48 +81,74 @@ exports.submitOrder = async (req, res) => {
                     });
                 });
             }else {
-                const NewOrder =new orderDb({   
-                    email: req.session.OrderInfo.email,
-                    username: req.session.OrderInfo.username,
-                    products: data,
-                    totalAmount: req.session.totalPriceinPrid,
-                    shippingAddress: {
-                        locality: req.session.OrderInfo.locality,
-                        Address: req.session.OrderInfo.address,
-                        city: req.session.OrderInfo.city,
-                        house_no: req.session.OrderInfo.house_No,
-                        postcode: req.session.OrderInfo.postcode,
-                        AlternateNumber: req.session.OrderInfo.altr_number
-                    },
-                    PaymentMethod: req.body.payment
-                });   
-                
-                if(req.body.payment=='wallet'){
-                    const transaction = {
-                        date: new Date(),
-                        category: 'purchase',
-                        amount: req.session.totalPriceinPrid,
-                        description:"Item Ordered"
-                    };
-
-                    console.log(transaction)
-
-                    const updatedUser = await userDb.findOneAndUpdate(
-                      { email: req.session.OrderInfo.email },
-                      {
-                          $inc: { 'wallet.totalAmount':-req.session.totalPriceinPrid },
-                          $push: { 'wallet.transactions': transaction }
-                      },
-                      { new: true }
-                  );
-
+                console.log("its coming here")
+                if(req.session.DisplayAmount>=1){
+                    req.session.totalPriceinPrid=req.session.DisplayAmount
                 }
-                await NewOrder.save();
-                await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
-                console.log(id)
-             const updateddata= await cartDb.updateMany({prId:id},{$inc:{stock:-1}});
-                console.log(updateddata+"   its updated")
-                req.session.paymentMidd='true'
+              
+                if(req.session.DisplayAmount==0){
+                    const NewOrder =new orderDb({   
+                        email: req.session.OrderInfo.email,
+                        username: req.session.OrderInfo.username,
+                        products: data,
+                        totalAmount: req.session.totalPriceinPrid,
+                        shippingAddress: {
+                            locality: req.session.OrderInfo.locality,
+                            Address: req.session.OrderInfo.address,
+                            city: req.session.OrderInfo.city,
+                            house_no: req.session.OrderInfo.house_No,
+                            postcode: req.session.OrderInfo.postcode,
+                            AlternateNumber: req.session.OrderInfo.altr_number
+                        },
+                        PaymentMethod: 'complete from Wallet'
+                    })
+                    await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
+                    await NewOrder.save(); 
+                    console.log(id) 
+                    const updateddata= await cartDb.updateMany({prId:id},{$inc:{stock:-1}});
+                    console.log(updateddata+"   its updated")
+                    req.session.paymentMidd='true'
+                }else{
+                    const NewOrder =new orderDb({   
+                        email: req.session.OrderInfo.email,
+                        username: req.session.OrderInfo.username,
+                        products: data,
+                        totalAmount: req.session.totalPriceinPrid,
+                        shippingAddress: {
+                            locality: req.session.OrderInfo.locality,
+                            Address: req.session.OrderInfo.address,
+                            city: req.session.OrderInfo.city,
+                            house_no: req.session.OrderInfo.house_No,
+                            postcode: req.session.OrderInfo.postcode,
+                            AlternateNumber: req.session.OrderInfo.altr_number
+                        },
+                        PaymentMethod: req.body.payment
+                    })
+                    await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
+                    await NewOrder.save();
+                    console.log(id) 
+                 const updateddata= await cartDb.updateMany({prId:id},{$inc:{stock:-1}});
+                    console.log(updateddata+"   its updated")
+                    req.session.paymentMidd='true'
+                }
+                console.log(req.session.takingFromWallet, typeof req.session.takingFromWallet ,  "this is taking from wallet amount")
+                if(req.session.takingFromWallet>0){
+                        const transaction = {
+                            date: new Date(),
+                            category: 'purchase',
+                            amount: req.session.takingFromWallet,
+                            description:"Item Ordered"
+                        };
+    
+                        const updatedUser = await userDb.findOneAndUpdate(
+                          { email: req.session.OrderInfo.email },
+                          {
+                              $inc: { 'wallet.totalAmount':-req.session.takingFromWallet },
+                              $push: { 'wallet.transactions': transaction }
+                          },
+                          { new: true }
+                      );      
+                }
                 res.json({ url:`/order/success`});
              }
         } catch (error) {         
@@ -140,6 +168,9 @@ exports.submitOrder = async (req, res) => {
                 res.json({errorforStock:"no Stock"})
                 return
             }
+        }
+        if(req.session.DisplayAmount>=1){
+            req.session.totalPriceinPrid=req.session.DisplayAmount
         }
         
            console.log(prdata+" this is prdata dkjfisafjadsifjdsifie")
@@ -216,26 +247,23 @@ exports.submitOrder = async (req, res) => {
                     PaymentMethod: req.body.payment
                 })
                 
-                if(req.body.payment=='wallet'){
+                if(req.session.takingFromWallet>0){
                     const transaction = {
                         date: new Date(),
                         category: 'purchase',
-                        amount: req.session.totalPriceinPrid,
+                        amount: req.session.takingFromWallet,
                         description:"Item Ordered"
                     };
-
-                    console.log(transaction)
 
                     const updatedUser = await userDb.findOneAndUpdate(
                       { email: req.session.OrderInfo.email },
                       {
-                          $inc: { 'wallet.totalAmount':-req.session.totalPriceinPrid},
+                          $inc: { 'wallet.totalAmount':-req.session.takingFromWallet },
                           $push: { 'wallet.transactions': transaction }
                       },
                       { new: true }
-                  );
-
-                }
+                  );      
+            }
                await cartOrder.save()
                await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
                await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
@@ -341,6 +369,23 @@ exports.orderRoute= async(req,res)=>{
         await productdb.updateOne({_id:id},{$inc:{stock:-1}})
         await cartDb.updateMany({prId:id},{$inc:{stock:-1}})
         req.session.paymentMidd='true'
+        if(req.session.takingFromWallet>0){
+            const transaction = {
+                date: new Date(),
+                category: 'purchase',
+                amount: req.session.takingFromWallet,
+                description:"Item Ordered"
+            };
+
+            const updatedUser = await userDb.findOneAndUpdate(
+              { email: req.session.OrderInfo.email },
+              {
+                  $inc: { 'wallet.totalAmount':-req.session.takingFromWallet },
+                  $push: { 'wallet.transactions': transaction }
+              },
+              { new: true }
+          );      
+    }
         res.json({ url:`/order/success`});
         return
    }else{
@@ -369,6 +414,23 @@ exports.orderRoute= async(req,res)=>{
         await cartDb.deleteMany({email:req.session.isAuth})
         console.log("its coming in else case")
         req.session.paymentMidd='true'
+        if(req.session.takingFromWallet>0){
+            const transaction = {
+                date: new Date(),
+                category: 'purchase',
+                amount: req.session.takingFromWallet,
+                description:"Item Ordered"
+            };
+
+            const updatedUser = await userDb.findOneAndUpdate(
+              { email: req.session.OrderInfo.email },
+              {
+                  $inc: { 'wallet.totalAmount':-req.session.takingFromWallet },
+                  $push: { 'wallet.transactions': transaction }
+              },
+              { new: true }
+          );      
+    }
         res.json({ url:`/order/success`});
    }
 }

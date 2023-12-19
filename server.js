@@ -25,7 +25,6 @@ app.use(session({
 // });
 
 
-
 app.use(methodOverride('_method'));
   
 
@@ -47,6 +46,9 @@ app.use("/primg", express.static(path.join(__dirname, "images")));
 app.use("/", require("./server/routes/userRouter"));
 app.use("/", require("./server/routes/adminRouter"))
 
+// app.use((req, res) => {
+//   res.status(404).redirect('/');
+// });
 
 
 

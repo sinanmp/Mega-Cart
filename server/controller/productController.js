@@ -171,9 +171,7 @@ exports.removeImage = (req, res) => {
     productDb.updateOne({ _id: id }, { $pull: { prd_images: image } })
         .then(data => {
             path = `images/${image}`
-            fs.unlink(path, (err => {
                 res.redirect(`/add/images?id=${id}`)
-            }))
         })
 }
 

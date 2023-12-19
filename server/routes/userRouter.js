@@ -91,6 +91,7 @@ router.post("/wallet-add",userController.walletAdd)
 router.get("/wallet-fetch",userController.walletFetch)
 router.get("/wallet/dataUpdate",userController.walletUpdate)
 router.get("/fetch-wallet-total",userController.fetchTotalWalletAmount)
+router.post("/wallet-payment",userController.walletPayment)
 
 
 

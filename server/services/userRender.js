@@ -96,12 +96,15 @@ exports.checkout=(req,res)=>{
             console.log(price,"  this is product price")
             totalPrice=price
             req.session.totalPriceinPrid=price  
+            req.session.totalForDisplay=price
+            console.log(req.session.totalPriceinPrid , "this is session iam printed")
         })
         req.session.prLength=null
         console.log("its coming here")
     }else{
         console.log(req.session.totalPriceinPrid+" kasdjfasodjfaosihgfnjasoergjhferargheua")
         totalPrice=req.session.totalPriceinPrid
+
     }
 
     axios.get(`http://localhost:3000/api/checkout?&email=${userEmail}`)
@@ -180,7 +183,8 @@ exports.userOrdersDeatails=(req,res)=>{
 
 
 exports.payment=(req,res)=>{
-    req.session.paymentMidd='false'                                                                 
+    req.session.paymentMidd='false'       
+    req.session.takingFromWallet=null                                                          
     req.session.OrderInfo=req.body        
     console.log(req.session.OrderInfo.locality+" this is address req.body")       
     console.log(req.body.email+'  this is body') 

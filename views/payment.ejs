@@ -86,36 +86,38 @@
     <!-- Jumbotron -->
   
   </header>
-
-  <div id="preloader"></div>
+<!-- 
+  <div id="preloader"></div> -->
   <div class="container-fluid" style="margin-top: 21px; min-height: 90vh;">
     <div class="text-center">
       <h1 class="mb-4">Choose a Payment Option</h1>
+      <div>
+        <div class="form-check">
+          <% if(totalSumofWallet<=0){ %>
+          <input class="form-check-input"  disabled   style="margin-left: -30px;  margin-top: 7px; width: 20px; height: 20px;" type="checkbox"  name="payment" id="walletCheckbox" value="cod">
+          <label class="form-check-label walletLabel" style="opacity: .5;" for="cod">Wallet  <span style="color: red; font-size: 10px; font-weight: 500;">Wallet Available Balance is           <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSumofWallet) %></span></label>
+          <% }else{ %>
+            <input class="form-check-input"  onclick="walletMangement('<%=totalSumofWallet%>','<%=totalAmount%>')"   style="margin-left: -30px;  margin-top: 7px; width: 20px; height: 20px;" type="checkbox"  name="payment" id="walletCheckbox" value="cod">
+            <label class="form-check-label walletLabel" for="cod">Wallet  <span style="color: green; font-size: 10px; font-weight: 500;">Wallet Available Balance is           <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSumofWallet) %></span></label>
+            <% } %>
+      </div> 
+      <!-- <div class="form-check">
+        <input class="form-check-input" style="margin-left: -40px; margin-top: 2px;" type="checkbox" name="payment" id="cod" value="cod">
+        <label class="form-check-label" for="cod">Coupen</label>
+    </div> -->
+      </div>
+   
   </div>
 
   <form id="paymentForm" style="margin-top: 30px;">
     <div class="container">
-
       <div class="form-check mb-2" style="    margin-left: -71px;">
-        <input class="form-check-input" type="radio" style="margin-left: -37px; margin-top: 8px;" onclick="showPayment();codAndOnline()" name="payment" id="razorpay" value="razorpay">
-        <label class="form-check-label ml-1" style="margin-top: 7px;" for="razorpay">Online Payment</label>
+        <input class="form-check-input opPayment" type="radio" style="margin-left: -37px; margin-top: 8px;" onclick="showPayment();codAndOnline()" name="payment" id="razorpay" value="razorpay">
+        <label class="form-check-label ml-1 opPayment" style="margin-top: 7px;" for="razorpay">Online Payment</label>
       </div>
-    
-
-      <% if(totalSumofWallet < totalAmount) {%>
-        <div class="form-check mb-2" style="margin-left: -154px;">
-          <input class="form-check-input"  disabled style="margin-left: -40px; margin-top: 2px; opacity: .6;" type="radio" onclick="showPayment()" name="payment" id="walletMain" value="wallet">
-          <label class="form-check-label" style="opacity: .6;" for="cod">Wallet <span style="color: red;font-size: 13px;position: absolute;top: 6px;left: 54%;font-weight: 500;">Wallet Only have <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSumofWallet) %></span></label>
-      </div>
-        <% }else{ %>
-      <div class="form-check mb-2" style="margin-left: -154px;">
-        <input  class="form-check-input" style="margin-left: -40px; margin-top: 2px;" type="radio" onclick="showPayment()" name="payment" id="walletMain" value="wallet">
-        <label id="curruntBalance" class="form-check-label" for="cod">Wallet <span style="    color: rgb(13, 169, 13);font-size: 13px;position: absolute;top: 6px;left: 54%;font-weight: 500;">Wallet Available Balance is <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalSumofWallet) %></span></label>
-    </div>
-    <% } %>
       <div class="form-check">
-        <input class="form-check-input" style="margin-left: -40px; margin-top: 2px;" type="radio" onclick="showPayment();codAndOnline()" name="payment" id="cod" value="cod">
-        <label class="form-check-label" for="cod">Cash on Delivery (COD)</label>
+        <input class="form-check-input opPayment" style="margin-left: -40px; margin-top: 2px;" type="radio" onclick="showPayment();codAndOnline()" name="payment" id="cod" value="cod">
+        <label class="form-check-label opPayment" for="cod">Cash on Delivery (COD)</label>
     </div>
       </div>
       <div class="container mt-3">
@@ -134,28 +136,40 @@
                         <%= prLength %>
                     </p>
                 </div>
-                <hr />
-    
-                <div class="justify-content-between" id="takingfrom" style="display: none;">
-                    <p style="color: red;">Taking From Wallet:</p>
-                    <p class="mb-2 fw-bold" style="font-weight: 500; color: red;">
-                        - <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalAmount) %>
-                    </p>
-                </div>
-    
+                <div class=" takingFrom justify-content-between mb-2" style="display: none;">
+                  <p>Taking From Wallet:</p>
+                  <p class="text-success takingWallet">
+                      
+                  </p>
+              </div>
+                <hr />    
                 <div class="d-flex justify-content-between mb-2">
                     <p>Total price:</p>
                     <p class="font-weight-bold" id="total-price">
                         <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalAmount) %>
                     </p>
                 </div>
-                <button class="btn btn-block" style="background-color: #BF7DC1; color: white; height: 40px;" disabled id="rzp-button" type="submit">Place Order</button>
+                <button class="btn btn-block placeOrderBtn" style="background-color: #BF7DC1; color: white; height: 40px;" disabled id="rzp-button" type="submit">Place Order</button>
             </div>
         </div>
     </div>
     
     </form>
-    
+</div>
+
+
+
+<div id="overlayError"></div>
+<div id="youNeedtoverify">
+  <a onclick="CoupenColose()">X</a>
+  <form action="" method="post">
+    <div class="form-group">
+      <label for="password">Enter Coupen Code</label>
+      <input type="password" class="form-control" id="password" name="password"
+        placeholder="Enter Password">
+    </div> 
+    <button type="submit" style="background-color: #392539; color: white;" class="btn mx-auto d-block mt-5">Submit</button>
+  </form>
 </div>
 
 
@@ -172,12 +186,6 @@
 <!-- Your other script tags -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
 <script>
-document.getElementById("walletMain").addEventListener("click", () => {
-  let totalPriceElement = document.getElementById("total-price");
-  document.getElementById("takingfrom").style.display='flex'
-  totalPriceElement.innerHTML = '₹0.00';
-});
-
  function codAndOnline(){
   let totalPriceElement = document.getElementById("total-price");
   document.getElementById("takingfrom").style.display='none'
@@ -263,8 +271,111 @@ document.getElementById("walletMain").addEventListener("click", () => {
             window.addEventListener("load",function(){
             loader.style.display="none"
             })
+
+
+
+
+  function shoCoupenPayment(){
+        const input =document.getElementById("coupenPayment")
+        if(input.checked){
+          document.getElementById('overlayError').style.display = 'block';
+          document.getElementById('youNeedtoverify').style.display = 'block';
+        }else{
+          document.getElementById('overlayError').style.display = 'none';
+          document.getElementById('youNeedtoverify').style.display = 'none';
+        }
+        
+        }
+
+        function CoupenColose(){
+          document.getElementById('overlayError').style.display = 'none';
+        document.getElementById('youNeedtoverify').style.display = 'none';
+        }
+
+
+        function walletMangement(waletTotalAmount,totalAmount){
+          const walletCheckbox=document.getElementById("walletCheckbox")
+          console.log(walletCheckbox.checked)
+          fetch('/wallet-payment', {
+          method: 'Post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ waletTotalAmount ,checkedW:walletCheckbox.checked,totalAmount}),
+        }).then(response => {
+          
+          return response.json(); 
+        }).then(data => {
+          let DisplayAmount1 = Number(data.DisplayAmount);
+          console.log(data )
+          let totalPriceElement = document.getElementById("total-price");
+          totalPriceElement.innerHTML =  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(DisplayAmount1);
+          if(walletCheckbox.checked){
+            if(data.DisplayAmount==0){
+              var opPaymentElements = document.querySelectorAll(".opPayment");
+
+          // Loop through the elements and set the "disabled" attribute
+          opPaymentElements.forEach(function(element) {
+            element.disabled = true;
+        });
+         var btn=  document.querySelector(".placeOrderBtn")
+         btn.disabled=false
+
+            }
+            document.querySelector(".takingFrom").style.display='flex'
+            document.querySelector(".takingWallet").innerHTML = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(data.takingFromWallet);
+            document.querySelector(".walletLabel").style.opacity=.4
+          }else{
+            var btn=  document.querySelector(".placeOrderBtn")
+             btn.disabled=true
+            var opPaymentElements = document.querySelectorAll(".opPayment");
+          // Loop through the elements and set the "disabled" attribute
+          opPaymentElements.forEach(function(element) {
+            element.disabled = false;
+          });
+       
+            document.querySelector(".walletLabel").style.opacity=1
+            document.querySelector(".takingFrom").style.display='none'
+          }
+
+
+        }).catch(error => {
+          console.error('Error:', error);
+        });
+        }
 </script>
 
-  
+
+
+<style>
+    #youNeedtoverify{
+     border-radius: 6px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+  }
+  #overlayError{
+    display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+</style>
+
+
 </body>
 </html>

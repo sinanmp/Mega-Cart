@@ -249,7 +249,7 @@ exports.logout = (req, res) => {
 }
 
 exports.singlePrd = (req, res) => {
-  
+  console.log(req.session.prId , "this is prid in single product")
   const prId = req.session.prId;
   console.log(prId)
   const { quantity } = req.body;
@@ -796,3 +796,47 @@ exports.takeProductPrice=async(req,res)=>{
 
  res.send(prdata)
 }
+
+
+
+
+
+exports.walletPayment = (req, res) => {
+  console.log(req.session.takingFromWallet)
+  let { waletTotalAmount, checkedW ,totalAmount} = req.body;
+  req.session.DisplayAmount= req.session.totalPriceinPrid-waletTotalAmount
+  waletTotalAmount=Number(waletTotalAmount)
+  if (waletTotalAmount < req.session.totalPriceinPrid) {
+    if (checkedW) {
+      req.session.takingFromWallet =  waletTotalAmount;
+      req.session.DisplayAmount=req.session.totalForDisplay-waletTotalAmount
+      console.log("its coming here")
+    } else {
+      req.session.takingFromWallet = 0
+      console.log("its coming else")
+      if(req.session.DisplayAmount<=req.session.totalPriceinPrid){
+        console.log("its coming here condition")
+        req.session.DisplayAmount=Number(req.session.totalForDisplay)  
+        console.log(req.session.totalForDisplay)
+      }
+  
+    }
+    res.json({ takingFromWallet: req.session.takingFromWallet, DisplayAmount: req.session.DisplayAmount});
+  } else {
+    if(checkedW){
+      req.session.takingFromWallet = totalAmount;
+      req.session.DisplayAmount=0
+    }else{
+      console.log(totalAmount)
+      req.session.DisplayAmount=totalAmount
+      req.session.takingFromWallet = 0
+    }
+    res.json({ takingFromWallet: req.session.takingFromWallet, DisplayAmount: req.session.DisplayAmount });
+  }
+};
+
+
+
+
+
+

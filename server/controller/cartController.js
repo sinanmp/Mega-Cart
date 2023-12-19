@@ -130,6 +130,7 @@ exports.cart = async (req, res) => {
     }
 
     req.session.totalPriceinPrid = sum;
+    req.session.totalForDisplay=sum
 
     const wishdata = await wishdb.find({ email: email });
     const catData = await categoryDb.find({ status: true });
