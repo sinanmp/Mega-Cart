@@ -158,7 +158,7 @@ exports.find = (req, res) => {
                   .then(resdata => {
                     console.log(userData.status)
                     req.session.isAuth = userData.email
-                    res.redirect("/");
+                    res.send({success:true});
                   }).catch(err => {
                     req.session.invalidMail=true
                     res.send(err)
@@ -167,13 +167,13 @@ exports.find = (req, res) => {
             }).catch(err => {
               req.session.invalidMail=true
               req.session.errEmail=req.body.email
-              res.redirect("/login");
+              res.send({success:false});
               console.log(err);
             })
         } else {
           req.session.passborder=true
           req.session.errEmail=req.body.email
-          res.redirect("/login"); 
+          res.send({success:false});
           console.log("User not found invalid pass");
           // invalid password
         }
@@ -181,7 +181,7 @@ exports.find = (req, res) => {
         //invalid email
         req.session.emailborder=true
         req.session.errEmail=req.body.email
-        res.redirect("/login");
+        res.send({success:false});
         console.log("User not found null");
         // null output
       }
@@ -196,6 +196,7 @@ exports.find = (req, res) => {
 
 exports.userHome = async (req, res) => {
   req.session.prId=null
+  const modal=req.query.isauthenticate
   const searchQuery = req.query.search; 
   try {
     const Nemail = req.session.isAuth;
@@ -221,11 +222,11 @@ exports.userHome = async (req, res) => {
    }
    catogorydb.find({status:true})
    .then(catData=>{
-    res.render("home", { products, userAuth: Nemail, user: userdata,wishlists:wishIds,searchQuery,catData:catData});
+    res.render("home", { products, userAuth: Nemail, user: userdata,wishlists:wishIds,searchQuery,catData:catData,modal});
    })
   } catch (err) {
     console.error(err);     
-    res.render("home", { products: null, userAuth: req.session.isAuth, block: null,searchQuery});
+    res.render("home", { products: null, userAuth: req.session.isAuth, block: null,searchQuery,modal});
   }
 };
               

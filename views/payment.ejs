@@ -10,6 +10,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
        body {
@@ -183,6 +184,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+
+
 <!-- Your other script tags -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
 <script>
@@ -325,13 +328,21 @@
             document.querySelector(".takingFrom").style.display='flex'
             document.querySelector(".takingWallet").innerHTML = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(data.takingFromWallet);
             document.querySelector(".walletLabel").style.opacity=.4
+         
+           Swal.fire({
+            icon: "success",
+            title: "Wallet Amount taked",
+            showConfirmButton: false,
+            timer: 1500
+       });
           }else{
             var btn=  document.querySelector(".placeOrderBtn")
              btn.disabled=true
             var opPaymentElements = document.querySelectorAll(".opPayment");
           // Loop through the elements and set the "disabled" attribute
-          opPaymentElements.forEach(function(element) {
+            opPaymentElements.forEach(function(element) {
             element.disabled = false;
+
           });
        
             document.querySelector(".walletLabel").style.opacity=1
