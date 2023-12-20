@@ -1,72 +1,219 @@
-<%- include('include2/adminbase') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <style>
+    #totalSales {
+      transition: color 0.5s, transform 0.5s;
+    }
+    #totalUsers {
+      transition: color 0.5s, transform 0.5s;
+    }
+  </style>
+</head>
+<body>
+	<%- include('include2/adminbase') %>
+	<% let a=0 %>
+	<% let total=0 %>
+	<% for(let i=0;i<orders.length;i++){ %>
+	<% if(orders[i].status=='pending'){ a++ }%>
+	<% if(orders[i].status=='Delivered') {%>
+	<% total+=orders[i].products[0]?.price %>
+	<% } %>
+	<% } %>
+		
 
+		<!-- CONTENT -->
+		<section id="content">
+			<!-- NAVBAR -->
 
-<% let a=0 %>
-<% let total=0 %>
-<% for(let i=0;i<orders.length;i++){ %>
-<% if(orders[i].status=='pending'){ a++ }%>
-<% if(orders[i].status=='Delivered') {%>
-<% total+=orders[i].products[0]?.price %>
-<% } %>
-<% } %>
+			<!-- NAVBAR -->
+
+			<!-- MAIN -->
+			<main>
+				<div class="head-title">
+					<div class="left">
+						<h1>Dashboard</h1>
+						<ul class="breadcrumb">
+							<li>
+								<a href="#"></a>
+							</li>
+							<li><i class='bx bx-chevron-right'></i></li>
+							<li>
+								<a class="active" href="#">Home</a>
+							</li>
+						</ul>
+					</div>
+					<a onclick="generateSalesReport()" class="btn-download">
+						<i class='bx bxs-cloud-download'></i>
+						<span class="text">Download PDF</span>
+					</a>
+				</div>
+
+				<ul class="box-info">
+					<li>
+						<i class='bx bxs-calendar-check'></i>
+						<span class="text">
+							<h3 id="newOrders">0</h3>
+							<p>New Order</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-group'></i>
+						<span class="text">
+							<h3 id="totalUsers">0</h3>
+							<p>Toatal Users</p>
+						</span>
+					</li>
+					<li>
+						<i class='bx bxs-dollar-circle'></i>
+						<span class="text">
+							<h3 id="totalSales">0</h3>
+							<p>Total Sales</p>
+						</span>
+					</li>
+				</ul>
+			</main>
+			<!-- MAIN -->
+		</section>
+
+  <script>
+    // Your JavaScript code
+	function generateSalesReport() {
+  const pdf = new window.jspdf.jsPDF();
+  pdf.addFont('OpenSans-Regular.ttf', 'Open Sans', 'normal');
+
+  pdf.setFontSize(16);
+  pdf.setFont('Open Sans', 'normal');
+
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+  const formattedDate = new Date().toLocaleDateString('en-IN', options);
+  const formattedTotalSales = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Math.floor('<%=total%>')); 
+    pdf.text(`Date: ${formattedDate}`, 10, 80);
+  	pdf.text(`Total Sales:${formattedTotalSales}`, 10, 20);
+	pdf.text(`Total Users: ${'<%=count%>'}`, 10, 40);  
+	pdf.text(`New Orders: ${'<%=a%>'}`, 10, 60);
 	
 
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
 
-		<!-- NAVBAR -->
+  // Add an image on the right side
+  const imageUrl = 'https://cdn.pixabay.com/photo/2017/02/14/07/54/sale-2065116_960_720.jpg';
+  const docWidth = 210;
+  const imageWidth = 50;
+  const xCoordinate = docWidth - imageWidth - 10;
+  pdf.addImage(imageUrl, 'PNG', xCoordinate, 30, 50, 50);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setTextColor(255, 0, 0); 
+  pdf.text('Mega Cart', xCoordinate + 10, 85); 
 
-		<!-- MAIN -->
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Dashboard</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="#"></a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
-							<a class="active" href="#">Home</a>
-						</li>
-					</ul>
-				</div>
-				<a href="#" class="btn-download">
-					<i class='bx bxs-cloud-download'></i>
-					<span class="text">Download PDF</span>
-				</a>
-			</div>
+// Reset font weight and color for subsequent text (if needed)
+pdf.setFont('helvetica', 'normal');
+pdf.setTextColor(0, 0, 0); 
 
-			<ul class="box-info">
-				<li>
-					<i class='bx bxs-calendar-check'></i>
-					<span class="text">
-						<h3><%=a  %></h3>
-						<p>New Order</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-group'></i>
-					<span class="text">
-						<h3><%=count  %></h3>
-						<p>Toatal Users</p>
-					</span>
-				</li>
-				<li>
-					<i class='bx bxs-dollar-circle'></i>
-					<span class="text">
-						<h3><%=total  %></h3>
-						<p>Total Sales</p>
-					</span>
-				</li>
-			</ul>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
+  // Display sales data in a loop
 
-	<script src="js/adminbase.js"></script>
-	</body>
+  // Add a line to separate sections
+  pdf.line(10, 120, docWidth - 10, 120);
 
-	</html>
+  // Display orders list in a loop (table-like format)
+  const ordersList = [
+    { Date: formattedDate, TotalSales: formattedTotalSales, TotalUsers: '<%=count%>', NewOrders: '<%=a%>'},
+  ];
+
+  // Table header
+  pdf.text('Date', 10, 130);
+  pdf.text('Total Sales', 50, 130);
+  pdf.text('Total Users', 100, 130);
+  pdf.text('New Orders', 150, 130);
+
+  // Table rows
+  ordersList.forEach((order, index) => {
+  const yPos = 150 + index * 10;
+  pdf.text(order.Date, 10, yPos);
+  pdf.text(order.TotalSales, 50, yPos);
+  pdf.text(order.TotalUsers, 120, yPos);
+  pdf.text(order.NewOrders, 150, yPos);
+});
+  pdf.save('MegaCart Sales Report.pdf');
+}
+
+
+    function updateCount(count, elementId) {
+      const countingNumber = document.getElementById(elementId);
+      countingNumber.style.color = 'red';
+      countingNumber.style.transform = 'scale(1.2)';
+
+      setTimeout(() => {
+        countingNumber.innerText = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(Math.floor(count));
+        countingNumber.style.color = 'black';
+        countingNumber.style.transform = 'scale(1)';
+      }, 1000);
+    }
+
+    let count = 0;
+    const maxCount = Number('<%=total%>');
+
+    function startCounting() {
+      if (count <= maxCount) {
+        updateCount(count, 'totalSales');
+        count += 500;
+        setTimeout(startCounting, .1);
+      }
+    }
+
+    function countingUsers(count) {
+      const totalUsers = document.getElementById('totalUsers');
+      totalUsers.style.color = 'red';
+      totalUsers.style.transform = 'scale(1.2)';
+
+      setTimeout(() => {
+        totalUsers.innerText = count;
+        totalUsers.style.color = 'black';
+        totalUsers.style.transform = 'scale(1)';
+      }, 1000);
+    }
+
+    let usercount = 0;
+    const usermaxCount = Number('<%=count%>');
+
+    function startCountingUsers() {
+      if (usercount <= usermaxCount) {
+        countingUsers(usercount);
+        usercount++;
+        setTimeout(startCountingUsers, 100);
+      }
+    }
+
+    function countingOrders(count) {
+      const newOrders = document.getElementById('newOrders');
+      newOrders.style.color = 'red';
+      newOrders.style.transform = 'scale(1.2)';
+
+      setTimeout(() => {
+        newOrders.innerText = count;
+        newOrders.style.color = 'black';
+        newOrders.style.transform = 'scale(1)';
+      }, 1000);
+    }
+
+    let orderCount = 0;
+    const maxOrderCount = Number('<%=a%>');
+
+    function startCountingOrders() {
+      if (orderCount <= maxOrderCount) {
+        countingOrders(orderCount);
+        orderCount++;
+        setTimeout(startCountingOrders, 100);
+      }
+    }
+
+    window.onload = function () {
+      startCounting();
+      startCountingUsers();
+      startCountingOrders();
+    };
+  </script>
+</body>
+</html>

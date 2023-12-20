@@ -38,6 +38,7 @@ exports.submitOrder = async (req, res) => {
                     postcode: req.session.OrderInfo.postcode,
                     AlternateNumber: req.session.OrderInfo.altr_number
                 },
+                takingFromWallet:req.session.takingFromWallet,
                 PaymentMethod: req.body.payment
             };
 
@@ -100,6 +101,7 @@ exports.submitOrder = async (req, res) => {
                             postcode: req.session.OrderInfo.postcode,
                             AlternateNumber: req.session.OrderInfo.altr_number
                         },
+                        takingFromWallet:req.session.takingFromWallet,
                         PaymentMethod: 'complete from Wallet'
                     })
                     await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
@@ -122,6 +124,7 @@ exports.submitOrder = async (req, res) => {
                             postcode: req.session.OrderInfo.postcode,
                             AlternateNumber: req.session.OrderInfo.altr_number
                         },
+                        takingFromWallet:req.session.takingFromWallet,
                         PaymentMethod: req.body.payment
                     })
                     await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
@@ -187,6 +190,7 @@ exports.submitOrder = async (req, res) => {
                     postcode: req.session.OrderInfo.postcode,
                     AlternateNumber: req.session.OrderInfo.altr_number
                 },
+                takingFromWallet:req.session.takingFromWallet,
                 PaymentMethod: req.body.payment
             };
             
@@ -244,6 +248,7 @@ exports.submitOrder = async (req, res) => {
                         postcode: req.session.OrderInfo.postcode,
                         AlternateNumber: req.session.OrderInfo.altr_number
                     },
+                    takingFromWallet:req.session.takingFromWallet,
                     PaymentMethod: req.body.payment
                 })
                 
@@ -301,12 +306,12 @@ exports.cancelMain = (req, res) => {
                             };
                                 
                 console.log(data.products.price)
-            if(data.PaymentMethod!='cod'){
+            if(data.takingFromWallet>0){
             
              userDb.findOneAndUpdate(
                 { email: req.session.isAuth },
                 {
-                    $inc: { 'wallet.totalAmount': parseInt(data.totalAmount)},
+                    $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet)},
                     $push: { 'wallet.transactions': transaction }
                 },
                 { new: true }
@@ -363,6 +368,7 @@ exports.orderRoute= async(req,res)=>{
                 postcode: NewOrder.shippingAddress.postcode,
                 AlternateNumber: NewOrder.shippingAddress.AlternateNumber
             },
+            takingFromWallet:req.session.takingFromWallet,
             PaymentMethod: NewOrder.PaymentMethod
         });
         await NewOrder2.save()
@@ -404,6 +410,7 @@ exports.orderRoute= async(req,res)=>{
                 postcode: NewOrder.shippingAddress.postcode,
                 AlternateNumber: NewOrder.shippingAddress.AlternateNumber
             },
+            takingFromWallet:req.session.takingFromWallet,
             PaymentMethod: NewOrder.PaymentMethod
         })
         await NewOrder1.save()

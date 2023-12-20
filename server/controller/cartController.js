@@ -216,6 +216,7 @@ exports.getTotalPrice = async (req, res) => {
       productTotalPrices[item.prId] = productTotal;
     });
     req.session.totalPriceinPrid=totalPrice
+    req.session.totalForDisplay=totalPrice
     res.json({ success: true, totalPrice: totalPrice, productTotalPrices: productTotalPrices });
   } catch (error) {
     console.error("Error calculating total price:", error);

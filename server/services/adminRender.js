@@ -20,7 +20,6 @@ exports.dash = (req, res) => {
         .then(response=>{
             axios.get('http://localhost:3000/api/countOrders')
             .then(data=>{
-                
                 console.log(response.data)
                 const count=response.data.length
                 res.render("admin/adminDashbord",{count:count,orders:data.data})

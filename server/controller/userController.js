@@ -201,7 +201,7 @@ exports.userHome = async (req, res) => {
     const Nemail = req.session.isAuth;
 
     const [products, userdata, wishdata] = await Promise.all([
-      productDb.find({ catStatus: true, unlist: false }),
+      productDb.find({ catStatus: true, unlist: false }).sort({_id:-1}).limit(8),
       userDb.find({ email: Nemail }),
       wishdb.find({email:Nemail})
     ]);
@@ -345,8 +345,15 @@ exports.ourStore = (req, res) => {
   const searchQuery = req.query.search;
   const min=req.query.min
   const max=req.query.max
+  const page = req.query.page || 1;
+  const itemsPerPage = 6;
   req.session.priceError=false
   const filter = { catStatus: true, unlist: false };
+  const skipCount = (page - 1) * itemsPerPage;
+
+
+
+
   if (catFilter) {
     filter.category = catFilter;
   }
@@ -370,9 +377,13 @@ exports.ourStore = (req, res) => {
     ];
   }
   productDb.find(filter)
-    .then(data => {
+    .then(allData => {
       catogorydb.find({ status: true })
       .then(catData => {
+        const totalProducts = allData.length;
+        const totalPages = Math.max(1, Math.ceil(totalProducts / itemsPerPage));
+        const skipCount = (page - 1) * itemsPerPage;
+        const data = allData.slice(skipCount, skipCount + itemsPerPage);
         res.render("our-store", {
           products: data,
           email: req.session.isAuth,
@@ -381,7 +392,9 @@ exports.ourStore = (req, res) => {
           catFilter,   
           priceError:req.session.priceError,
           min:min,
-          max:max
+          max:max,
+          currentPage: parseInt(page),  
+          totalPages: totalPages
         },(error,html)=>{
           if(error){
             return 
