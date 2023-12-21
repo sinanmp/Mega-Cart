@@ -3,7 +3,6 @@
 <title>MegaCart Cart.net</title>
   <!-- /include header -->
 <% let check=false %>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
  #preloader{
             background: white url(img/load.gif) no-repeat  center;
@@ -301,30 +300,6 @@
               var quantityElement = document.getElementById(`quantity-${prId}`);
               if (quantityElement) {
                 quantityElement.value = data.newQuantity
-                const Toast = Swal.mixin({
-                toast: true,
-                position: "bottom-start",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.onmouseenter = Swal.stopTimer;
-                  toast.onmouseleave = Swal.resumeTimer;
-                }
-              });
-                if(delta==1){
-                Toast.fire({
-                icon: "success",
-                title: "quantity increased"
-              });
-                }else{
-                  Toast.fire({
-                  icon: "success",
-                  title: "quantity decreased"
-              });
-                }
-               
-    
               }
               recalculateTotalPrice(prId);  
             } else {

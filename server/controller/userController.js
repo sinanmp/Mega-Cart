@@ -11,7 +11,8 @@ const cartDb = require("../model/cartSchema");
 const Razorpay=require("razorpay")
 const wishdb = require("../model/wishlistSchema")
 
-const axios=require("axios")
+const axios=require("axios");
+const CouponDb = require("../model/coupenModel");
 
 dotenv.config()
 
@@ -152,13 +153,15 @@ exports.find = (req, res) => {
           blockDb.findOne({ email: req.body.email })
             .then(data => {
               if (data) {
-                res.render('userblockd')
+                res.send({block:true})
+                return
               } else {
                 userDb.updateOne({ email: req.body.email }, { $set: { status: "Active" } })
                   .then(resdata => {
                     console.log(userData.status)
                     req.session.isAuth = userData.email
                     res.send({success:true});
+                    req.session.modal=true
                   }).catch(err => {
                     req.session.invalidMail=true
                     res.send(err)
@@ -196,6 +199,7 @@ exports.find = (req, res) => {
 
 exports.userHome = async (req, res) => {
   req.session.prId=null
+  req.session.coupen=false
   const modal=req.query.isauthenticate
   const searchQuery = req.query.search; 
   try {
@@ -251,7 +255,9 @@ exports.logout = (req, res) => {
 
 exports.singlePrd = (req, res) => {
   console.log(req.session.prId , "this is prid in single product")
+  req.session.totalPriceinPrid=0
   const prId = req.session.prId;
+  req.session.coupen=false
   console.log(prId)
   const { quantity } = req.body;
   console.log(quantity + "product quantity")
@@ -850,6 +856,40 @@ exports.walletPayment = (req, res) => {
 };
 
 
+
+
+exports.applyCoupen = async (req, res) => {
+  const couponCode = req.body.couponCode;
+  const coupendata = await CouponDb.findOne({ code: couponCode });
+if(!req.session.coupen){
+  if (coupendata) {
+    const currentDate = new Date();
+    const expirationDate = new Date(coupendata.expirationDate);
+
+    if (currentDate < expirationDate) {
+      if(coupendata.active==true){
+        let discount = req.session.totalPriceinPrid*coupendata.discountPercentage/100
+        discount=Math.floor(discount)
+        req.session.coupenAmount=discount
+        req.session.appliedCoupen=coupendata.code
+        req.session.totalPriceinPrid= req.session.totalPriceinPrid-discount
+        req.session.totalForDisplay=req.session.totalForDisplay-discount
+        req.session.coupen=true
+        res.send({status:"coupen applied",code:coupendata.code ,discount:discount});
+      }else{
+        res.send({status:"coupen is not active",code:coupendata.code})
+      }
+    } else {
+      res.send({status:"coupen is expired",code:couponCode});
+    }
+  } else {
+    res.send({status:"invalid Coupen" , code:couponCode});
+  }
+}else{
+  res.send({status:"Coupen Already Addedd",appliedCoupen:req.session.appliedCoupen})
+}
+
+};
 
 
 

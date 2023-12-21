@@ -105,9 +105,9 @@ exports.submitOrder = async (req, res) => {
                         PaymentMethod: 'complete from Wallet'
                     })
                     await productdb.updateOne({ _id: id }, { $inc: { stock: -1 } });
-                    await NewOrder.save(); 
+                    await NewOrder.save();
                     console.log(id) 
-                    const updateddata= await cartDb.updateMany({prId:id},{$inc:{stock:-1}});
+                 const updateddata= await cartDb.updateMany({prId:id},{$inc:{stock:-1}});
                     console.log(updateddata+"   its updated")
                     req.session.paymentMidd='true'
                 }else{
@@ -235,23 +235,50 @@ exports.submitOrder = async (req, res) => {
             });
         }else{
             for(let i=0;i<NewOrder.products.length;i++){
-                const cartOrder=new orderDb({
-                    email: req.session.OrderInfo.email,
-                    username: req.session.OrderInfo.username,
-                    products: NewOrder.products[i],
-                    totalAmount: req.session.totalPriceinPrid,
-                    shippingAddress: {
-                        locality: req.session.OrderInfo.locality,
-                        Address: req.session.OrderInfo.address,
-                        city: req.session.OrderInfo.city,
-                        house_no: req.session.OrderInfo.house_No,
-                        postcode: req.session.OrderInfo.postcode,
-                        AlternateNumber: req.session.OrderInfo.altr_number
-                    },
-                    takingFromWallet:req.session.takingFromWallet,
-                    PaymentMethod: req.body.payment
-                })
+                if(req.session.DisplayAmount==0){
+                    const cartOrder=new orderDb({
+                        email: req.session.OrderInfo.email,
+                        username: req.session.OrderInfo.username,
+                        products: NewOrder.products[i],
+                        totalAmount: req.session.totalPriceinPrid,
+                        shippingAddress: {
+                            locality: req.session.OrderInfo.locality,
+                            Address: req.session.OrderInfo.address,
+                            city: req.session.OrderInfo.city,
+                            house_no: req.session.OrderInfo.house_No,
+                            postcode: req.session.OrderInfo.postcode,
+                            AlternateNumber: req.session.OrderInfo.altr_number
+                        },
+                        takingFromWallet:req.session.takingFromWallet,
+                        PaymentMethod: 'complete from Wallet'
+                    })
+                    await cartOrder.save()
+                    await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                }else{
+                    const cartOrder=new orderDb({
+                        email: req.session.OrderInfo.email,
+                        username: req.session.OrderInfo.username,
+                        products: NewOrder.products[i],
+                        totalAmount: req.session.totalPriceinPrid,
+                        shippingAddress: {
+                            locality: req.session.OrderInfo.locality,
+                            Address: req.session.OrderInfo.address,
+                            city: req.session.OrderInfo.city,
+                            house_no: req.session.OrderInfo.house_No,
+                            postcode: req.session.OrderInfo.postcode,
+                            AlternateNumber: req.session.OrderInfo.altr_number
+                        },
+                        takingFromWallet:req.session.takingFromWallet,
+                        PaymentMethod: req.body.payment
+                    })
+                    await cartOrder.save()
+                    await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                }
+             
                 
+            }
                 if(req.session.takingFromWallet>0){
                     const transaction = {
                         date: new Date(),
@@ -261,25 +288,22 @@ exports.submitOrder = async (req, res) => {
                     };
 
                     const updatedUser = await userDb.findOneAndUpdate(
-                      { email: req.session.OrderInfo.email },
-                      {
-                          $inc: { 'wallet.totalAmount':-req.session.takingFromWallet },
-                          $push: { 'wallet.transactions': transaction }
-                      },
-                      { new: true }
-                  );      
-            }
-               await cartOrder.save()
-               await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
-               await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
-            }
-            await cartDb.deleteMany({email:req.session.isAuth})
-            req.session.paymentMidd='true'
-            res.json({ url:`/order/success`});
+                    { email: req.session.OrderInfo.email },
+                    {
+                        $inc: { 'wallet.totalAmount':-req.session.takingFromWallet },
+                        $push: { 'wallet.transactions': transaction }
+                    },
+                    { new: true }
+                );      
+        }
+                await cartDb.deleteMany({email:req.session.isAuth})
+                req.session.paymentMidd='true'
+                res.json({ url:`/order/success`});
         }
      
     } catch (err) {   
-        res.status(500).send(err);         
+        res.status(500).send(err);  
+        console.log(err)       
     }
 };     
 

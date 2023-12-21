@@ -15,6 +15,7 @@ router.get("/otp", (req, res) => {
     res.render("otp")
 })
 
+
 router.get("/take/productPrice",userController.takeProductPrice)
 router.get("/single/prd", userController.singlePrd)
 router.get("/cart", cartController.cart)
@@ -92,6 +93,9 @@ router.get("/wallet-fetch",userController.walletFetch)
 router.get("/wallet/dataUpdate",userController.walletUpdate)
 router.get("/fetch-wallet-total",userController.fetchTotalWalletAmount)
 router.post("/wallet-payment",userController.walletPayment)
+
+//
+router.post("/applyCoupon",userController.applyCoupen)
 
 
 

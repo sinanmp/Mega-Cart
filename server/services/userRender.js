@@ -37,6 +37,7 @@ exports.signup = (req, res) => {
 exports.userDeatails = (req, res) => {
     const nemail = req.session.isAuth
     const pos = req.query.position || 0;
+    req.session.coupen=false
     userDb.find({ email: nemail })
         .then(userdata => {
             console.log(userdata)
@@ -93,11 +94,13 @@ exports.checkout=(req,res)=>{
         .then(prdata=>{
             data=prdata.data
             price=Math.floor(data.discountedPrice)
-            console.log(price,"  this is product price")
             totalPrice=price
-            req.session.totalPriceinPrid=price  
-            req.session.totalForDisplay=price
-            console.log(req.session.totalPriceinPrid , "this is session iam printed")
+            if(req.session.totalPriceinPrid>=1){
+                console.log("nothingFordo")
+            }else{
+                req.session.totalPriceinPrid=price  
+                req.session.totalForDisplay=price
+            }
         })
         req.session.prLength=null
         console.log("its coming here")
@@ -116,13 +119,19 @@ exports.checkout=(req,res)=>{
             if(!prId){
                 req.session.prLength=prLength
             }
-            res.render("checkout", { userData: userData, total: totalPrice, a: index ,prId:prId});
+            res.render("checkout", { 
+                userData: userData,
+                total: req.session.totalPriceinPrid, 
+                a: index ,prId:prId ,
+                coupenSession:req.session.coupen ,
+                coupenAmount:req.session.coupenAmount ,
+                appliedCoupon: req.session.appliedCoupen
+                });
 
         })
       
     })
     .catch(error => {
-        // Handle errors from the API call
         console.error("Error fetching data:", error);
         res.status(500).send("Internal Server Error");
     });
@@ -139,7 +148,13 @@ exports.changeAddress=(req,res)=>{
         const price=req.session.totalPriceinPrid
     axios.get(`http://localhost:3000/api/checkout?&email=${userEmail}`)
     .then(response=>{
-        res.render("checkout",{userData:response.data,total:price,a:index,prId:prId})
+        res.render("checkout",{
+            userData:response.data,
+            total:price,a:index,prId:prId ,
+             coupenSession:req.session.coupen ,
+             coupenAmount:req.session.coupenAmount,
+             appliedCoupon: req.session.appliedCoupen
+            })
     })
 }   
 
@@ -220,3 +235,4 @@ exports.setSession=(req,res)=>{
     req.session.prId = prId;
     res.send('Session updated');
 }
+

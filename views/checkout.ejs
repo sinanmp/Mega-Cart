@@ -7,7 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Itim&family=Jockey+One&display=swap" rel="stylesheet">
-     
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- Jumbotron -->
         <div class="px-2 nav-div text-center"
           style="background-color: #392539 !important ;justify-content: center; height: 70px;">
@@ -255,8 +255,19 @@
               </div>
               <div class="d-flex justify-content-between">
                 <p class="mb-2">Discount:</p>
-                <p class="mb-2 text-danger">- ₹60.00</p>
+                <p class="mb-2 text-success">- ₹60.00</p>
               </div>
+              <% if(coupenSession){ %>
+              <div   class="d-flex justify-content-between">
+                <p class="mb-2">Coupen Discount:</p>
+                <p class="mb-2 text-success"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(coupenAmount) %></p>
+              </div>
+              <% }else{ %>
+              <div style="display: none;" id="coupenContent" class="justify-content-between">
+                <p class="mb-2">Coupen Discount:</p>
+                <p class="mb-2 text-success" id="coupenInnerText"></p>
+              </div>
+              <% } %>
               <div class="d-flex justify-content-between">
                 <p class="mb-2">Shipping cost:</p>
                 <p class="mb-2" style="color: green;">-Free</p>
@@ -266,12 +277,23 @@
                 <p class="mb-2">Total price:</p>
                 <p class="mb-2 fw-bold">   <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(total) %></p>
               </div>
-
-              <div class="input-group mt-3 mb-4" style="visibility: hidden;">
-                <input type="text" class="form-control border" name="" placeholder="Promo code" />
-                <button class="btn btn-light text-primary border">Apply</button>
+              <% if(!coupenSession){ %>
+              <div class="input-group mt-3 mb-4" id="applyDiv">
+                <input type="text" class="form-control border" id="couponInput" placeholder="Coupon code" />
+                <button class="btn btn-light text-primary border" id="applyCouponBtn">Apply</button>
               </div>
-
+              <div class="input-group mt-3 mb-4" id="cancelDiv" style="display: none;">
+                <label for="couponInput" style="margin-top: 5px; margin-right: 5px;">Coupen Applied</label>
+                <input type="text" class="form-control border" disabled id="couponInput"  placeholder="NewYear" />
+                <button class="btn btn-light text-primary border" id="cancelCouponBtn">Cancel</button>
+              </div>
+              <% }else{ %>
+              <div class="input-group mt-3 mb-4">
+                <label for="couponInput" style="margin-top: 5px; margin-right: 5px;">Coupen Applied</label>
+                <input type="text" class="form-control border" disabled id="couponInput"  placeholder="NewYear" />
+                <button class="btn btn-light text-primary border" id="cancelCouponBtn">Cancel</button>
+              </div>
+              <% } %>
 
               <!-- <h6 class="text-dark my-4">Items in cart</h6> -->
 
@@ -280,6 +302,44 @@
  
 <script>
     $(document).ready(function () {
+
+      $('#applyCouponBtn').click(function() {
+            var couponCode = $('#couponInput').val();
+            $.ajax({
+                type: 'POST',
+                url: '/applyCoupon', 
+                data: { couponCode: couponCode },
+                success: function(response) {
+                    if(response.status=='coupen applied'){
+                      $('#coupenContent').css('display', 'flex');
+                      $('#coupenInnerText').html('-'+new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(response.discount));
+                      $('#cancelDiv').css('display', 'flex');
+                      $("#applyDiv").css("display" , 'none')
+                      Swal.fire({
+                      icon: "success",
+                      title: "Coupon Applied Successfully",
+                      showConfirmButton: false,
+                      timer: 1500
+                      });
+                    }
+                    if(response.status=="Coupen Already Addedd"){
+                      Swal.fire({
+                      icon: "error",
+                      title: "1 Coupon is Already Applied",
+                      showConfirmButton: false,
+                      timer: 1500
+                      });
+                    }
+               
+                    
+                },
+                error: function(error) {
+                    console.error('Error applying coupon:', error);
+                }
+            });
+        });
+
+
         $('#addAddressLink').click(function () {
             $('#checkoutForm1').submit();
         });

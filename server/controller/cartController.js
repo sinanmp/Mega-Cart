@@ -106,7 +106,7 @@ exports.cart = async (req, res) => {
   try {
     req.session.prId = null;
     const email = req.session.isAuth;
-
+    req.session.coupen=false
     const cartData = await cartDb.find({ email: email });
 
     const productIds = cartData.map((item) => item.prId);

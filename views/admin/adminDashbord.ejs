@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     #totalSales {
       transition: color 0.5s, transform 0.5s;
@@ -12,6 +14,7 @@
       transition: color 0.5s, transform 0.5s;
     }
   </style>
+
 </head>
 <body>
 	<%- include('include2/adminbase') %>
@@ -76,8 +79,57 @@
 					</li>
 				</ul>
 			</main>
+      <canvas id="ordersChart" width="1300" height="600"></canvas>
+
 			<!-- MAIN -->
 		</section>
+
+
+
+
+    <script>
+      // Sample data (replace this with your actual order data)
+      var orderData = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [{
+          label: 'Number of Orders',
+          data: [20, 35, 15, 45, 30],
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+          fill: false
+        }]
+      };
+  
+      // Get the canvas element
+      var ctx = document.getElementById('ordersChart').getContext('2d');
+  
+      // Create a line chart for orders
+      var ordersChart = new Chart(ctx, {
+        type: 'line',
+        data: orderData,
+        options: {
+          scales: {
+            x: {
+              type: 'category', // Use 'category' for the x-axis because we have labels
+              labels: orderData.labels
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Number of Orders'
+              }
+            }
+          }
+        }
+      });
+    </script>
+    
+
+
+
+
+
 
   <script>
     // Your JavaScript code
@@ -214,6 +266,9 @@ pdf.setTextColor(0, 0, 0);
       startCountingUsers();
       startCountingOrders();
     };
+
+
+    
   </script>
 </body>
 </html>
