@@ -364,7 +364,7 @@
       toast: true,
       position: "top-end",
       showConfirmButton: false,
-      timer: 3000,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -375,7 +375,11 @@
       icon: "success",
       title: "Signed in successfully"
     });
+    setTimeout(() => {
+      window.location.href='/'
+    }, 2000);
     }
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

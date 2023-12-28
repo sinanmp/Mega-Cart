@@ -2,6 +2,7 @@ const axios = require("axios");
 const { response } = require("express");
 const userDb = require("../model/userModel");
 const productdb = require("../model/productModel");
+const moment = require('moment');
 
 exports.login = (req, res) => {
     res.render("admin_login", { logError: req.session.adminLogerror }, (err, html) => {
@@ -14,14 +15,13 @@ exports.login = (req, res) => {
 }
 
 exports.dash = (req, res) => {
-    console.log("its working")
     axios
     .get("http://localhost:3000/api/countUsers")
         .then(response=>{
+            console.log(response.data)
+            const count=response.data.length
             axios.get('http://localhost:3000/api/countOrders')
             .then(data=>{
-                console.log(response.data)
-                const count=response.data.length
                 res.render("admin/adminDashbord",{count:count,orders:data.data})
             })
             

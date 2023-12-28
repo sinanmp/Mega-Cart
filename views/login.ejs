@@ -153,10 +153,14 @@
             success: function(response) {
          
               if(response.success){
-                    window.location.href = `/?isauthenticate=7#j$342kddfg`;
+                    window.location.href = `/?isauthenticate=65479b918133d5180ebf53cf#/metrics/replicaSet/65479bd7d5effd06b5650e80/explorer/test/otpverifications/find`;
                     
               }else{
                 window.location.href = '/login';
+              }
+
+              if(response.block){
+                window.location.href='/block-route'
               }
              
             },
@@ -260,9 +264,25 @@
     position: fixed;
   }
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function handleInput(event) {
+           var cleanedValue = event.target.value.replace(/\s/g, '');
+           event.target.value = cleanedValue;
+            }
+
+            var emailInput = document.getElementById('typeEmailX');
+            var passwordInput = document.getElementById('typePasswordX');
+
+            emailInput.addEventListener('input', handleInput);
+            passwordInput.addEventListener('input', handleInput);
+
+    });
+</script>
 
 
 <script>
+  
   
   var loader=document.getElementById("preloader");
         window.addEventListener("load",function(){

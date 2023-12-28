@@ -251,7 +251,7 @@
               <h6 class="mb-3">Summary</h6>
               <div class="d-flex justify-content-between">
                 <p class="mb-2">Total price:</p>
-                <p class="mb-2">   <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(total) %></p>
+                <p class="mb-2"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(total) %></p>
               </div>
               <div class="d-flex justify-content-between">
                 <p class="mb-2">Discount:</p>
@@ -275,7 +275,7 @@
               <hr />
               <div class="d-flex justify-content-between">
                 <p class="mb-2">Total price:</p>
-                <p class="mb-2 fw-bold">   <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(total) %></p>
+                <p class="mb-2 fw-bold totalptag">   <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(total) %></p>
               </div>
               <% if(!coupenSession){ %>
               <div class="input-group mt-3 mb-4" id="applyDiv">
@@ -286,9 +286,13 @@
                 <label for="couponInput" style="margin-top: 5px; margin-right: 5px;">Coupen Applied</label>
                 <input type="text" class="form-control border" disabled id="couponInput"  placeholder="NewYear" />
                 <button class="btn btn-light text-primary border" id="cancelCouponBtn">Cancel</button>
-              </div>
+              </div>T
               <% }else{ %>
-              <div class="input-group mt-3 mb-4">
+                <div class="input-group mt-3 mb-4" id="applyDiv"  style="display: none;">
+                  <input type="text" class="form-control border" id="couponInput" placeholder="Coupon code" />
+                  <button class="btn btn-light text-primary border" id="applyCouponBtn">Apply</button>
+                </div>
+              <div class="input-group mt-3 mb-4" id="cancelDiv">
                 <label for="couponInput" style="margin-top: 5px; margin-right: 5px;">Coupen Applied</label>
                 <input type="text" class="form-control border" disabled id="couponInput"  placeholder="NewYear" />
                 <button class="btn btn-light text-primary border" id="cancelCouponBtn">Cancel</button>
@@ -304,6 +308,7 @@
     $(document).ready(function () {
 
       $('#applyCouponBtn').click(function() {
+        console.log("its coming here")
             var couponCode = $('#couponInput').val();
             $.ajax({
                 type: 'POST',
@@ -313,6 +318,8 @@
                     if(response.status=='coupen applied'){
                       $('#coupenContent').css('display', 'flex');
                       $('#coupenInnerText').html('-'+new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(response.discount));
+                      let total=Number('<%=total%>')
+                      $(".totalptag").html( new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(total-response.discount))
                       $('#cancelDiv').css('display', 'flex');
                       $("#applyDiv").css("display" , 'none')
                       Swal.fire({
@@ -330,6 +337,33 @@
                       timer: 1500
                       });
                     }
+
+                    if(response.status=='coupen is not active'){
+                      Swal.fire({
+                      icon: "error",
+                      title: "coupen is not active",
+                      showConfirmButton: false,
+                      timer: 1500
+                      });
+                    }
+
+                    if(response.status=='coupen is expired'){
+                      Swal.fire({
+                      icon: "error",
+                      title: "This coupen is expired",
+                      showConfirmButton: false,
+                      timer: 1500
+                      });
+                    }
+
+                    if(response.status=='invalid Coupen'){
+                      Swal.fire({
+                      icon: "error",
+                      title: "Invalid Coupon",
+                      showConfirmButton: false,
+                      timer: 1500
+                      });
+                    }
                
                     
                 },
@@ -343,6 +377,27 @@
         $('#addAddressLink').click(function () {
             $('#checkoutForm1').submit();
         });
+
+
+        $('#cancelCouponBtn').click(function (){
+          $.ajax({
+            type:"GET",
+            url:"/coupon-cancel",
+            success:  function(response){
+               if(response.success){
+                $('#coupenContent').css('display', 'none');
+                      $('#coupenInnerText').html('-'+new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(response.discount));
+                      let total=Number('<%=total%>')
+                      $(".totalptag").html( new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(response.amount))
+                      $('#cancelDiv').css('display', 'none');
+                      $("#applyDiv").css("display" , 'flex')
+               }
+            }
+          })
+        })
+
+
+
     });
 
     var loader=document.getElementById("preloader");

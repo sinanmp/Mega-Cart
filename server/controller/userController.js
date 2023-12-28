@@ -34,9 +34,15 @@ let transporter = nodemailer.createTransport({
 
 
 
-
+//send otp function we can to call all time
 const sendOTPVerificationeEmail = async (email) => {
   try {
+   
+    const user=await otpDb.findOne({email:email})
+    if(user){
+     await otpDb.delete({email:email})
+    }
+
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const OTP = parseInt(otp);
 
@@ -79,7 +85,7 @@ const sendOTPVerificationeEmail = async (email) => {
 
 
 
-
+//user registration route
 exports.create = (req, res) => {
   if (!req.body.email || !req.body.password || !req.body.confirmpassword || !req.body.mobile || !req.body.username) {
     req.session.bodyEmitty = true;
@@ -94,6 +100,7 @@ exports.create = (req, res) => {
     res.redirect("/signup")
     return
   }
+  //find to user is already exist or not
   userDb.findOne({ email: req.body.email })
     .then(data => {
       if (data) {
@@ -102,10 +109,11 @@ exports.create = (req, res) => {
         res.redirect("/signup")
         return
       } else {
+        //password hashing
         const hashedPass = bcrypt.hashSync(req.body.password, 10)
 
 
-
+//user creating
         const users = new userDb({
           block: "false",
           username: req.body.username,
@@ -119,6 +127,7 @@ exports.create = (req, res) => {
         users.save()
           .then(data => {
             setTimeout(() => {
+              //calling function for otp and sending user email
               sendOTPVerificationeEmail(data.email);
               res.render("otp", { user: req.body.email });
             }, 1000);
@@ -141,14 +150,15 @@ exports.create = (req, res) => {
 
 
 
-
+//user login route
 exports.find = (req, res) => {
 
   const epass = req.body.password
-
+//find to user exist or not
   userDb.findOne({ email: req.body.email })
     .then(userData => {
       if (userData) {
+        //comparing user password correct or not
         if (bcrypt.compareSync(req.body.password, userData.password)) {
           blockDb.findOne({ email: req.body.email })
             .then(data => {
@@ -156,10 +166,13 @@ exports.find = (req, res) => {
                 res.send({block:true})
                 return
               } else {
+                //update user status to active
                 userDb.updateOne({ email: req.body.email }, { $set: { status: "Active" } })
                   .then(resdata => {
                     console.log(userData.status)
+                    //this session using for all authentication middlewares
                     req.session.isAuth = userData.email
+                    //this route is ajax route so send to success
                     res.send({success:true});
                     req.session.modal=true
                   }).catch(err => {
@@ -196,15 +209,17 @@ exports.find = (req, res) => {
 
 
 
-
+//user Home route
 exports.userHome = async (req, res) => {
   req.session.prId=null
   req.session.coupen=false
+  req.session.totalPriceinPrid=null
+  req.session.totalForDisplay=null
   const modal=req.query.isauthenticate
   const searchQuery = req.query.search; 
   try {
     const Nemail = req.session.isAuth;
-
+    //taking all datas for home page
     const [products, userdata, wishdata] = await Promise.all([
       productDb.find({ catStatus: true, unlist: false }).sort({_id:-1}).limit(8),
       userDb.find({ email: Nemail }),
@@ -253,6 +268,8 @@ exports.logout = (req, res) => {
     })
 }
 
+
+//individual product page
 exports.singlePrd = (req, res) => {
   console.log(req.session.prId , "this is prid in single product")
   req.session.totalPriceinPrid=0
@@ -294,7 +311,7 @@ exports.singlePrd = (req, res) => {
 
 
 
-
+//ort verification route
 exports.verify = (req, res) => {
   const bodyOtp = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4
   otpDb.findOne({ otp: bodyOtp })
@@ -327,13 +344,15 @@ exports.verify = (req, res) => {
 
 }
 
-
+//otp sending function
 exports.userverify = (req, res) => {
   const qemail = req.query.email
   sendOTPVerificationeEmail(qemail);
   res.render("otp", { user: qemail });
 }
 
+
+//resent otp route
 exports.resendOtp = (req, res) => {
   const qemail = req.query.email
   otpDb.deleteOne({ email: qemail })
@@ -346,7 +365,7 @@ exports.resendOtp = (req, res) => {
 }
 
 
-
+//our store route for users
 exports.ourStore = (req, res) => {
   const catFilter = req.query.catFilter;
   const searchQuery = req.query.search;
@@ -360,11 +379,12 @@ exports.ourStore = (req, res) => {
 
 
 
-
+   //category filter
   if (catFilter) {
     filter.category = catFilter;
   }
 
+  //budjut price filter for products
   if (min && max) {
     if(max>min){
     filter.discountedPrice = { $gte: parseInt(min), $lte: parseInt(max) };
@@ -377,12 +397,16 @@ exports.ourStore = (req, res) => {
     filter.discountedPrice = { $lte: parseInt(max) }; 
   }
 
+
+  //user searching products here to adding that search using regex mongodb method
   if (searchQuery) {
     filter.$or = [
       { pname: { $regex: new RegExp(searchQuery, 'i') } },
       { category: { $regex: new RegExp(searchQuery, 'i') } }
     ];
   }
+
+  //finding all products include all filters
   productDb.find(filter)
     .then(allData => {
       catogorydb.find({ status: true })
@@ -419,6 +443,8 @@ exports.ourStore = (req, res) => {
 };
 
 
+
+//user address adding route
 exports.addAddress = (req, res) => {
   const id = req.query.id
 
@@ -433,6 +459,8 @@ exports.addAddress = (req, res) => {
     house_No: req.body.HouseNumber
   };
 
+
+  //pushing address to address array field
   userDb.updateOne({ _id: id },
     { $push: { address: newAddress } })
     .then(data => {
@@ -443,7 +471,7 @@ exports.addAddress = (req, res) => {
 }
 
 
-
+//index changing for defaul address changing
 exports.changeIndex = (req, res) => {
   const email = req.session.isAuth;
   const adId = req.query.position;
@@ -452,15 +480,16 @@ exports.changeIndex = (req, res) => {
     .then(data => {
 
       res.redirect(`/userDetails?email=${req.session.isAuth}&position=${adId}`);
-
     })
     .catch(err => {
       console.error(err);
-      res.sendStatus(500); // Use res.sendStatus instead of res.send(status)
+      res.sendStatus(500); 
     });
 };
 
 
+
+//address deleting route
 exports.adDelete = (req, res) => {
   const email = req.session.isAuth;
   const id = req.query.id;
@@ -481,6 +510,7 @@ exports.adDelete = (req, res) => {
 };
 
 
+//user username and mobile number updation display input route for check password just a security
 exports.updateCheck = (req, res) => {
   const email = req.session.isAuth;
   const username = req.query.username;
@@ -499,7 +529,7 @@ exports.updateCheck = (req, res) => {
 
 
 
-
+//checking entered password is correct or not
 exports.updateUser = (req, res) => {
   const email = req.session.isAuth
   const username = req.query.username
@@ -520,7 +550,7 @@ exports.updateUser = (req, res) => {
 }
 
 
-
+//main user update mobile or username this is post route
 exports.updatePost = (req, res) => {
   const email = req.query.email
   const username = req.body.username
@@ -544,6 +574,8 @@ exports.updatePost = (req, res) => {
 }
 
 
+
+//address updating rendering page
 exports.updateAddress = (req, res) => {
   const pos = req.query.pos
   const id = req.query.id
@@ -560,7 +592,7 @@ exports.updateAddress = (req, res) => {
 }
 
 
-
+//address updtate post route
 exports.updatePostAdd = (req, res) => {
   const id = req.query.id
   const pos = req.query.pos
@@ -592,13 +624,14 @@ exports.updatePostAdd = (req, res) => {
 
 
 
-
+//forgot otp page in login page
 exports.sendOtpForgot = (req, res) => {
   const email = req.body.email
   req.session.emailforVerify=email
   userDb.findOne({ email: email })
     .then(data => {
       if (data) {
+        //calling otp function 
         sendOTPVerificationeEmail(data.email)
         res.render("forgotOtp", { user: email })
       } else {
@@ -609,7 +642,7 @@ exports.sendOtpForgot = (req, res) => {
 }
 
 
-
+//checking otp correct or not
 exports.forgotVerify = (req, res) => {
   const email = req.session.emailforVerify
   const bodyOtp = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4
@@ -629,7 +662,7 @@ exports.forgotVerify = (req, res) => {
 }
 
 
-
+//taking new passwords password and confirm password
 exports.mainforgetPass = (req, res) => {
   const email = req.session.emailforVerify
   const pass = req.body.password
@@ -657,7 +690,7 @@ exports.mainforgetPass = (req, res) => {
 
 
 
-
+//checkout route
 exports.checkoutFetch=(req,res)=>{
   const totalPrice=req.query.total
   const email=req.query.email
@@ -670,6 +703,8 @@ exports.checkoutFetch=(req,res)=>{
 }
 
 
+
+//address adding in checkout route
 exports.addressPostCheckout=(req,res)=>{
   req.session.paymentMidd='false'
   const userEmail = req.session.isAuth;
@@ -703,6 +738,8 @@ exports.addressPostCheckout=(req,res)=>{
 
 
 
+
+//order list in user side route
 exports.orderList=(req,res)=>{
   const email=req.query.email
   orderDb.find({email:email}).sort({orderDate:-1})
@@ -712,7 +749,7 @@ exports.orderList=(req,res)=>{
 }
 
 
-
+//user wallet add amount route this is ajax request
 exports.walletAdd = async (req, res) => {
   let amount = req.body.amount;
   const email = req.query.email;
@@ -757,7 +794,7 @@ exports.walletAdd = async (req, res) => {
 };
 
 
-
+//adding amount after successing ajax route in to wallet
 exports.walletFetch=async(req,res)=>{
   const email=req.query.email
   const up=req.query.update
@@ -770,7 +807,7 @@ exports.walletFetch=async(req,res)=>{
 }
 
 
-
+//adding transaction history
 exports.walletUpdate = async (req, res) => {
   try {
       const amount = req.query.amount;
@@ -802,6 +839,9 @@ exports.walletUpdate = async (req, res) => {
 };
 
 
+
+
+//wallet total amount fetching 
 exports.fetchTotalWalletAmount=async(req,res)=>{
   const email=req.query.email
   const data= await userDb.findOne({email:email})
@@ -809,7 +849,7 @@ exports.fetchTotalWalletAmount=async(req,res)=>{
 }
 
 
-
+//product details fetching
 exports.takeProductPrice=async(req,res)=>{
   const id=req.query.id
  const prdata=await productDb.findOne({_id:id})
@@ -820,7 +860,7 @@ exports.takeProductPrice=async(req,res)=>{
 
 
 
-
+//wallet payment in payment page
 exports.walletPayment = (req, res) => {
   console.log(req.session.takingFromWallet)
   let { waletTotalAmount, checkedW ,totalAmount} = req.body;
@@ -855,10 +895,11 @@ exports.walletPayment = (req, res) => {
   }
 };
 
+   
 
-
-
+//apply coupen in user checkout
 exports.applyCoupen = async (req, res) => {
+  console.log("its coming also here")
   const couponCode = req.body.couponCode;
   const coupendata = await CouponDb.findOne({ code: couponCode });
 if(!req.session.coupen){
@@ -875,17 +916,22 @@ if(!req.session.coupen){
         req.session.totalPriceinPrid= req.session.totalPriceinPrid-discount
         req.session.totalForDisplay=req.session.totalForDisplay-discount
         req.session.coupen=true
+        console.log(1)
         res.send({status:"coupen applied",code:coupendata.code ,discount:discount});
       }else{
+        console.log(2)
         res.send({status:"coupen is not active",code:coupendata.code})
       }
     } else {
+      console.log(3)
       res.send({status:"coupen is expired",code:couponCode});
     }
   } else {
+    console.log(4)
     res.send({status:"invalid Coupen" , code:couponCode});
   }
-}else{
+}else{   
+  console.log(5)
   res.send({status:"Coupen Already Addedd",appliedCoupen:req.session.appliedCoupen})
 }
 
@@ -893,4 +939,14 @@ if(!req.session.coupen){
 
 
 
+exports.couponCancel=(req,res)=>{
+  req.session.totalPriceinPrid+=req.session.coupenAmount
+  console.log(req.session.coupenAmount   ,  req.session.totalPriceinPrid)
+  req.session.coupenAmount=null
+  req.session.appliedCoupen=null
+  req.session.coupen =false
+  res.send({success:true,amount:req.session.totalPriceinPrid})
+}
+
+   
 

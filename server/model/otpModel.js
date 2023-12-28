@@ -6,7 +6,7 @@ const otpVerification = new mongoose.Schema({
     user: String,
     otp: Number,
     createdAt: Date,
-    expiresAt: Date
+    expiresAt: { type: Date, expires: '5m', default: Date.now + 5 * 60 * 1000 } 
 })
 const OTPverify = mongoose.model("otpVerification", otpVerification)
 

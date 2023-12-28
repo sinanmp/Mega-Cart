@@ -100,7 +100,7 @@
                       </div>
 
                       <div class="mb-4">
-                        <input type="text " class="form-control form-control-lg" placeholder="Mobile" name="mobile"
+                        <input type="number" id="mobile" class="form-control form-control-lg" placeholder="Mobile" name="mobile"
                           style="border-radius: 10px;
                                   background: rgba(217, 217, 217, 0.50);" />
                           <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">this field is required</p>
@@ -113,7 +113,7 @@
                       </div>
 
                       <div class="mb-4">
-                        <input type="password" id="typePasswordX" name="confirmpassword" placeholder="Confirm Password"
+                        <input type="password" id="typePasswordXc" name="confirmpassword" placeholder="Confirm Password"
                           class="form-control form-control-lg"
                           style="border-radius: 10px; background: rgba(217, 217, 217, 0.50);" />
                           <p style="color: red;text-align: start; font-weight: 4  00; font-size: 13px; display: none;" class="errorfill">this field is required</p>
@@ -176,6 +176,27 @@
   </footer>
 
   <script src="js/otp.js"></script>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      function handleInput(event) {
+             var cleanedValue = event.target.value.replace(/\s/g, '');
+             event.target.value = cleanedValue;
+              }
+  
+              var emailInput = document.getElementById('typeEmailX');
+              var passwordInput = document.getElementById('typePasswordX');
+              var passwordInputconfirm = document.getElementById('typePasswordXc');
+              var mobile = document.getElementById('mobile');
+
+              emailInput.addEventListener('input', handleInput);
+              passwordInput.addEventListener('input', handleInput);
+              passwordInputconfirm.addEventListener('input', handleInput);
+              mobile.addEventListener('input', handleInput);
+  
+      });
+  </script>
 
 
 

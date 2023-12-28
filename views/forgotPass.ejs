@@ -118,7 +118,19 @@
   </footer>
 
 
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      function handleInput(event) {
+             var cleanedValue = event.target.value.replace(/\s/g, '');
+             event.target.value = cleanedValue;
+              }
+  
+              var emailInput = document.getElementById('typeEmailX');
+  
+              emailInput.addEventListener('input', handleInput);
+  
+      });
+  </script>
 
 
   <!-- Footer -->

@@ -79,6 +79,18 @@
 					</li>
 				</ul>
 			</main>
+      <div>
+        <label for="year">Year:</label>
+        <input type="text" id="year" placeholder="Enter year">
+        
+        <label for="month">Month:</label>
+        <input type="text" id="month" placeholder="Enter month">
+        
+        <label for="day">Day:</label>
+        <input type="text" id="day" placeholder="Enter day">
+        
+        <button onclick="updateChart()">Apply Filters</button>
+      </div>
       <canvas id="ordersChart" width="1300" height="600"></canvas>
 
 			<!-- MAIN -->
@@ -88,29 +100,27 @@
 
 
     <script>
-      // Sample data (replace this with your actual order data)
+    console.log( typeof orders)
       var orderData = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','June','July','Aug','Sep','Oct','Nov','Dec'],
         datasets: [{
           label: 'Number of Orders',
-          data: [20, 35, 15, 45, 30],
+          data: [],
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 2,
           fill: false
         }]
       };
   
-      // Get the canvas element
+ 
       var ctx = document.getElementById('ordersChart').getContext('2d');
-  
-      // Create a line chart for orders
       var ordersChart = new Chart(ctx, {
         type: 'line',
         data: orderData,
         options: {
           scales: {
             x: {
-              type: 'category', // Use 'category' for the x-axis because we have labels
+              type: 'category',
               labels: orderData.labels
             },
             y: {
@@ -145,8 +155,8 @@
   const formattedTotalSales = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Math.floor('<%=total%>')); 
     pdf.text(`Date: ${formattedDate}`, 10, 80);
   	pdf.text(`Total Sales:${formattedTotalSales}`, 10, 20);
-	pdf.text(`Total Users: ${'<%=count%>'}`, 10, 40);  
-	pdf.text(`New Orders: ${'<%=a%>'}`, 10, 60);
+    pdf.text(`Total Users: ${'<%=count%>'}`, 10, 40);  
+    pdf.text(`New Orders: ${'<%=a%>'}`, 10, 60);
 	
 
 
@@ -160,16 +170,14 @@
   pdf.setTextColor(255, 0, 0); 
   pdf.text('Mega Cart', xCoordinate + 10, 85); 
 
-// Reset font weight and color for subsequent text (if needed)
+
 pdf.setFont('helvetica', 'normal');
 pdf.setTextColor(0, 0, 0); 
 
-  // Display sales data in a loop
 
-  // Add a line to separate sections
   pdf.line(10, 120, docWidth - 10, 120);
 
-  // Display orders list in a loop (table-like format)
+ 
   const ordersList = [
     { Date: formattedDate, TotalSales: formattedTotalSales, TotalUsers: '<%=count%>', NewOrders: '<%=a%>'},
   ];

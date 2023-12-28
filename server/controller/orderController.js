@@ -234,12 +234,11 @@ exports.submitOrder = async (req, res) => {
                 });
             });
         }else{
-            for(let i=0;i<NewOrder.products.length;i++){
                 if(req.session.DisplayAmount==0){
                     const cartOrder=new orderDb({
                         email: req.session.OrderInfo.email,
                         username: req.session.OrderInfo.username,
-                        products: NewOrder.products[i],
+                        products: NewOrder.products,
                         totalAmount: req.session.totalPriceinPrid,
                         shippingAddress: {
                             locality: req.session.OrderInfo.locality,
@@ -253,13 +252,15 @@ exports.submitOrder = async (req, res) => {
                         PaymentMethod: 'complete from Wallet'
                     })
                     await cartOrder.save()
-                    await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
-                    await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    for(let i=0; i<NewOrder.products.length;i++){
+                        await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                        await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    }
                 }else{
                     const cartOrder=new orderDb({
-                        email: req.session.OrderInfo.email,
+                        email: req.session.OrderInfo.email, 
                         username: req.session.OrderInfo.username,
-                        products: NewOrder.products[i],
+                        products: NewOrder.products,
                         totalAmount: req.session.totalPriceinPrid,
                         shippingAddress: {
                             locality: req.session.OrderInfo.locality,
@@ -273,12 +274,14 @@ exports.submitOrder = async (req, res) => {
                         PaymentMethod: req.body.payment
                     })
                     await cartOrder.save()
-                    await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
-                    await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    for(let i=0; i<NewOrder.products.length;i++){
+                        await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                        await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    }
                 }
              
                 
-            }
+            
                 if(req.session.takingFromWallet>0){
                     const transaction = {
                         date: new Date(),
@@ -477,4 +480,13 @@ exports.takingcartForCheck=(req,res)=>{
         console.log(err)
         console.log("error in sending cartdata")
     })
+}
+
+
+
+
+exports.fetchOrderD=async(req,res)=>{
+    const id=req.query.id
+    const details= await orderDb.findOne({_id:id})
+    res.send(details)
 }

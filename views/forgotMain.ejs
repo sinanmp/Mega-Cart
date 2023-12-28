@@ -149,6 +149,22 @@
 
   </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function handleInput(event) {
+           var cleanedValue = event.target.value.replace(/\s/g, '');
+           event.target.value = cleanedValue;
+            }
+
+            var emailInput = document.getElementById('typeEmailX');
+            var passwordInput = document.getElementById('typePasswordX');
+
+            emailInput.addEventListener('input', handleInput);
+            passwordInput.addEventListener('input', handleInput);
+
+    });
+</script>
+
   <!-- Footer -->
 
   <!-- End of .container -->

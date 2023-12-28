@@ -41,8 +41,12 @@ exports.userDeatails = (req, res) => {
     userDb.find({ email: nemail })
         .then(userdata => {
             console.log(userdata)
-            res.render("useracDeatails", { users: userdata, a: pos })
-            // res.send(userdata[0].address)
+            if(req.session.isAuth){
+                res.render("useracDeatails", { users: userdata, a: pos })
+            }else{
+                res.redirect("/login")
+            }
+           
         }).catch(err => {
             console.log(err)
             res.send(err)
@@ -122,7 +126,8 @@ exports.checkout=(req,res)=>{
             res.render("checkout", { 
                 userData: userData,
                 total: req.session.totalPriceinPrid, 
-                a: index ,prId:prId ,
+                a: index ,
+                prId:prId ,
                 coupenSession:req.session.coupen ,
                 coupenAmount:req.session.coupenAmount ,
                 appliedCoupon: req.session.appliedCoupen
@@ -193,8 +198,18 @@ exports.reason=(req,res)=>{
   
 exports.userOrdersDeatails=(req,res)=>{
     const id=req.query.id
-    res.render('userOrderDetails',{id:id})
+    axios
+        .get(`http://localhost:3000/fetch-order?id=${id}`)
+        .then(response=>{
+            console.log(response.data)
+            res.render('userOrderDetails',{id:id, order:response.data})
+        })
+
 }   
+
+
+
+
 
 
 exports.payment=(req,res)=>{
@@ -236,3 +251,14 @@ exports.setSession=(req,res)=>{
     res.send('Session updated');
 }
 
+
+
+
+exports.otpRender=(req,res)=>{
+    res.render("otp")
+}
+
+
+exports.block=(req,res)=>{
+    res.render("userblockd")
+}

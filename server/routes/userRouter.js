@@ -11,16 +11,14 @@ router.get('/', userController.userHome)//home
 router.get('/login', userServices.login)
 router.get('/signup', userServices.signup);
 router.get("/userDetails", userServices.userDeatails)
-router.get("/otp", (req, res) => {
-    res.render("otp")
-})
+router.get("/otp", userServices.otpRender)
 
 
 router.get("/take/productPrice",userController.takeProductPrice)
 router.get("/single/prd", userController.singlePrd)
 router.get("/cart", cartController.cart)
 router.get("/cartTo/wishlist",wishlistController.cartToWishlist)
-
+router.get("/block-route",userServices.block)
 
 
 router.get("/count/update-quantity", cartController.updateQuantity);
@@ -84,6 +82,7 @@ router.get("/user-order/details",userServices.userOrdersDeatails)
 router.post("/payment",paymentMiddleware,userServices.payment)
 router.post("/order-route",orderController.orderRoute)
 router.get("/cart/count",cartController.cartCountPr)
+router.get("/fetch-order",orderController.fetchOrderD)
   
 
 //wallet
@@ -96,7 +95,7 @@ router.post("/wallet-payment",userController.walletPayment)
 
 //
 router.post("/applyCoupon",userController.applyCoupen)
-
+router.get("/coupon-cancel",userController.couponCancel)
 
 
 module.exports = router;
