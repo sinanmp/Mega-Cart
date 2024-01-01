@@ -2,9 +2,9 @@
 
 
 <div class="container">
-    <h2>Coupen Management</h2>
+    <h2>Banner Management</h2>
     
-    
+
 
     <!-- Add Category Button -->
     <div style="display: flex; justify-content: space-between;">
@@ -28,32 +28,35 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Coupen Name</th>
-                <th>Discount</th>
-                <th scope="col">Valid At</th>
+                <th scope="col" style="text-align: left;">Banner Image</th>
+                <th>title</th>
+                <th scope="col">discription</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             <% for(let i=0 ; i<banners.length; i++){ %>
-                <tr style="cursor: pointer;">
-                    <th style="width: 30px;" scope="row">
-                        1
-                    </th>
+                <tr style="cursor: pointer; text-align: center;">
                     <td>
-                        hii
+                        <div style="object-fit: contain; height: 100px; margin: auto; display: flex; justify-content: start;">
+                            <img src="/primg/<%=banners[i].image %>" style="height: 100%;" alt="">
+                        </div>
                     </td>
-                    <td>
-                        7
+                    <td style="font-size: large; font-weight:500 ; vertical-align: middle;">
+                        <%=banners[i].title  %>
                     </td>
-                    <td>
-                      4
+                    <td style="font-size: medium ; font-weight: 400 ;  vertical-align: middle;">
+                        <%=banners[i].discription  %>
                     </td>
-                 
+                    <td style="vertical-align: middle;">
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </td>
                 </tr>
-                <% } %>
+            <% } %>
         </tbody>
     </table>
+    
+    
 </div>
 
 
@@ -116,7 +119,6 @@
     }
     
     body {
-        background: var(--grey);
         overflow-x: hidden;
     }
     

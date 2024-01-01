@@ -197,7 +197,11 @@ exports.getChart=async (req, res) => {
       const orders = await orderDb.find(findQuerry);
 
       orders.forEach(order => {
-        salesCount[labelObj[String(order.orderDate).split(' ')[index]]] += 1;
+        if(index === 2){
+            salesCount[labelObj[Number(String(order.orderDate).split(' ')[index])]] += 1;
+          }else{
+            salesCount[labelObj[String(order.orderDate).split(' ')[index]]] += 1;
+          }
       });
 
       res.json({

@@ -1,12 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyD9tRLehB1RR9l3K/B9wM5iPkC+7SkDL"
+        crossorigin="anonymous">
+    <title>Coupon Form</title>
+    <style>
+
+        .coupon-form {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-add-coupon {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+        }
+    </style>
 </head>
+
 <body>
     <%- include('include2/adminbase') %>
+    <div class="coupon-form">
+        <h2 class="text-center mb-4">Add Banner</h2>
+        <form action="/addCoupen" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="couponCode">Banner title</label>
+                <input type="text" class="form-control"  name="title" placeholder="Enter Banner Name" required>
+            </div>
+            <div class="form-group">
+                <label for="validDate">Banner Discription</label>
+                <input type="text" class="form-control" placeholder="Enter Discription" name="discription" required>
+            </div>
+            <div class="form-group">
+                <label for="selectOption">Select an Category</label>
+                <select class="form-control" id="selectOption" name="category">
+                    <% for(let i=0 ; i < categories.length ; i++){ %>
+                    <option value="<%=categories[i]._id %>"><%=categories[i].name %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="expiryDate">Banner Image</label>    <input type="file"  name="image"  class="form-control-file"
+                id="productImage">
+            </div>
+            <img id="imagePreview" src="#" alt="Preview" style="max-width: 100%; max-height: 250px; display: none;">
+            <button type="button" style="display: none;" id="imgclose" class="close-btn" onclick="removeImagePreview()">Close</button>
+            <button type="submit" style="background-color: #BF7DC1; color: white" class="btn btn-add-coupon btn-block">Add Banner</button>
+        </form>
+    </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-Xz16ABPNAzoAd4MZGCchF+t6v40Izkg3tLOH6FzItwBv8Vq3G8g3F6C6CO3F+kJ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyD9tRLehB1RR9l3K/B9wM5iPkC+7SkDL"
+        crossorigin="anonymous"></script>
+
+        <script>
+            document.querySelector('input[name="image"]').addEventListener('change', function() {
+                const fileInput = this;
+                const imagePreview = document.getElementById('imagePreview');
+                const file = fileInput.files[0];
+
+                if (file) {
+                    document.getElementById("imgclose").style.display='block'
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+
+                    reader.readAsDataURL(file);
+                } else {
+                    document.getElementById("imgclose").style.display='none'
+                    imagePreview.src = '#';
+                    imagePreview.style.display = 'none';
+                }
+            });
+
+            function removeImagePreview() {
+            const imagePreview = document.getElementById('imagePreview');
+            const fileInput = document.querySelector('input[name="image"]');
+            document.getElementById("imgclose").style.display='none'
+
+            // Reset the image preview
+            imagePreview.src = '#';
+            imagePreview.style.display = 'none';
+
+            // Clear the file input value to allow selecting the same file again
+            fileInput.value = '';
+        }
+
+        </script>
+        
 </body>
-</html>

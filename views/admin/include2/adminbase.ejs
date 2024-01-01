@@ -28,6 +28,7 @@
 	<title>Admin</title>
 </head>
 <body>
+	
 
 
 	<!-- SIDEBAR -->
@@ -38,53 +39,81 @@
 				<span style="color: #BF7DC1; font-size: 25px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Admin</span>
 			</h2>
 		</a>
-		<ul class="side-menu top">
-			<li >
-				<a href="/adminDash">
+		<ul class="side-menu top p-0">
+			<li id="one">
+				<a class="ps-" href="/adminDash">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
 
-			<li>
-				<a href="/admin-products">
+			<li id="two">
+				<a class="ps-" href="/admin-products">
 					<i class='bx bxs-message-dots' ></i>
 					<span class="text">Products</span>
 				</a>
 			</li>
 			
-			<li>
-				<a href="/admin-order">
+			<li id="three">
+				<a class="ps-" href="/admin-order">
 					<i class='bx bxs-doughnut-chart' ></i>
 					<span class="text">Orders</span>
 				</a>
 			</li>
 			
-			<li>
-				<a href="/admin-users">
+			<li id="four">
+				<a class="ps-" href="/admin-users">
 					<i class='bx bxs-group' ></i>
 					<span class="text">Users</span>
 				</a>
 			</li>
-			<li>
-				<a href="/category/api">
+			<li id="five">
+				<a class="ps-1" href="/category/api">
 					<i class='bx bxs-doughnut-chart' ></i>
 					<span class="text">Categories</span>
 				</a>
 			</li>
-			<li >
-				<a href="/coupen/api" style="margin-left: 13px;">
+			<li id="six">
+				<a class="ps-3" href="/coupen/api" >
 					<i style="margin-right: 11px;"  class="fa-solid fa-ticket"></i>
 					<span class="text">Coupens</span>
 				</a>
 			</li>
-			<li >
-				<a href="/banners/api" style="margin-left: 13px;">
+			<li id="seven">
+				<a class="ps-3" href="/banners/api" >
 					<i style="margin-right: 11px;" class="fa-solid fa-chart-bar"></i>
 					<span class="text">Banners</span>
 				</a>
 			</li>
 		</ul>
+		<script>
+			const url = location.pathname;
+			console.log(url, typeof url);
+	
+			switch(url){
+				case '/adminDash':
+					document.getElementById('one').classList.add('active');
+					break;
+				case '/admin-products':
+					document.getElementById('two').classList.add('active');
+					break;
+				case '/admin-order':
+					document.getElementById('three').classList.add('active');
+					break;
+				case '/admin-users':
+					document.getElementById('four').classList.add('active');
+					break;
+				case '/category/api':
+					document.getElementById('five').classList.add('active');
+					break;
+				case '/coupen/api':
+					document.getElementById('six').classList.add('active');
+					break;
+				case '/banners/api':
+					document.getElementById('seven').classList.add('active');
+					break;
+			}
+		</script>
 		<ul class="side-menu">
 			<!-- <li>
 				<a href="#">

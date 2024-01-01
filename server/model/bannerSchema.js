@@ -13,9 +13,8 @@ const bannerSchema = new mongoose.Schema({
         required: true
     },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'categories' 
+        type: String,
+        required: true
     },
     active:{
         type:Boolean,

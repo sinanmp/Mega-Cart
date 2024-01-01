@@ -13,6 +13,7 @@ const upload = require("../routes/middlewares/imageUpload")
 
 //login
 router.get("/adminLogin", adminAuthMiddleware.adminIsnotAuth, adminServices.login);
+
 router.post("/api/admin1", adminController.register);
 
 
@@ -39,8 +40,10 @@ router.get("/remove/unlist", productController.removeUnlist)
 router.get("/api/block", adminController.block);
 router.get("/user-details", adminServices.usersDetails);
 
-
+//order managment
 router.post("/change/status", orderController.changeStatus)
+router.get("/admin/individualOrder",orderController.individualOrder)
+
 
 
 //image 
@@ -73,12 +76,12 @@ router.get("/unlist/coupens", coupenController.unlistCoupens)
 router.get("/restore/coupens", coupenController.restoreCoupens)
 
 
-
+ 
 
 //banner managment
 router.get("/banners/api",bannerController.getBanners)
 router.get("/addBanner",bannerController.addBanner)
-
+router.post("/addCoupen",upload ,bannerController.addPost)
 
 
 

@@ -10,6 +10,7 @@ const bcrypt = require("bcrypt");
 const cartDb = require("../model/cartSchema");
 const Razorpay=require("razorpay")
 const wishdb = require("../model/wishlistSchema")
+const bannerDb= require("../model/bannerSchema")
 
 const axios=require("axios");
 const CouponDb = require("../model/coupenModel");
@@ -221,11 +222,12 @@ exports.userHome = async (req, res) => {
   try {
     const Nemail = req.session.isAuth;
     //taking all datas for home page
-    const [products, userdata, wishdata] = await Promise.all([
+    const [products, userdata, wishdata , banners] = await Promise.all([
       productDb.find({ catStatus: true, unlist: false }).sort({_id:-1}).limit(8),
       userDb.find({ email: Nemail }),
-      wishdb.find({email:Nemail})
-    ]);
+      wishdb.find({email:Nemail}),
+      bannerDb.find({active:true})
+    ]);       
    const productIds=products.map((item) => item._id) 
    const wishIds = wishdata.map((item) => item.prId);
    if(wishIds[0]==productIds[0]){ 
@@ -242,15 +244,15 @@ exports.userHome = async (req, res) => {
    }
    catogorydb.find({status:true})
    .then(catData=>{
-    res.render("home", { products, userAuth: Nemail, user: userdata,wishlists:wishIds,searchQuery,catData:catData,modal});
+    res.render("home", { products, userAuth: Nemail, user: userdata,wishlists:wishIds,searchQuery,catData:catData,modal ,banners:banners});
    })
   } catch (err) {
     console.error(err);     
-    res.render("home", { products: null, userAuth: req.session.isAuth, block: null,searchQuery,modal});
+    res.render("home", { products: null, userAuth: req.session.isAuth, block: null,searchQuery,modal , banners:banners});
   }
 };
               
-
+ 
 
 
 

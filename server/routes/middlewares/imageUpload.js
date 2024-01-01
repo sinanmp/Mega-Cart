@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
         cb(null, fileName);
     }
 })
+console.log("this is image route here is coming")
 
 const upload = multer({ storage: storage }).array("image", 12);
 

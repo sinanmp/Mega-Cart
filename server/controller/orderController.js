@@ -492,3 +492,8 @@ exports.fetchOrderD=async(req,res)=>{
 }
 
 
+
+
+exports.individualOrder=(req,res)=>{
+    res.render("admin/adminSingleOrder")
+}
