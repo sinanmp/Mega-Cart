@@ -66,7 +66,8 @@
                 <h5>Your Orders</h5>
                 <div class="col-lg-9">
                     <% if (data.length> 0) { %>
-                        <% for (let i=0; i < data.length; i++) { %>-
+                  
+                        <% for (let i=0; i < data.length; i++) { %>
                           <div class="card mb-4" onclick="details('<%=data[i]._id%>')" style="cursor: pointer;">
                             <div class="card-body">
                                 <p style="font-size: 12px;" class="card-title">Order ID: <span style="font-weight: bold;"><%= data[i]._id %></span></p>
@@ -105,6 +106,7 @@
                                                 </p>
                                             </div>
                                             <div class="col-12 col-md-2 d-flex align-items-center mt-2 mt-md-0">
+                                              <% if(data[i].products.length==1){ %>
                                               <% let statusDoc %>
                                               <% if (data[i].status == "pending" || data[i].status == 'Shipped') { %>
                                                   <% let pid %>
@@ -129,6 +131,9 @@
                                                       Delivered
                                                   </button>
                                               <% } %>
+                                              <% }else{ %>
+                                                
+                                                <% } %>
                                           </div>
                                               
                                         </div>

@@ -87,7 +87,8 @@ const sendOTPVerificationeEmail = async (email) => {
 
 //user registration route
 exports.create = (req, res) => {
-  if (!req.body.email || !req.body.password || !req.body.confirmpassword || !req.body.mobile || !req.body.username) {
+  const email = req.body.email.toLowerCase();
+  if (!email || !req.body.password || !req.body.confirmpassword || !req.body.mobile || !req.body.username) {
     req.session.bodyEmitty = true;
     res.redirect("/signup")
     console.log("req.body is emty right")
@@ -101,7 +102,7 @@ exports.create = (req, res) => {
     return
   }
   //find to user is already exist or not
-  userDb.findOne({ email: req.body.email })
+  userDb.findOne({ email: email })
     .then(data => {
       if (data) {
         console.log("email is already exists")
@@ -117,7 +118,7 @@ exports.create = (req, res) => {
         const users = new userDb({
           block: "false",
           username: req.body.username,
-          email: req.body.email,
+          email: email,
           password: hashedPass,
           mobile: req.body.mobile,
           confirmpassword: hashedPass,
@@ -129,7 +130,7 @@ exports.create = (req, res) => {
             setTimeout(() => {
               //calling function for otp and sending user email
               sendOTPVerificationeEmail(data.email);
-              res.render("otp", { user: req.body.email });
+              res.render("otp", { user: email });
             }, 1000);
 
           })
@@ -152,22 +153,22 @@ exports.create = (req, res) => {
 
 //user login route
 exports.find = (req, res) => {
-
+  const email=req.body.email.toLowerCase()
   const epass = req.body.password
 //find to user exist or not
-  userDb.findOne({ email: req.body.email })
+  userDb.findOne({ email: email })
     .then(userData => {
       if (userData) {
         //comparing user password correct or not
         if (bcrypt.compareSync(req.body.password, userData.password)) {
-          blockDb.findOne({ email: req.body.email })
+          blockDb.findOne({ email: email })
             .then(data => {
               if (data) {
                 res.send({block:true})
                 return
               } else {
                 //update user status to active
-                userDb.updateOne({ email: req.body.email }, { $set: { status: "Active" } })
+                userDb.updateOne({ email: email }, { $set: { status: "Active" } })
                   .then(resdata => {
                     console.log(userData.status)
                     //this session using for all authentication middlewares
@@ -181,14 +182,14 @@ exports.find = (req, res) => {
                   })
               }
             }).catch(err => {
-              req.session.invalidMail=true
-              req.session.errEmail=req.body.email
+              req.session.invalidMail=true 
+              req.session.errEmail=email
               res.send({success:false});
               console.log(err);
             })
         } else {
           req.session.passborder=true
-          req.session.errEmail=req.body.email
+          req.session.errEmail=email
           res.send({success:false});
           console.log("User not found invalid pass");
           // invalid password
@@ -196,7 +197,7 @@ exports.find = (req, res) => {
       } else {
         //invalid email
         req.session.emailborder=true
-        req.session.errEmail=req.body.email
+        req.session.errEmail=email
         res.send({success:false});
         console.log("User not found null");
         // null output
@@ -227,7 +228,7 @@ exports.userHome = async (req, res) => {
     ]);
    const productIds=products.map((item) => item._id) 
    const wishIds = wishdata.map((item) => item.prId);
-   if(wishIds[0]==productIds[0]){
+   if(wishIds[0]==productIds[0]){ 
     console.log(productIds[0])
     console.log(wishIds[0])
    } 

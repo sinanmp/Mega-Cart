@@ -427,7 +427,7 @@ exports.orderRoute= async(req,res)=>{
         const NewOrder1=new orderDb({
             email: NewOrder.email,
             username: NewOrder.username,
-            products: NewOrder.products[i],  
+            products: NewOrder.products[i],
             totalAmount:req.session.totalPriceinPrid,
             shippingAddress: {
                 locality:NewOrder.shippingAddress.locality,
@@ -442,7 +442,7 @@ exports.orderRoute= async(req,res)=>{
         })
         await NewOrder1.save()
         const q = Number(NewOrder.products[i].cartQhantity);
-        await productdb.updateOne({_id:NewOrder.products[i].prId},{$inc:{stock:-q}})
+        await productdb.updateOne({_id:NewOrder.products[i].prId},{$inc:{stock:-q}}) 
         await cartDb.updateMany({prId:NewOrder.products[i].prId},{$inc:{stock:-q}})
     }
         await cartDb.deleteMany({email:req.session.isAuth})
@@ -490,3 +490,5 @@ exports.fetchOrderD=async(req,res)=>{
     const details= await orderDb.findOne({_id:id})
     res.send(details)
 }
+
+

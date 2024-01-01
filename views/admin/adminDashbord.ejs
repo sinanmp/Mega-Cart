@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <style>
     #totalSales {
       transition: color 0.5s, transform 0.5s;
@@ -14,9 +11,12 @@
       transition: color 0.5s, transform 0.5s;
     }
   </style>
-
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
 	<%- include('include2/adminbase') %>
 	<% let a=0 %>
 	<% let total=0 %>
@@ -79,18 +79,17 @@
 					</li>
 				</ul>
 			</main>
-      <div>
-        <label for="year">Year:</label>
-        <input type="text" id="year" placeholder="Enter year">
-        
-        <label for="month">Month:</label>
-        <input type="text" id="month" placeholder="Enter month">
-        
-        <label for="day">Day:</label>
-        <input type="text" id="day" placeholder="Enter day">
-        
-        <button onclick="updateChart()">Apply Filters</button>
-      </div>
+            <div class="form-group">
+              <label for="timeInterval">Select Time Interval:</label>
+              <select class="form-control" style="width: 150px;" id="timeInterval">
+                <option value="Yearly">Yearly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Daily">Daily</option>
+              </select>
+            </div>
+ 
+
       <canvas id="ordersChart" width="1300" height="600"></canvas>
 
 			<!-- MAIN -->
@@ -99,45 +98,79 @@
 
 
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-    console.log( typeof orders)
-      var orderData = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May','June','July','Aug','Sep','Oct','Nov','Dec'],
-        datasets: [{
-          label: 'Number of Orders',
-          data: [],
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2,
-          fill: false
-        }]
-      };
+      window.addEventListener("load", () => {
+          // Variable to store the chart instance
+          let ordersChart;
   
- 
-      var ctx = document.getElementById('ordersChart').getContext('2d');
-      var ordersChart = new Chart(ctx, {
-        type: 'line',
-        data: orderData,
-        options: {
-          scales: {
-            x: {
-              type: 'category',
-              labels: orderData.labels
-            },
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'Number of Orders'
-              }
-            }
-          }
-        }
+          // Function to fetch and update chart data
+          const updateChartData = (filter) => {
+              $.ajax({
+                  url: '/get/chart',
+                  method: 'POST',
+                  data: { filter },
+                  success: function (data) {
+                      console.log(data);
+  
+                      var orderData = {
+                          labels: data.label,
+                          datasets: [{
+                              label: 'Number of Orders',
+                              data: data.salesCount,
+                              borderColor: 'rgba(75, 192, 192, 1)',
+                              backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                              borderWidth: 2,
+                              fill: false
+                          }]
+                      };
+  
+                      var ctx = document.getElementById('ordersChart').getContext('2d');
+  
+                      // Destroy the previous chart instance (if it exists)
+                      if (ordersChart) {
+                          ordersChart.destroy();
+                      }
+  
+                      ordersChart = new Chart(ctx, {
+                          type: 'bar',
+                          data: orderData,
+                          options: {
+                              scales: {
+                                  xAxes: [{
+                                      type: 'category',
+                                      labels: orderData.labels
+                                  }],
+                                  yAxes: [{
+                                      beginAtZero: true,
+                                      scaleLabel: {
+                                          display: true,
+                                          labelString: 'Number of Orders'
+                                      }
+                                  }]
+                              }
+                          }
+                      });
+                  },
+                  error: function (xhr, status, error) {
+                      console.error('Error fetching chart data:', error);
+                  }
+              });
+          };
+  
+          // Initial data load (assuming 'monthly' as default)
+          updateChartData('Monthly');
+  
+          // Event listener for the select button (dropdown)
+          let timeInterval = document.getElementById("timeInterval");
+          timeInterval.addEventListener("change", () => {
+              // Fetch and update data when the dropdown changes
+              updateChartData(timeInterval.value);
+          });
       });
-    </script>
-    
-
-
-
+  </script>
+  
 
 
 

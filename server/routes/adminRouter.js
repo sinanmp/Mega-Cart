@@ -7,6 +7,7 @@ const categoryController = require("../controller/categoryController")
 const adminAuthMiddleware = require("../routes/middlewares/adminMiddleware")
 const orderController = require("../controller/orderController")
 const coupenController = require("../controller/coupenController")
+const bannerController= require("../controller/bannerController")
 const upload = require("../routes/middlewares/imageUpload")
 
 
@@ -23,6 +24,7 @@ router.get("/order/list/admin", adminController.orderList)
 router.get("/admin-users", adminAuthMiddleware.adminIsAuth, adminServices.users)
 router.get("/add-products", adminAuthMiddleware.adminIsAuth, productController.addingProduct)
 router.get("/api/users", adminController.find);
+router.post("/get/chart",adminController.getChart)
 
 
 
@@ -69,6 +71,17 @@ router.get("/getCoupens", coupenController.getCoupens)
 router.get("/expiredCoupens", coupenController.expiredCoupens)
 router.get("/unlist/coupens", coupenController.unlistCoupens)
 router.get("/restore/coupens", coupenController.restoreCoupens)
+
+
+
+
+//banner managment
+router.get("/banners/api",bannerController.getBanners)
+router.get("/addBanner",bannerController.addBanner)
+
+
+
+
 
 module.exports = router;
 

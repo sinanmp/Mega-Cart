@@ -51,7 +51,13 @@ const productsSchema = new mongoose.Schema({
   },
   discountedPrice:{
     type:Number,
+  },
+  orderStatus:{
+    type:String,
+    enum: ['pending', 'Shipped', 'Delivered','Canceled','Returned'],
+    default: 'pending'
   }
+
 });
 
 productsSchema.pre('save', function (next) {

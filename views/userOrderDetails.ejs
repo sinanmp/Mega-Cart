@@ -69,6 +69,16 @@
     <p class="text-muted mb-0">Ordered At <span class="fw-bold text-body">12,March 2019</span></p>
   </div>
 </div>
+<div style="display: flex; justify-content: center;" >
+  <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4 w-50">
+    <li class="step0 active" id="step1"><span
+        style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
+    <li class="step0 active text-center" id="step2"><span>SHIPPED</span></li>
+    <li class="step0 text-muted text-end" id="step3"><span
+        style="margin-right: 22px;">DELIVERED</span></li>
+  </ul>
+</div>
+
 
 <% for(let i=0;i<order.products.length;i++){ %>
   <section class="gradient-custom-2">
@@ -78,32 +88,63 @@
           <div class="card card-stepper" style="border-radius: 16px;">
             <div class="card-header p-4">
               <div class="d-flex justify-content-between align-items-center">
-             
-                <div>
-                  <h6 class="mb-0"> <a href="#">View Details</a> </h6>
-                </div>
               </div>
             </div>
             <div class="card-body p-4">
               <div class="d-flex flex-row mb-4 pb-2">
                 <div class="flex-fill">
-                  <h5 class="bold">Headphones Bose 35 II</h5>
+                  <h5 class="bold"><%=order.products[i].pname  %></h5>
                   <p class="text-muted"> Qt: 1 item</p>
-                  <h4 class="mb-3"> $ 299 <span class="small text-muted"> via (COD) </span></h4>
-                  <p class="text-muted">Tracking Status on: <span class="text-body">11:30pm, Today</span></p>
+                  <h4 class="mb-3"> <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.products[i].price) %> <span class="small text-muted"> via (<%=order.PaymentMethod.toUpperCase()  %>) </span></h4>
+                  <p class="text-muted">Tracking Status on: 
+                    <span class="text-body currentTime"></span>
+                    , Today
+                  </p>
                 </div>
+                <script>
+                  function updateCurrentTime() {
+                    var currentDate = new Date();
+                    var hours = currentDate.getHours();
+                    var minutes = currentDate.getMinutes();
+                    var seconds = currentDate.getSeconds();
+                
+                    var formattedTime = hours + ':' + minutes + ':<span style="color: green ;">' + seconds + '</span>';
+                
+                    var currentTimeElements = document.querySelectorAll('.currentTime');
+                  currentTimeElements.forEach(function (element) {
+                    element.innerHTML = formattedTime;
+                    });
+                  }
+                
+                  updateCurrentTime();
+                  setInterval(updateCurrentTime, 1000);
+                </script>
+                
                 <div>
                   <img class="align-self-center img-fluid"
                     src="/primg/<%= order.products[i].prd_images[0] %>" width="200">
                 </div>
               </div>
-              <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4">
-                <li class="step0 active" id="step1"><span
-                    style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
-                <li class="step0 active text-center" id="step2"><span>SHIPPED</span></li>
-                <li class="step0 text-muted text-end" id="step3"><span
-                    style="margin-right: 22px;">DELIVERED</span></li>
-              </ul>
+            
+              <% if(order.products.length==1){ %>
+              <div class="card-footer1 p-4">
+                <div class="d-flex justify-content-between">
+                  <h5 class="fw-normal mb-0"><a href="#!">Track</a></h5>
+                  <div class="border-start h-100"></div>
+                  <h5 class="fw-normal mb-0"><a href="#!">Cancel</a></h5>
+                  <div class="border-start h-100"></div>
+                  <h5 class="fw-normal mb-0"><a href="#!">Pre-pay</a></h5>
+                  <div class="border-start h-100"></div>
+                  <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i class="fas fa-ellipsis-v"></i></a>
+                  </h5>
+                </div>
+              </div>
+              <% }else{  %>
+                <div class="d-flex justify-content-end">
+                  <button class="btn" style="background-color: #392539; color: white;">Cancle</button>
+                </div>
+                <% } %>
+    
             </div>
           </div>
         </div>
@@ -113,23 +154,31 @@
   
   
   <% } %>
-<div class="card-footer p-4">
+  <% if(order.products.length>1){ %>
+<div class="card-footer p-3">
   <div class="d-flex justify-content-lg-center gap-5">
-    <h5 class="fw-normal mb-0"><a href="#!">Track</a></h5>
-    <h5 class="fw-normal mb-0"><a href="#!">Cancel All</a></h5>
-    <h5 class="fw-normal mb-0"><a href="#!">Pre-pay</a></h5>
+    <h5 class="fw-normal mb-0"><a href="#!" style="color: #BF7DC1;">Track</a></h5>
+    <h5 class="fw-normal mb-0"><a href="#!" style="color: #BF7DC1;">Cancel All Orders</a></h5>
+    <% if(order.PaymentMethod=='cod'){ %>
+    <h5 class="fw-normal mb-0"><a href="#!" style="color: #BF7DC1;">Pre-pay <span style="color: white; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
+    <% }else{ %>
+      <h5 class="fw-normal mb-0"><a href="#!" style="color: green;">Payment Completed</a></h5>
+      <% } %>
     <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i class="fas fa-ellipsis-v"></i></a></h5>
   </div>
 </div>
+<% } %>
 
 
   <!-- Add the following CSS to your styles.css file --> 
   <style>
     .card-footer {
+      color: white;
+      text-decoration: none;
       position: fixed;
       bottom: 0;
       width: 100%;
-      background-color:transparent; /* Adjust the background color as needed */
+      background-color:#392539; /* Adjust the background color as needed */
       box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
     }
   </style>
@@ -184,7 +233,7 @@ margin: auto;
 content: '';
 width: 121%;
 height: 2px;
-background: #455A64;
+background: #392539;
 position: absolute;
 left: 0%;
 right: 0%;
@@ -208,7 +257,7 @@ width: 50%;
 
 #progressbar-1 li.active:before,
 #progressbar-1 li.active:after {
-background: #1266f1;
+background: #BF7DC1;
 }
 
 .card-stepper {
