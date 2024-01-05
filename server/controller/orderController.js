@@ -388,7 +388,7 @@ exports.cancelMain = (req, res) => {
     const orderId = req.query.id;
     orderDb.updateOne({ _id: orderId }, { $set: { status: 'Canceled' } })
         .then(() => {
-            orderDb.findOne({_id:orderId})
+            orderDb.findOne({_id:orderId})   
             .then(data=>{
               productdb.updateOne({_id:data.products[0]._id},{$inc:{stock:1}})
               .then(udata=>{
