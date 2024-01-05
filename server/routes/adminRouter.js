@@ -82,8 +82,9 @@ router.get("/restore/coupens", coupenController.restoreCoupens)
 router.get("/banners/api",bannerController.getBanners)
 router.get("/addBanner",bannerController.addBanner)
 router.post("/addCoupen",upload ,bannerController.addPost)
-
-
+router.get("/unlist-banner",bannerController.unsilst)
+router.get("/Unlisted-Banners",bannerController.unlistedBanners)
+router.get("/restore-banner",bannerController.restoreBanner)
 
 
 module.exports = router;

@@ -69,15 +69,35 @@
     <p class="text-muted mb-0">Ordered At <span class="fw-bold text-body">12,March 2019</span></p>
   </div>
 </div>
-<div style="display: flex; justify-content: center;" >
+<div style="display: flex; justify-content: center;">
   <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4 w-50">
-    <li class="step0 active" id="step1"><span
-        style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
+    <li class="step0 active" id="step1"><span style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
     <li class="step0 active text-center" id="step2"><span>SHIPPED</span></li>
-    <li class="step0 text-muted text-end" id="step3"><span
-        style="margin-right: 22px;">DELIVERED</span></li>
+    <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">DELIVERED</span></li>
   </ul>
 </div>
+
+<script>
+var orderStatus = "DELIVERED"; 
+function updateProgressBar(status) {
+  for (var i = 1; i <= 3; i++) {
+    document.getElementById('step' + i).classList.remove('active');
+    document.getElementById('step' + i).classList.remove('text-muted');
+  }
+  if (status === 'PLACED') {
+    document.getElementById('step1').classList.add('active');
+  } else if (status === 'SHIPPED') {
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('step2').classList.add('active');
+  } else if (status === 'DELIVERED') {
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('step3').classList.add('text-muted');
+  }
+}
+updateProgressBar(orderStatus);
+</script>
+
 
 
 <% for(let i=0;i<order.products.length;i++){ %>
@@ -131,7 +151,7 @@
                 <div class="d-flex justify-content-between">
                   <h5 class="fw-normal mb-0"><a href="#!">Track</a></h5>
                   <div class="border-start h-100"></div>
-                  <h5 class="fw-normal mb-0"><a href="#!">Cancel</a></h5>
+                  <h5 class="fw-normal mb-0"><a href="/cancel/order?orderId=<%=order.products[i]._id%>">Cancel</a></h5>
                   <div class="border-start h-100"></div>
                   <h5 class="fw-normal mb-0"><a href="#!">Pre-pay</a></h5>
                   <div class="border-start h-100"></div>
@@ -235,14 +255,14 @@ width: 121%;
 height: 2px;
 background: #392539;
 position: absolute;
-left: 0%;
+/* left: 0%; */
 right: 0%;
 top: 15px;
 z-index: -1;
 }
 
 #progressbar-1 li:nth-child(2):after {
-left: 50%
+left:50%
 }
 
 #progressbar-1 li:nth-child(1):after {
@@ -251,8 +271,8 @@ width: 121%
 }
 
 #progressbar-1 li:nth-child(3):after {
-left: 25%;
-width: 50%;
+  left: -60%;
+width: 141%;
 }
 
 #progressbar-1 li.active:before,

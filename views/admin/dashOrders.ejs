@@ -76,13 +76,15 @@
                                     <th>User</th>
                                     <th>Products Count</th>
                                     <th>Date Order</th>
+                                    <th>Total</th>
                                     <th>Status</th>
                                     <th>Edit Status</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% for(let i=0;i<orders.length;i++){ %>
-                                    <tr onclick="goOrderes('<%=orders[i]._id%>')">
+                                    <tr>
                                         <td>
                                             <p>
                                                 <%= orders[i].email%>
@@ -97,6 +99,9 @@
                                                     Date(utcTimestamp).toLocaleString("en-IN", options); %>
                                                     <td>
                                                         <%= istDateTimeString %>
+                                                    </td>
+                                                    <td style="font-size: 17px; font-weight: bold; font-family: sans-serif;">
+                                                        <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(orders[i].totalAmount ) %>
                                                     </td>
                                                     <% if(orders[i].status=='pending' ){ %>
                                                         <td><span class="status pending">
@@ -237,6 +242,9 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" onclick="goOrderes('<%=orders[i]._id%>')" class="btn btn-outline-primary"><Details></Details></button>
                                                                             </td>
                                     </tr>
                                     <% } %>

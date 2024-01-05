@@ -28,7 +28,20 @@ exports.submitOrder = async (req, res) => {
             const NewOrder = {
                 email: req.session.OrderInfo.email,
                 username: req.session.OrderInfo.username,
-                products: data,
+                products: {
+                    pname:data.pname,
+                    prd_images:data.prd_images,
+                    category:data.category,
+                    description:data.description,
+                    additional_info:data.additional_info,
+                    discount:data.discount,
+                    brand:data.brand,
+                    price:data.price,
+                    purchase:data.purchase,
+                    reviews:data.reviews,
+                    Ofprice:data.Ofprice,
+                    discountedPrice:data.discountedPrice
+                },
                 totalAmount: req.session.totalPriceinPrid,
                 shippingAddress: {
                     locality: req.session.OrderInfo.locality,
@@ -42,9 +55,10 @@ exports.submitOrder = async (req, res) => {
                 PaymentMethod: req.body.payment
             };
 
+            console.log(data)
             
 
-            if (req.body.payment == 'razorpay') {
+            if (req.body.payment == 'Online') {
                 console.log("its coming success is very dangersly")
                 const randomOrderID = Math.floor(Math.random() * 1000000).toString();
                 if(req.session.DisplayAmount>=1){
@@ -91,7 +105,20 @@ exports.submitOrder = async (req, res) => {
                     const NewOrder =new orderDb({   
                         email: req.session.OrderInfo.email,
                         username: req.session.OrderInfo.username,
-                        products: data,
+                        products: {
+                            pname:data.pname,
+                            prd_images:data.prd_images,
+                            category:data.category,
+                            description:data.description,
+                            additional_info:data.additional_info,
+                            discount:data.discount,
+                            brand:data.brand,
+                            price:data.price,
+                            purchase:data.purchase,
+                            reviews:data.reviews,
+                            Ofprice:data.Ofprice,
+                            discountedPrice:data.discountedPrice
+                        },
                         totalAmount: req.session.totalPriceinPrid,
                         shippingAddress: {
                             locality: req.session.OrderInfo.locality,
@@ -114,7 +141,20 @@ exports.submitOrder = async (req, res) => {
                     const NewOrder =new orderDb({   
                         email: req.session.OrderInfo.email,
                         username: req.session.OrderInfo.username,
-                        products: data,
+                        products: {
+                            pname:data.pname,
+                            prd_images:data.prd_images,
+                            category:data.category,
+                            description:data.description,
+                            additional_info:data.additional_info,
+                            discount:data.discount,
+                            brand:data.brand,
+                            price:data.price,
+                            purchase:data.purchase,
+                            reviews:data.reviews,
+                            Ofprice:data.Ofprice,
+                            discountedPrice:data.discountedPrice
+                        },
                         totalAmount: req.session.totalPriceinPrid,
                         shippingAddress: {
                             locality: req.session.OrderInfo.locality,
@@ -172,6 +212,31 @@ exports.submitOrder = async (req, res) => {
                 return
             }
         }
+
+
+        const productsArray = prdata.map(item => ({
+            pname: item.pname,
+            prd_images: item.prd_images,
+            category: item.category,
+            description: item.description,
+            additional_info: item.additional_info,
+            discount: item.discount,
+            brand: item.brand,
+            price: item.price,
+            purchase: item.purchase,
+            reviews: item.reviews,
+            active: item.active,
+            unlist: item.unlist,
+            catStatus: item.catStatus,
+            Ofprice: item.Ofprice,
+            cartQuantity: item.cartQuantity,
+            discountedPrice: item.discountedPrice,
+            IndividualStatus: 'pending'
+        }));
+
+
+
+
         if(req.session.DisplayAmount>=1){
             req.session.totalPriceinPrid=req.session.DisplayAmount
         }
@@ -180,7 +245,7 @@ exports.submitOrder = async (req, res) => {
             NewOrder = {
                 email: req.session.OrderInfo.email,
                 username: req.session.OrderInfo.username,
-                products: prdata,
+                products:productsArray,
                 totalAmount:req.session.totalPriceinPrid,
                 shippingAddress: {
                     locality: req.session.OrderInfo.locality,
@@ -198,7 +263,7 @@ exports.submitOrder = async (req, res) => {
 
         
 
-        if(req.body.payment=='razorpay'){
+        if(req.body.payment=='Online'){
 
             console.log("its coming success is very dangersly")
             const randomOrderID = Math.floor(Math.random() * 1000000).toString();
@@ -207,7 +272,7 @@ exports.submitOrder = async (req, res) => {
                 currency: "INR",  
                 receipt: randomOrderID,
             };      
-
+            console.log(NewOrder+"     this is new order for display to check")
             await new Promise((resolve, reject) => {
                 razorpayInstance.orders.create(options, (err) => {
                     if (!err) {
@@ -238,7 +303,7 @@ exports.submitOrder = async (req, res) => {
                     const cartOrder=new orderDb({
                         email: req.session.OrderInfo.email,
                         username: req.session.OrderInfo.username,
-                        products: NewOrder.products,
+                        products:productsArray,
                         totalAmount: req.session.totalPriceinPrid,
                         shippingAddress: {
                             locality: req.session.OrderInfo.locality,
@@ -252,15 +317,15 @@ exports.submitOrder = async (req, res) => {
                         PaymentMethod: 'complete from Wallet'
                     })
                     await cartOrder.save()
-                    for(let i=0; i<NewOrder.products.length;i++){
-                        await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
-                        await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    for(let i=0; i<prdata.length;i++){
+                        await productdb.updateOne({ _id:prdata.prId }, { $inc: { stock: -prdata[i].cartQhantity } });
+                        await cartDb.updateMany({ prId: prdata[i].prId }, { $inc: { stock: -prdata[i].cartQhantity } });
                     }
                 }else{
                     const cartOrder=new orderDb({
                         email: req.session.OrderInfo.email, 
                         username: req.session.OrderInfo.username,
-                        products: NewOrder.products,
+                        products:productsArray,
                         totalAmount: req.session.totalPriceinPrid,
                         shippingAddress: {
                             locality: req.session.OrderInfo.locality,
@@ -273,10 +338,12 @@ exports.submitOrder = async (req, res) => {
                         takingFromWallet:req.session.takingFromWallet,
                         PaymentMethod: req.body.payment
                     })
+                    console.log(productsArray)
                     await cartOrder.save()
-                    for(let i=0; i<NewOrder.products.length;i++){
-                        await productdb.updateOne({ _id: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
-                        await cartDb.updateMany({ prId: NewOrder.products[i].prId }, { $inc: { stock: -NewOrder.products[i].cartQhantity } });
+                    for(let i=0; i<prdata.length;i++){
+                        console.log(prdata[i].cartQhantity , typeof(prdata[i].cartQhantity)+"   this is quantity") 
+                        await productdb.updateOne({ _id:prdata[i].prId }, { $inc: { stock: -prdata[i].cartQhantity } });
+                        await cartDb.updateMany({ prId: prdata[i].prId }, { $inc: { stock: -prdata[i].cartQhantity } });
                     }
                 }
              
@@ -378,14 +445,27 @@ exports.orderRoute= async(req,res)=>{
    const {order} = req.body;
    if(id){
     console.log("reached")
-        console.log(order);
-        // res.send(req.body)
+        console.log(order)
         const NewOrder=order.orders
         console.log(NewOrder.email)
         const NewOrder2 = new orderDb({
             email: NewOrder.email,
             username: NewOrder.username,
-            products: NewOrder.products,
+            products: {
+                pname:NewOrder.products.pname,
+                prd_images:NewOrder.products.prd_images,
+                category:NewOrder.products.category,
+                description:NewOrder.products.description,
+                additional_info:NewOrder.products.additional_info,
+                discount:NewOrder.products.discount,
+                brand:NewOrder.products.brand,
+                price:NewOrder.products.price,
+                purchase:NewOrder.products.purchase,
+                reviews:NewOrder.products.reviews,
+                Ofprice:NewOrder.products.Ofprice,
+                discountedPrice:NewOrder.products.discountedPrice,
+                IndividualStatus:'pending'
+            },
             totalAmount:req.session.totalPriceinPrid,
             shippingAddress: {
                 locality:NewOrder.shippingAddress.locality,
@@ -494,6 +574,7 @@ exports.fetchOrderD=async(req,res)=>{
 
 
 
-exports.individualOrder=(req,res)=>{
-    res.render("admin/adminSingleOrder")
+exports.individualOrder=async(req,res)=>{
+    const data= await orderDb.findOne({_id:req.query.id})
+    res.render("admin/adminSingleOrder",{order:data})
 }

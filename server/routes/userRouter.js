@@ -6,6 +6,7 @@ const cartController = require("../controller/cartController");
 const wishlistController=require("../controller/wishlistController")
 const orderController=require("../controller/orderController")
 const {paymentMiddleware} = require("../routes/middlewares/userMiddleware");
+const reviewController= require("../controller/reviewController")
 
 router.get('/', userController.userHome)//home
 router.get('/login', userServices.login)
@@ -97,5 +98,10 @@ router.post("/wallet-payment",userController.walletPayment)
 router.post("/applyCoupon",userController.applyCoupen)
 router.get("/coupon-cancel",userController.couponCancel)
 
+
+
+//reviews
+router.get("/add/review",reviewController.reviewGet)
+router.post("/review-submit",reviewController.reviewSubmit)
 
 module.exports = router;

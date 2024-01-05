@@ -8,16 +8,16 @@
 
     <!-- Add Category Button -->
     <div style="display: flex; justify-content: space-between;">
-        <a href="/addBanner">
+        <a href="/addBanner" style="visibility: hidden;">
             <button type="button" style="background-color: #BF7DC1; color: white;" class="btn btn-add-category" data-bs-toggle="modal"
                 data-bs-target="#addCategoryModal">
                 <i class="fa-solid fa-plus"></i>
                 Add Banner
             </button>
         </a>
-        <a href="/Unlisted-Banners">
+        <a href="/banners/api">
             <button style="background-color: #392539; color: white;" class="btn">
-                Unlisted Banners
+                Active Banners
             </button>
         </a>
     </div>
@@ -49,8 +49,8 @@
                         <%=banners[i].discription  %>
                     </td>
                     <td style="vertical-align: middle;">
-                        <a href="/unlist-banner?id=<%=banners[i]._id %>">
-                            <button type="button" class="btn btn-danger">Delete</button>
+                        <a href="/restore-banner?id=<%=banners[i]._id %>">
+                            <button type="button" class="btn btn-success">Restore</button>
                         </a>
                     </td>
                 </tr>

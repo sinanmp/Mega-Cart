@@ -30,3 +30,26 @@ exports.addPost= async(req,res)=>{
       res.send(error)
     }
 }
+
+
+
+exports.unsilst=async(req,res)=>{
+    const id=req.query.id
+    await bannerDb.updateOne({_id:id},{$set:{active:false}})
+    res.redirect("/banners/api")
+}
+
+
+
+exports.unlistedBanners=async(req,res)=>{
+    const banners=await bannerDb.find({active:false})
+    res.render("admin/unlistedBanners",{banners:banners})
+}
+
+
+
+exports.restoreBanner=async(req,res)=>{
+    const id=req.query.id
+    await bannerDb.updateOne({_id:id},{$set:{active:true}})
+    res.redirect("/Unlisted-Banners")
+}

@@ -11,6 +11,7 @@ const cartDb = require("../model/cartSchema");
 const Razorpay=require("razorpay")
 const wishdb = require("../model/wishlistSchema")
 const bannerDb= require("../model/bannerSchema")
+const reviewDb= require("../model/reviewsSchema")
 
 const axios=require("axios");
 const CouponDb = require("../model/coupenModel");
@@ -277,6 +278,7 @@ exports.singlePrd = (req, res) => {
   console.log(req.session.prId , "this is prid in single product")
   req.session.totalPriceinPrid=0
   const prId = req.session.prId;
+  const success=req.query.success
   req.session.coupen=false
   console.log(prId)
   const { quantity } = req.body;
@@ -296,7 +298,11 @@ exports.singlePrd = (req, res) => {
             .then(data => {
               wishdb.findOne({ prId: prId,email:req.session.isAuth})
               .then(wishdata=>{
-                res.render("userSinglePrd", { product: pdata, email: req.session.isAuth, cart: cartdata,wishdata:wishdata});
+              reviewDb.find({productId:prId}).then(review=>{
+                res.render("userSinglePrd", { product: pdata, email: req.session.isAuth, cart: cartdata,wishdata:wishdata ,success:success ,reviews:review});
+               })
+
+
               })             
             })
 
@@ -732,7 +738,9 @@ exports.addressPostCheckout=(req,res)=>{
         const userData=response.data
         const address=userData.address
         const index=req.query.index ||address.length-1
-          res.render("checkout",{userData:response.data,total:price,a:index,prId:prId})
+          res.render("checkout",{userData:response.data,total:price,a:index,prId:prId,coupenSession:req.session.coupen ,
+            coupenAmount:req.session.coupenAmount,
+            appliedCoupon: req.session.appliedCoupen})
       })
     }).catch(err => {
       res.send(err)
@@ -952,4 +960,5 @@ exports.couponCancel=(req,res)=>{
 }
 
    
+
 

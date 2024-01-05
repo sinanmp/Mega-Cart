@@ -28,10 +28,6 @@ const productsSchema = new mongoose.Schema({
   purchase: {
     type: Number,
   },
-  reviews: [{
-    feedback: String,
-    rating: Number,
-  }],
   active: {
     type: Boolean,
     default: true,
@@ -51,11 +47,6 @@ const productsSchema = new mongoose.Schema({
   },
   discountedPrice:{
     type:Number,
-  },
-  orderStatus:{
-    type:String,
-    enum: ['pending', 'Shipped', 'Delivered','Canceled','Returned'],
-    default: 'pending'
   }
 
 });

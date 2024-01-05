@@ -115,21 +115,21 @@
                                                   <% } else { %>
                                                       <% pid = data[i]._id %>
                                                   <% } %>
-                                                  <a href="/cancel/order?orderId=<%=pid %>" class="btn btn-outline-primary btn-sm">
+                                                  <a href="" class="btn btn-outline-primary btn-sm">
                                                       Cancel
                                                   </a>
                                               <% } else if (data[i].status == 'Canceled') { %>
-                                                  <button class="btn btn-outline-danger btn-sm" disabled>
-                                                      Canceled
-                                                  </button>
+                                                <div class="alert alert-danger" role="alert">
+                                                  Canceled
+                                                </div>
                                               <% } else if (data[i].status == 'Returned') { %>
-                                                  <button class="btn btn-outline-warning btn-sm" disabled>
-                                                      Returned
-                                                  </button>
+                                                <div class="alert alert-warning" role="alert">
+                                                  Returned
+                                                </div>
                                               <% } else if (data[i].status == 'Delivered') { %>
-                                                  <button class="btn btn-outline-success btn-sm" disabled>
-                                                      Delivered
-                                                  </button>
+                                                <div class="alert alert-success" role="alert">
+                                                  Delivered
+                                                </div>
                                               <% } %>
                                               <% }else{ %>
                                                 

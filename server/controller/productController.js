@@ -57,7 +57,10 @@ exports.updateProcduct = (req, res) => {
     productDb.findOne({ _id: id })
         .then(prdata => {
             console.log(prdata + "update")
-            res.render("admin/updateProduct", { products: prdata })
+            catogorydb.find({status:true})
+            .then(catData=>{
+                res.render("admin/updateProduct", { products: prdata , catData:catData})
+            })
         }).catch(err => {
             res.send(err)
         })

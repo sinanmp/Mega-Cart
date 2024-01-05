@@ -39,13 +39,13 @@
                                     <form action="/api/update/product?id=<%=products._id %>" method="POST">
                                         <div class="form-group">
                                             <label for="productName">Product Name:</label>
-                                            <input type="text" name="prd_name" class="form-control"
+                                            <input required type="text" name="prd_name" class="form-control"
                                                 value="<%=products.pname%>" id="productName"
                                                 placeholder="Enter Product Name">
                                         </div>
                                         <div class="form-group">
                                             <label for="productDescription">Description:</label>
-                                            <input type="text" name="description" value="<%=products.description%>"
+                                            <input required type="text" name="description" value="<%=products.description%>"
                                                 class="form-control" id="productDescription"
                                                 placeholder="Enter Description">
                                         </div>
@@ -55,32 +55,34 @@
                                                 <option value="" selected disabled>
                                                     <%=products.category%>
                                                 </option>
+                                                <% for( let i=0; i < catData.length; i++ ) { %>
+                                                    <option value="<%=catData[i].name%>">
+                                                        <%=catData[i].name%>
+                                                    </option>
+                                                    <% } %>
                                                 <option value="Smartphone">Smartphone</option>
-                                                <option value="Laptop">Laptop</option>
-                                                <option value="Watches">Watches</option>
-                                                <option value="Speakers">Speakers</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="productDescription">Brand Name:</label>
-                                            <input type="text" name="brand" class="form-control"
+                                            <input required type="text" name="brand" class="form-control"
                                                 id="productBrand" value="<%=products.brand  %>" placeholder="Enter Brand Name">
                                         </div>
                                         <div class="form-group">
                                             <label for="productPrice">Product Price:</label>
-                                            <input type="number" name="price" class="form-control"
+                                            <input required type="number" name="price" class="form-control"
                                                 value="<%=products.price  %>" id="productPrice"
                                                 placeholder="Enter Product Price">
                                         </div>
                                         <div class="form-group">
                                             <label for="productDiscount">Product Discount/%:</label>
-                                            <input type="number" name="discount" class="form-control"
+                                            <input required type="number" name="discount" class="form-control"
                                                 value="<%=products.discount  %>" id="productDiscount"
                                                 placeholder="Enter Product Discount">
                                         </div>
                                         <div class="form-group">
                                             <label for="productStock">Product Stock:</label>
-                                            <input type="number" name="stock" class="form-control"
+                                            <input  type="number" name="stock" class="form-control"
                                                 value="<%=products.stock  %>" id="productStock"
                                                 placeholder="Enter Product Stock">
                                         </div>

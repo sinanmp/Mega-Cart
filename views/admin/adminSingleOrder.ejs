@@ -4,12 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    
 </head>
 <body>
     <%- include('include2/adminbase') %>
 
-
-
+ 
+    <h3 class="mb-5" style="text-align: center;"><%=order.products.length  %> Items</h3>
+    <h4 style="text-align: center;" class="mb-3">Shipping Address:</h4>
+    <div class="shipping-address" style="text-align: center;">
+        <p><strong>Email:</strong> <%= order.email %></p>
+        <p><strong>Address:</strong> <%= order.shippingAddress.Address %></p>
+        <p><strong>City:</strong> <%= order.shippingAddress.city %></p>
+        <p><strong>House Number:</strong> <%= order.shippingAddress.house_no %></p>
+        <p><strong>Postcode:</strong> <%= order.shippingAddress.postcode %></p>
+        <p><strong>Alternate Number:</strong> <%= order.shippingAddress.AlternateNumber %></p>
+    </div>
+    <% for(let i=0;i<order.products.length;i++){ %>
+        <section class="gradient-custom-2" >
+          <div class="container py-5">
+            <div class="row d-flex justify-content-center align-items-center ">
+              <div class="col-md-10 col-lg-8 col-xl-6">
+                <div class="card card-stepper" style="border-radius: 16px;">
+                  <div class="card-header p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                    </div>
+                  </div>
+                  <div class="card-body p-4">
+                    <div class="d-flex flex-row mb-4 pb-2">
+                      <div class="flex-fill">
+                        <h5 class="bold"><%=order.products[i].pname  %></h5>
+                        <p class="text-muted"> Qt: 1 item</p>
+                        <h4 class="mb-3"> <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.products[i].price) %> <span class="small text-muted"> via (<%=order.PaymentMethod.toUpperCase()  %>) </span></h4>
+                        <p class="text-muted">Tracking Status on: 
+                          <span class="text-body currentTime"></span>
+                          , Today
+                        </p>
+                      </div>
+                      <script>
+                        function updateCurrentTime() {
+                          var currentDate = new Date();
+                          var hours = currentDate.getHours();
+                          var minutes = currentDate.getMinutes();
+                          var seconds = currentDate.getSeconds();
+                      
+                          var formattedTime = hours + ':' + minutes + ':<span style="color: green ;">' + seconds + '</span>';
+                      
+                          var currentTimeElements = document.querySelectorAll('.currentTime');
+                        currentTimeElements.forEach(function (element) {
+                          element.innerHTML = formattedTime;
+                          });
+                        }
+                      
+                        updateCurrentTime();
+                        setInterval(updateCurrentTime, 1000);
+                      </script>
+                      
+                      <div>
+                        <img class="align-self-center img-fluid"
+                          src="/primg/<%= order.products[i].prd_images[0] %>" width="200">
+                      </div>
+                    </div>
+                    <div class="card-footer1 p-4">
+                      <div class="d-flex justify-content-between">
+                        <h5 class="fw-normal mb-0"><a href="#!">Track</a></h5>
+                        <div class="border-start h-100"></div>
+                        <h5 class="fw-normal mb-0"><a href="">Cancel</a></h5>
+                        <div class="border-start h-100"></div>
+                        <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i class="fas fa-ellipsis-v"></i></a>
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        
+        <% } %>
+       
 
 
 
