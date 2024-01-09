@@ -10,6 +10,53 @@
     #totalUsers {
       transition: color 0.5s, transform 0.5s;
     }
+    
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #data-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    #data-table th, #data-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    #data-table th {
+      background-color: #f2f2f2;
+    }
+
+    #exportModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input {
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
   </style>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -49,9 +96,9 @@
 							</li>
 						</ul>
 					</div>
-					<a onclick="generateSalesReport()" class="btn-download">
+					<a onclick="openExportModal()" class="btn-download">
 						<i class='bx bxs-cloud-download'></i>
-						<span class="text">Download PDF</span>
+						<span class="text">Download</span>
 					</a>
 				</div>
 
@@ -91,6 +138,26 @@
  
 
       <canvas id="ordersChart" width="1300" height="600"></canvas>
+
+      
+  <div id="exportModal">
+    <label>
+      <input type="radio" name="exportType" value="excel" checked> Excel
+    </label>
+    <label>
+      <input type="radio" name="exportType" value="pdf"> PDF
+    </label>
+    <label>
+      Start Date:
+      <input type="date" id="startDate">
+    </label>
+    <label>
+      End Date:
+      <input type="date" id="endDate">
+    </label>
+    <button onclick="exportData()">Export</button>
+    <button onclick="closeExportModal()">Cancel</button>
+  </div>
 
 			<!-- MAIN -->
 		</section>
@@ -175,8 +242,82 @@
 
 
   <script>
-    // Your JavaScript code
-	function generateSalesReport() {
+       function openExportModal() {
+      document.getElementById("exportModal").style.display = "block";
+    }
+
+    function closeExportModal() {
+      document.getElementById("exportModal").style.display = "none";
+    }
+
+    function exportData() {
+      var exportType = document.querySelector('input[name="exportType"]:checked').value;
+      var startDate = document.getElementById("startDate").value;
+      var endDate = document.getElementById("endDate").value;
+
+      // You can use the selected start and end dates in your export logic
+      console.log("Export Type:", exportType);
+      console.log("Start Date:", startDate);
+      console.log("End Date:", endDate);
+
+      if (exportType === "excel") {
+        exportToExcel();
+      } else if (exportType === "pdf") {
+        generateSalesReportPdf()
+      }
+
+      closeExportModal();
+    }
+    function exportToExcel() {
+  // Collecting data from the PDF
+  const formattedDate = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'numeric', day: 'numeric' });
+  const formattedTotalSales = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Math.floor('<%=total%>'));
+  const totalUsers = '<%=count%>';
+  const newOrders = '<%=a%>';
+
+  // Creating an HTML table structure
+  const htmlTable = `
+    <table>
+      <tr>
+        <th>Date</th>
+        <td>${formattedDate}</td>
+      </tr>
+      <tr>
+        <th>Total Sales</th>
+        <td>${formattedTotalSales}</td>
+      </tr>
+      <tr>
+        <th>Total Users</th>
+        <td>${totalUsers}</td>
+      </tr>
+      <tr>
+        <th>New Orders</th>
+        <td>${newOrders}</td>
+      </tr>
+    </table>
+  `;
+
+  // Creating a Blob with the HTML content
+  var blob = new Blob([htmlTable], { type: "application/vnd.ms-excel" });
+
+  // Creating a download link
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "megacartExel";
+
+  document.body.appendChild(a);
+  a.click();
+
+  document.body.removeChild(a);
+}
+
+
+ 
+
+
+
+	function generateSalesReportPdf() {
   const pdf = new window.jspdf.jsPDF();
   pdf.addFont('OpenSans-Regular.ttf', 'Open Sans', 'normal');
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Export Modal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #data-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    #data-table th, #data-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    #data-table th {
+      background-color: #f2f2f2;
+    }
+
+    #exportModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input {
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <table id="data-table">
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Email</th>
+    </tr>
+    <tr>
+      <td>John Doe</td>
+      <td>25</td>
+      <td>john@example.com</td>
+    </tr>
+    <tr>
+      <td>Jane Doe</td>
+      <td>30</td>
+      <td>jane@example.com</td>
+    </tr>
+  </table>
+
+  <button onclick="openExportModal()">Export Data</button>
+
+  <div id="exportModal">
+    <label>
+      <input type="radio" name="exportType" value="excel" checked> Excel
+    </label>
+    <label>
+      <input type="radio" name="exportType" value="pdf"> PDF
+    </label>
+    <label>
+      Start Date:
+      <input type="date" id="startDate">
+    </label>
+    <label>
+      End Date:
+      <input type="date" id="endDate">
+    </label>
+    <button onclick="exportData()">Export</button>
+    <button onclick="closeExportModal()">Cancel</button>
+  </div>
+
+  <script>
+    function openExportModal() {
+      document.getElementById("exportModal").style.display = "block";
+    }
+
+    function closeExportModal() {
+      document.getElementById("exportModal").style.display = "none";
+    }
+
+    function exportData() {
+      var exportType = document.querySelector('input[name="exportType"]:checked').value;
+      var startDate = document.getElementById("startDate").value;
+      var endDate = document.getElementById("endDate").value;
+
+      // You can use the selected start and end dates in your export logic
+      console.log("Export Type:", exportType);
+      console.log("Start Date:", startDate);
+      console.log("End Date:", endDate);
+
+      if (exportType === "excel") {
+        exportToExcel();
+      } else if (exportType === "pdf") {
+        exportToPDF();
+      }
+
+      closeExportModal();
+    }
+
+    function exportToExcel() {
+      var table = document.getElementById("data-table");
+      var html = table.outerHTML;
+
+      var blob = new Blob([html], { type: "application/vnd.ms-excel" });
+      var url = URL.createObjectURL(blob);
+
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "data.xls";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function exportToPDF() {
+      // Placeholder for PDF export logic
+      alert("PDF export logic goes here");
+    }
+  </script>
+
+</body>
+</html>

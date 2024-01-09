@@ -319,7 +319,7 @@
                 <% var discount = product.discount %>
                 <% var Odiscount = product.price * discount / 100 %>
                 <% var showPrice= product.price-Odiscount %>
-                ₹<%=Math.floor(showPrice)  %>
+                <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(Math.floor(showPrice)) %>
               </span>
               <span class="text-muted">/per box</span>
               <p style="color: green;">-<%=product.discount  %>% Off <span class="h6 text-black" style="text-decoration: line-through; opacity: .5;">₹<%= product.price %></span></p>
