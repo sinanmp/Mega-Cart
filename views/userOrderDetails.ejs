@@ -151,7 +151,7 @@ updateProgressBar(orderStatus);
                 <div class="d-flex justify-content-between">
                   <h5 class="fw-normal mb-0"><a href="#!">Track</a></h5>
                   <div class="border-start h-100"></div>
-                  <h5 class="fw-normal mb-0"><a href="/cancel/order?orderId=<%=order.products[i]._id%>">Cancel</a></h5>
+                  <h5 class="fw-normal mb-0"><a href="/cancel/order?productId=<%=order.products[i]._id%>&orderId=<%=order._id%>">Cancel</a></h5>
                   <div class="border-start h-100"></div>
                   <h5 class="fw-normal mb-0"><a href="#!">Pre-pay</a></h5>
                   <div class="border-start h-100"></div>

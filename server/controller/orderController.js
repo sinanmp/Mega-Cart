@@ -29,6 +29,7 @@ exports.submitOrder = async (req, res) => {
                 email: req.session.OrderInfo.email,
                 username: req.session.OrderInfo.username,
                 products: {
+                    prId:data._id,
                     pname:data.pname,
                     prd_images:data.prd_images,
                     category:data.category,
@@ -106,6 +107,7 @@ exports.submitOrder = async (req, res) => {
                         email: req.session.OrderInfo.email,
                         username: req.session.OrderInfo.username,
                         products: {
+                            prId:data._id,
                             pname:data.pname,
                             prd_images:data.prd_images,
                             category:data.category,
@@ -142,6 +144,7 @@ exports.submitOrder = async (req, res) => {
                         email: req.session.OrderInfo.email,
                         username: req.session.OrderInfo.username,
                         products: {
+                            prId:data._id,
                             pname:data.pname,
                             prd_images:data.prd_images,
                             category:data.category,
@@ -215,6 +218,7 @@ exports.submitOrder = async (req, res) => {
 
 
         const productsArray = prdata.map(item => ({
+            prId:item.prId,
             pname: item.pname,
             prd_images: item.prd_images,
             category: item.category,
@@ -380,51 +384,58 @@ exports.submitOrder = async (req, res) => {
 
 exports.cancel=(req,res)=>{
     const id=req.query.orderId
+
     res.redirect(`/api/reason?id=${id}`)
 }
 
 
-exports.cancelMain = (req, res) => {
-    const orderId = req.query.id;
-    orderDb.updateOne({ _id: orderId }, { $set: { status: 'Canceled' } })
-        .then(() => {
-            orderDb.findOne({_id:orderId})   
-            .then(data=>{
-              productdb.updateOne({_id:data.products[0]._id},{$inc:{stock:1}})
-              .then(udata=>{
-                 const transaction = {
-                         date: new Date(),
-                         category: 'deposit',
-                         amount:data.totalAmount,
-                         description:"Order Cancelled"
-                            };
-                                
-                console.log(data.products.price)
-            if(data.takingFromWallet>0){
-            
-             userDb.findOneAndUpdate(
+exports.cancelMain = async (req, res) => {
+    try {
+        const orderId = req.query.id;
+        console.log(orderId)
+        // Fetch order data
+        const data = await orderDb.findOne({ _id: orderId });
+        console.log(data);
+
+        if (!data ) {
+            console.log("Error: No products found in the order");
+            return res.status(400).send("Error: No products found in the order");
+        }
+        await orderDb.updateOne({_id:orderId},{$set:{status:'Canceled'}})
+        await productdb.updateOne({ _id: data.products[0]._id }, { $inc: { stock: 1 } });
+
+        const transaction = {
+            date: new Date(),
+            category: 'deposit',
+            amount: data.totalAmount,
+            description: "Order Cancelled"
+        };
+
+        console.log(data.products.price);
+
+        if (data.takingFromWallet > 0) {
+            // Update user wallet
+            await userDb.findOneAndUpdate(
                 { email: req.session.isAuth },
                 {
-                    $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet)},
+                    $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
                     $push: { 'wallet.transactions': transaction }
                 },
                 { new: true }
-            ).then(data=>{
-                res.redirect(`/user/orders`);
-            })
-        }else{
+            );
+
+            // Redirect after successful update
+            res.redirect(`/user/orders`);
+        } else {
+            // Redirect if no wallet transaction is needed
             res.redirect(`/user/orders`);
         }
-              })
-
-            })
-          
-        })
-        .catch(err => {
-            console.log("Error in catch block:", err);
-            res.send(err);
-        });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
+    }
 };
+
 
 
 exports.changeStatus=(req,res)=>{
@@ -474,7 +485,7 @@ exports.orderRoute= async(req,res)=>{
                 house_no: NewOrder.shippingAddress.house_no,
                 postcode: NewOrder.shippingAddress.postcode,
                 AlternateNumber: NewOrder.shippingAddress.AlternateNumber
-            },
+            }, 
             takingFromWallet:req.session.takingFromWallet,
             PaymentMethod: NewOrder.PaymentMethod
         });
@@ -503,6 +514,7 @@ exports.orderRoute= async(req,res)=>{
         return
    }else{
     const NewOrder=order.orders
+    console.log(NewOrder.products[0] + "  this is the id of i am finding")
     for(let i=0;i<NewOrder.products.length;i++){
         const NewOrder1=new orderDb({
             email: NewOrder.email,
@@ -521,13 +533,18 @@ exports.orderRoute= async(req,res)=>{
             PaymentMethod: NewOrder.PaymentMethod
         })
         await NewOrder1.save()
-        const q = Number(NewOrder.products[i].cartQhantity);
+        const q = Number(NewOrder.products[i].cartQuantity);
+        console.log(NewOrder.products[i].cartQuantity)
+        console.log(q + " this is the q kasdflairjkfddddddddddddddddddddddddjhskafdjs")
+        console.log(NewOrder.products.length)
+        console.log(NewOrder.products[i].prId)
+
         await productdb.updateOne({_id:NewOrder.products[i].prId},{$inc:{stock:-q}}) 
         await cartDb.updateMany({prId:NewOrder.products[i].prId},{$inc:{stock:-q}})
     }
         await cartDb.deleteMany({email:req.session.isAuth})
         console.log("its coming in else case")
-        req.session.paymentMidd='true'
+        req.session.paymentMidd='true' 
         if(req.session.takingFromWallet>0){
             const transaction = {
                 date: new Date(),

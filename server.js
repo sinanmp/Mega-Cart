@@ -46,9 +46,10 @@ app.use("/primg", express.static(path.join(__dirname, "images")));
 app.use("/", require("./server/routes/userRouter"));
 app.use("/", require("./server/routes/adminRouter"))
 
-// app.use((req, res) => {
-//   res.status(404).redirect('/');
-// });
+app.all('*',(req,res)=>{
+  const url= req.url
+  res.status(404).render("404",{url})
+})
 
 
 
