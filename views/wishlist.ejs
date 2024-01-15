@@ -1,6 +1,8 @@
 <!-- include header -->
 <%- include('include/header') %>
 <title>MegaCart Wishlist.net</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- /include header -->
 
 <style>
@@ -56,16 +58,16 @@
                                     </div>
                                     <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
                                         <div class="">
-                                            <select style="width: 100px;" class="form-select me-4">
+                                            <!-- <select style="width: 100px;" class="form-select me-4">
                                                 <option>1</option>
                                                 <option>2</option>
                                                 <option>3</option>
                                                 <option>4</option>
-                                            </select>
+                                            </select> -->
                                         </div>
                                         <div class="">
-                                            <text class="h6">$1156.00</text> <br />
-                                            <small class="text-muted text-nowrap">₹ <%= wishItems[i].price %>/ per item </small>
+                                            <text class="h6"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR'}).format(wishItems[i].price) %></text> <br />
+                                            <small class="text-muted text-nowrap">/ per item </small>
                                         </div>
                                     </div>
                                     <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">

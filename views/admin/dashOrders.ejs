@@ -128,9 +128,11 @@
                                                                             </span></td>
                                                                         <% } %>
                                                                             <td>
+                                                                                <% if(orders[i].status!='Canceled') {%>
                                                                                 <i class="fa-regular fa-pen-to-square"
                                                                                     data-toggle="modal"
                                                                                     data-target="#exampleModal<%= orders[i]._id %>"></i>
+                                                                                    <% } %>
                                                                                 <!-- Modal -->
                                                                                 <div class="modal"
                                                                                     id="exampleModal<%= orders[i]._id %>"

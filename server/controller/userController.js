@@ -481,6 +481,7 @@ exports.addAddress = (req, res) => {
 
 
 //index changing for defaul address changing
+
 exports.changeIndex = (req, res) => {
   const email = req.session.isAuth;
   const adId = req.query.position;
@@ -495,6 +496,8 @@ exports.changeIndex = (req, res) => {
       res.sendStatus(500); 
     });
 };
+
+
 
 
 

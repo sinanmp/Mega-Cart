@@ -315,7 +315,7 @@
                             <% var Odiscount = products[i].price * discount / 100 %>
                             <% var showPrice= products[i].price-Odiscount %>
                         
-                          <p class="card-text" style="margin-left: -8px; font-weight: bolder; font-size: 20px;">₹<%=Math.floor(showPrice)  %>
+                          <p class="card-text" style="margin-left: -8px; font-weight: bolder; font-size: 20px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Math.floor(products[i].discountedPrice)) %>
                               <span
                                 style="font-size: 10px; text-decoration: line-through; font-weight: bolder; opacity: .7;">₹<%=products[i].price %></span>
                           </p>
@@ -354,8 +354,8 @@
                 <h1>No Products</h1>
                 <% } %>
           </div>
-  
-          <hr />
+               
+          <hr/>
   
       
             <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">

@@ -105,7 +105,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     default: 'none',
   },
-  takingFromWallet: Number,
+  takingFromWallet: {
+    type:Number,
+    default:0
+  },
 });
 
 const Order = mongoose.model('Order', orderSchema);

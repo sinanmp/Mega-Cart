@@ -4,9 +4,10 @@ const { users } = require("./adminRender");
 const { response } = require("express");
 
 exports.login = (req, res) => {
+    const authenticationFailed=req.query.authenticationFailed
     const errEmail=req.session.errEmail
     
-    res.render("login",{invalid:req.session.invalidMail,errEmail:errEmail,emailborder:req.session.emailborder,passborder:req.session.passborder},(err,html)=>{
+    res.render("login",{invalid:req.session.invalidMail,errEmail:errEmail,emailborder:req.session.emailborder,passborder:req.session.passborder,authenticationFailed:authenticationFailed},(err,html)=>{
         if(err){
             return
         }
@@ -16,7 +17,7 @@ exports.login = (req, res) => {
         delete req.session.invalidMail
         req.session.registrationError=false
         res.send(html)
-    });
+    }); 
 }
 
 exports.signup = (req, res) => {
@@ -41,12 +42,7 @@ exports.userDeatails = (req, res) => {
     userDb.find({ email: nemail })
         .then(userdata => {
             console.log(userdata)
-            if(req.session.isAuth){
                 res.render("useracDeatails", { users: userdata, a: pos })
-            }else{
-                res.redirect("/login")
-            }
-           
         }).catch(err => {
             console.log(err)
             res.send(err)
@@ -88,6 +84,7 @@ exports.redirectForgot = (req, res) => {
 }
 
 exports.checkout=(req,res)=>{
+    
     req.session.paymentMidd=false
     const userEmail = req.session.isAuth;
     const index=req.query.index || 0
@@ -123,6 +120,7 @@ exports.checkout=(req,res)=>{
             if(!prId){
                 req.session.prLength=prLength
             }
+            console.log(userData + "this is userData for iam finding")
             res.render("checkout", { 
                 userData: userData,
                 total: req.session.totalPriceinPrid, 
@@ -132,6 +130,7 @@ exports.checkout=(req,res)=>{
                 coupenAmount:req.session.coupenAmount ,
                 appliedCoupon: req.session.appliedCoupen
                 });
+            // res.send(userData)
 
         })
       

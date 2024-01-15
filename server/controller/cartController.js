@@ -65,31 +65,40 @@ exports.addtocart = (req, res) => {
 
 
 exports.wishlistToCart=(req,res)=>{
-  const email=req.query.email
   const id=req.query.id
   const stock=req.query.stock
-  cartDb.findOne({email:email,prId:id})
+  cartDb.findOne({email:req.session.isAuth,prId:id})
   .then(cartdata=>{
     if(cartdata){
       console.log("its coming cartdata")
-      cartDb.deleteOne({email:email,prId:id})
+      cartDb.deleteOne({email:req.session.isAuth,prId:id})
       .then(data=>{
         res.redirect(`/wishlist?email=${email}`)
         console.log("data deleted successfully")
       })
     }else{
       productDb.findOne({_id:id})
-      .then(productdata=>{
+      .then(productData=>{
         console.log("its not coming cartdata")
         const cart=new cartDb({      
-          email:email,
-          prId:id,
-          cartQhantity:1
+          email: req.session.isAuth,
+          pname:productData.pname,
+          prId: id,
+          cartQhantity:1,
+          price:productData.price,
+          discount:productData.discount,   
+          description:productData.description,
+          stock:productData.stock,  
+          prd_images:productData.prd_images,
+          category:productData.category,
+          catStatus:productData.catStatus,
+          unlist:productData.unlist,
+          discountedPrice:productData.discountedPrice
         })
         cart.save(cart)
         .then(data=>{
           console.log("its coming also here")
-          res.redirect(`/wishlist?email=${email}`)  
+          res.redirect(`/cart`)  
         })  
       })
     

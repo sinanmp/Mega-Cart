@@ -233,7 +233,7 @@ exports.submitOrder = async (req, res) => {
             unlist: item.unlist,
             catStatus: item.catStatus,
             Ofprice: item.Ofprice,
-            cartQuantity: item.cartQuantity,
+            cartQuantity: item.cartQhantity,
             discountedPrice: item.discountedPrice,
             IndividualStatus: 'pending'
         }));
@@ -413,16 +413,39 @@ exports.cancelMain = async (req, res) => {
 
         console.log(data.products.price);
 
-        if (data.takingFromWallet > 0) {
-            // Update user wallet
-            await userDb.findOneAndUpdate(
-                { email: req.session.isAuth },
-                {
-                    $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
-                    $push: { 'wallet.transactions': transaction }
-                },
-                { new: true }
-            );
+        if (data.takingFromWallet > 0 || data.PaymentMethod=='Online') {
+
+            if(data.takingFromWallet>0){
+                await userDb.findOneAndUpdate(
+                    { email: req.session.isAuth },
+                    {
+                        $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
+                        $push: { 'wallet.transactions': transaction }
+                    },
+                    { new: true }
+                );
+            }else  if(data.PaymentMethod=="Online" && data.takingFromWallet==0){
+                await userDb.findOneAndUpdate(
+                    { email: req.session.isAuth },
+                    {
+                        $inc: { 'wallet.totalAmount': parseInt(data.totalAmount) },
+                        $push: { 'wallet.transactions': transaction }
+                    },  
+                    { new: true }   
+                );
+
+             
+            }else if(data.PaymentMethod=="Online" && data.takingFromWallet>0){
+                await userDb.findOneAndUpdate(
+                    { email: req.session.isAuth },
+                    {
+                        $inc: { 'wallet.totalAmount': parseInt(data.totalAmount-data.takingFromWallet) },
+                        $push: { 'wallet.transactions': transaction }
+                    },
+                    { new: true }
+                );
+            }
+       
 
             // Redirect after successful update
             res.redirect(`/user/orders`);
@@ -438,15 +461,60 @@ exports.cancelMain = async (req, res) => {
 
 
 
-exports.changeStatus=(req,res)=>{
-    const id=req.query.id
-    const status=req.body.exampleRadios
-    orderDb.updateOne({_id:id},{$set:{status:status}})
-    .then(data=>{
-        res.redirect("/admin-order")
-    }).catch(err=>{
-        res.send(err)
-    })
+exports.changeStatus=async(req,res)=>{
+    try {
+        const id=req.query.id
+        const status=req.body.exampleRadios
+       await orderDb.updateOne({_id:id},{$set:{status:status}})
+       const data = await orderDb.findOne({ _id: id });
+       const transaction = {
+        date: new Date(),
+        category: 'deposit',
+        amount: data.totalAmount,
+        description: "Order Cancelled"
+    };
+       console.log(data + "  this is data from status");
+            if(status=='Canceled'){
+                if(data.takingFromWallet>0){
+                    console.log("its coming properly")
+                    await userDb.findOneAndUpdate(
+                        { email: req.session.isAuth },
+                        {
+                            $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
+                            $push: { 'wallet.transactions': transaction }
+                        },
+                        { new: true }
+                    );
+                }else  if(data.PaymentMethod=="Online" && data.takingFromWallet==0){
+                    await userDb.findOneAndUpdate(
+                        { email: req.session.isAuth },
+                        {
+                            $inc: { 'wallet.totalAmount': parseInt(data.totalAmount) },
+                            $push: { 'wallet.transactions': transaction }
+                        },  
+                        { new: true }   
+                    );
+    
+                 
+                }else if(data.PaymentMethod=="Online" && data.takingFromWallet>0){
+                    await userDb.findOneAndUpdate(
+                        { email: req.session.isAuth },
+                        {
+                            $inc: { 'wallet.totalAmount': parseInt(data.totalAmount-data.takingFromWallet) },
+                            $push: { 'wallet.transactions': transaction }
+                        },
+                        { new: true }
+                    );
+                }
+           
+                }
+            res.redirect("/admin-order")
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+        
+    }
+
 }
 
 
@@ -515,11 +583,11 @@ exports.orderRoute= async(req,res)=>{
    }else{
     const NewOrder=order.orders
     console.log(NewOrder.products[0] + "  this is the id of i am finding")
-    for(let i=0;i<NewOrder.products.length;i++){
+   
         const NewOrder1=new orderDb({
             email: NewOrder.email,
             username: NewOrder.username,
-            products: NewOrder.products[i],
+            products: NewOrder.products,
             totalAmount:req.session.totalPriceinPrid,
             shippingAddress: {
                 locality:NewOrder.shippingAddress.locality,
@@ -533,12 +601,8 @@ exports.orderRoute= async(req,res)=>{
             PaymentMethod: NewOrder.PaymentMethod
         })
         await NewOrder1.save()
+        for(let i=0;i<NewOrder.products.length;i++){
         const q = Number(NewOrder.products[i].cartQuantity);
-        console.log(NewOrder.products[i].cartQuantity)
-        console.log(q + " this is the q kasdflairjkfddddddddddddddddddddddddjhskafdjs")
-        console.log(NewOrder.products.length)
-        console.log(NewOrder.products[i].prId)
-
         await productdb.updateOne({_id:NewOrder.products[i].prId},{$inc:{stock:-q}}) 
         await cartDb.updateMany({prId:NewOrder.products[i].prId},{$inc:{stock:-q}})
     }
