@@ -72,23 +72,6 @@
                             <div class="card-body">
                                 <p style="font-size: 12px;" class="card-title">Order ID: <span style="font-weight: bold;"><%= data[i]._id %></span></p>
                                 <% for (let j = 0; j < data[i].products.length; j++) { %>
-                                    <% if (data[i].products[j].cartQuantity >= 2) { %>
-                                            <div class="row gy-3 mt-4">
-                                                <div class="col-2">
-                                                    <img src="/primg/<%= data[i].products[j].prd_images[0] %>" class="img-fluid"
-                                                        style="height: 100px; width: 90px; object-fit: contain;"
-                                                        alt="<%= data[i].products[j].pname %>" />
-                                                </div>
-                                                <div class="col-8 d-flex flex-column align-items-start d-flex justify-content-center">
-                                                    <h6 class="card-subtitle mb-2 text-muted text-center">
-                                                        <%= data[i].products[j].pname %>
-                                                    </h6>
-                                                    <p class="card-text text-muted text-center">
-                                                        <%= data[i].products[j].category %>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                    <% } else { %>
                                         <div class="row gy-3 mt-4">
                                             <div class="col-2">
                                                 <img src="/primg/<%= data[i].products[j].prd_images[0] %>" class="img-fluid"
@@ -104,38 +87,56 @@
                                                 </p>
                                             </div>
                                             <div class="col-12 col-md-2 d-flex align-items-center mt-2 mt-md-0">
-                                              <% if(data[i].products.length==1){ %>
-                                              <% let statusDoc %>
-                                              <% if (data[i].status == "pending" || data[i].status == 'Shipped') { %>
-                                                  <% let pid %>
-                                                  <% if (data[i].prId) { %>
-                                                      <% pid = data[i].prId %>
-                                                  <% } else { %>
-                                                      <% pid = data[i]._id %>
-                                                  <% } %>
-                                                  <a href="" class="btn btn-outline-primary btn-sm">
-                                                      Cancel
-                                                  </a>
-                                              <% } else if (data[i].status == 'Canceled') { %>
-                                                <div class="alert alert-danger" role="alert">
-                                                  Canceled
-                                                </div>
-                                              <% } else if (data[i].status == 'Returned') { %>
-                                                <div class="alert alert-warning" role="alert">
-                                                  Returned
-                                                </div>
-                                              <% } else if (data[i].status == 'Delivered') { %>
-                                                <div class="alert alert-success" role="alert">
-                                                  Delivered
-                                                </div>
-                                              <% } %>
-                                              <% }else{ %>
-                                                
+                                              <% if(data[i].products.length == 1) { %>
+                                                <% let statusDoc %>
+                                                <% if (data[i].status == "pending") { %>
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Placed
+                                                    </div>
+                                                <% } else if(data[i].status == 'Shipped') { %>
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Shipped
+                                                    </div>
+                                                <% } else if (data[i].status == 'Canceled') { %>
+                                                    <div class="alert alert-danger" role="alert">
+                                                        Canceled
+                                                    </div>
+                                                <% } else if (data[i].status == 'Returned') { %>
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Returned
+                                                    </div>
+                                                <% } else if (data[i].status == 'Delivered') { %>
+                                                    <div class="alert alert-success" role="alert">
+                                                        Delivered
+                                                    </div>
                                                 <% } %>
+                                            <% } else { %>
+                                                <% if (data[i].products[j].IndividualStatus == "pending") { %>
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Placed
+                                                    </div>
+                                                <% } else if (data[i].products[j].IndividualStatus == 'Shipped') { %>
+                                                    <div class="alert" style="background-color: lightblue;" role="alert">
+                                                        Shipped
+                                                    </div>
+                                                <% } else if (data[i].products[j].IndividualStatus == 'Canceled') { %>
+                                                    <div class="alert alert-danger" role="alert">
+                                                        Canceled
+                                                    </div>
+                                                <% } else if (data[i].products[j].IndividualStatus == 'Returned') { %>
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Returned
+                                                    </div>
+                                                <% } else if (data[i].products[j].IndividualStatus == 'Delivered') { %>
+                                                    <div class="alert alert-success" role="alert">
+                                                        Delivered
+                                                    </div>
+                                                <% } %>
+                                            <% } %>
+                                            
                                           </div>
                                               
                                         </div>
-                                    <% } %>
                                 <% } %>
                             </div>
                         </div>

@@ -384,7 +384,6 @@ exports.submitOrder = async (req, res) => {
 
 exports.cancel=(req,res)=>{
     const id=req.query.orderId
-
     res.redirect(`/api/reason?id=${id}`)
 }
 
@@ -403,6 +402,17 @@ exports.cancelMain = async (req, res) => {
         }
         await orderDb.updateOne({_id:orderId},{$set:{status:'Canceled'}})
         await productdb.updateOne({ _id: data.products[0]._id }, { $inc: { stock: 1 } });
+
+        for (let i = 0; i < data.products.length; i++) {
+            const updateQuery = {
+              $set: {
+                [`products.${i}.IndividualStatus`]: 'Canceled'
+              }
+            };
+          
+            await orderDb.updateOne({ _id: orderId }, updateQuery);
+          }
+          
 
         const transaction = {
             date: new Date(),
@@ -465,7 +475,17 @@ exports.changeStatus=async(req,res)=>{
     try {
         const id=req.query.id
         const status=req.body.exampleRadios
-       await orderDb.updateOne({_id:id},{$set:{status:status}})
+        const orderData= await orderDb.findByIdAndUpdate({_id:id},{$set:{status:status}})
+        for (let i = 0; i < orderData.products.length; i++) {
+            const updateQuery = {
+              $set: {
+                [`products.${i}.IndividualStatus`]: status
+              }
+            };
+          
+            await orderDb.updateOne({ _id: id }, updateQuery);
+          }
+          
        const data = await orderDb.findOne({ _id: id });
        const transaction = {
         date: new Date(),
@@ -659,3 +679,34 @@ exports.individualOrder=async(req,res)=>{
     const data= await orderDb.findOne({_id:req.query.id})
     res.render("admin/adminSingleOrder",{order:data})
 }
+
+
+exports.singleCancel = async (req, res) => {
+    try {
+        let deleteOrder=true
+      // Update the document with the specified products._id
+      await orderDb.updateOne(
+        { "products._id": req.query.prId },
+        { $set: { "products.$.IndividualStatus": "Canceled" } }
+      );
+  
+      // Find and return the updated document
+      const data = await orderDb.findOne({ "products._id": req.query.prId });
+      for(let i=0;i<data.products.length; i++){
+        if(data.products[i].IndividualStatus=='Canceled'){ 
+            console.log("staus canceled")
+        }else{
+            deleteOrder=false
+        }
+      }
+      if(deleteOrder==true){
+        await orderDb.updateOne({"products._id": req.query.prId },{$set:{status:'Canceled'}})
+      }
+      console.log(data);
+      res.send(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  };
+  

@@ -334,12 +334,10 @@
 	
 
 
-  // Add an image on the right side
-  const imageUrl = 'https://cdn.pixabay.com/photo/2017/02/14/07/54/sale-2065116_960_720.jpg';
+  
   const docWidth = 210;
   const imageWidth = 50;
   const xCoordinate = docWidth - imageWidth - 10;
-  pdf.addImage(imageUrl, 'PNG', xCoordinate, 30, 50, 50);
   pdf.setFont('helvetica', 'bold');
   pdf.setTextColor(255, 0, 0); 
   pdf.text('Mega Cart', xCoordinate + 10, 85); 

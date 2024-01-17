@@ -85,7 +85,7 @@ router.post("/payment",paymentMiddleware,userServices.payment)
 router.post("/order-route",orderController.orderRoute)
 router.get("/cart/count",cartController.cartCountPr)
 router.get("/fetch-order",orderController.fetchOrderD)
-  
+router.get("/cancel/singleProduct",orderController.singleCancel)
 
 //wallet
 router.get("/wallet",isAuthMiddleware,userServices.wallet)

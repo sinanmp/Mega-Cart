@@ -69,34 +69,32 @@
     <p class="text-muted mb-0">Ordered At <span class="fw-bold text-body">12,March 2019</span></p>
   </div>
 </div>
+<% if(order.status=="Shipped" || order.status=='pending'){ %>
 <div style="display: flex; justify-content: center;">
   <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4 w-50">
     <li class="step0 active" id="step1"><span style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
-    <li class="step0 active text-center" id="step2"><span>SHIPPED</span></li>
-    <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">DELIVERED</span></li>
+    <li class="step0  text-center" id="step2"><span>SHIPPED</span></li>
+    <li class="step0  text-muted text-end" id="step3"><span style="margin-right: 22px;">DELIVERED</span></li>
   </ul>
 </div>
+<% }else if(order.status=="Delivered"){ %>
+  <div style="display: flex; justify-content: center;">
+    <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4 w-50">
+      <li class="step0 " id="step1"><span style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
+      <li    class="step0  text-center" id="step2"><span>SHIPPED</span></li>
+      <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">DELIVERED</span></li>
+    </ul>
+  </div>
+  <% }else{ %>
+    <div style="display: flex; justify-content: center; color: red;">
+      <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4 w-50">
+        <li class="step0 " id="step1"><span style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
+        <li  class="step0  text-center" id="step2"><span>SHIPPED</span></li>
+        <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">Canceled</span></li>
+      </ul>
+    </div>
+    <% } %>
 
-<script>
-var orderStatus = "DELIVERED"; 
-function updateProgressBar(status) {
-  for (var i = 1; i <= 3; i++) {
-    document.getElementById('step' + i).classList.remove('active');
-    document.getElementById('step' + i).classList.remove('text-muted');
-  }
-  if (status === 'PLACED') {
-    document.getElementById('step1').classList.add('active');
-  } else if (status === 'SHIPPED') {
-    document.getElementById('step1').classList.add('active');
-    document.getElementById('step2').classList.add('active');
-  } else if (status === 'DELIVERED') {
-    document.getElementById('step1').classList.add('active');
-    document.getElementById('step2').classList.add('active');
-    document.getElementById('step3').classList.add('text-muted');
-  }
-}
-updateProgressBar(orderStatus);
-</script>
 
 
 
@@ -115,7 +113,7 @@ updateProgressBar(orderStatus);
                 <div class="flex-fill">
                   <h5 class="bold"><%=order.products[i].pname  %></h5>
                   <p class="text-muted"> Qt: 1 item</p>
-                  <h4 class="mb-3"> <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.products[i].price) %> <span class="small text-muted"> via (<%=order.PaymentMethod.toUpperCase()  %>) </span></h4>
+                  <h4 class="mb-3"> <%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.products[i].discountedPrice) %> <span class="small text-muted"> via (<%=order.PaymentMethod.toUpperCase()  %>) </span></h4>
                   <p class="text-muted">Tracking Status on: 
                     <span class="text-body currentTime"></span>
                     , Today
@@ -149,11 +147,24 @@ updateProgressBar(orderStatus);
               <% if(order.products.length==1){ %>
               <div class="card-footer1 p-4">
                 <div class="d-flex justify-content-between">
-                  <h5 class="fw-normal mb-0"><a href="#!">Track</a></h5>
                   <div class="border-start h-100"></div>
-                  <h5 class="fw-normal mb-0"><a href="/cancel/order?productId=<%=order.products[i]._id%>&orderId=<%=order._id%>">Cancel</a></h5>
+                  <% if(order.status=='Canceled'){ %>
+                    <h5 class="fw-normal mb-0"><a style="color: lightcoral;" href="#">Canceled</a></h5>
+                    <%} else if(order.status=="Delivered"){ %>
+                      <h5 class="fw-normal mb-0"><a href="">Return</a></h5>
+                  <% }else{ %>
+                    <h5 class="fw-normal mb-0"><a href="/cancel/order?productId=<%=order.products[i]._id%>&orderId=<%=order._id%>">Cancel</a></h5>
+                    <% } %>
                   <div class="border-start h-100"></div>
-                  <h5 class="fw-normal mb-0"><a href="#!">Pre-pay</a></h5>
+                  <% if(order.PaymentMethod=='cod') {%>
+                  <h5 class="fw-normal mb-0"><a href="#!">Pre-pay <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
+                  <% }else{ %>
+                    <% if(order.status=='Canceled'){ %>
+                      <h5 class="fw-normal mb-0"><a style="color:lightcoral;" href="/wallet">Credited To Wallet <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
+                      <% }else{ %>
+                    <h5 class="fw-normal mb-0"><a style="color:lightgreen;" href="#!">Payment Completed <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
+                    <% } %>
+                    <% } %>
                   <div class="border-start h-100"></div>
                   <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i class="fas fa-ellipsis-v"></i></a>
                   </h5>
@@ -161,7 +172,23 @@ updateProgressBar(orderStatus);
               </div>
               <% }else{  %>
                 <div class="d-flex justify-content-end">
-                  <button class="btn" style="background-color: #392539; color: white;">Cancle</button>
+                  <% if(order.status=='Canceled'){ %>
+                    <div class="alert alert-danger" role="alert">
+                      Cancelled
+                    </div>
+                  <% }else if(order.status=='Delivered'){ %>
+                    <button class="btn" style="background-color: antiquewhite; color: black;">Return</button>
+                    <% }else if(order.status=='pending' || order.status=='Shipped'){ %>
+                      <% if(order.products[i].IndividualStatus=="Canceled"){ %>
+                        <div class="alert alert-danger" role="alert">
+                          Cancelled
+                        </div>
+                        <% }else{ %>
+                      <a href="/cancel/singleProduct?prId=<%=order.products[i]._id  %>">
+                        <button class="btn" style="background-color: #392539; color: white;">Cancel</button>
+                      </a>
+                      <% } %>
+                      <% } %>
                 </div>
                 <% } %>
     
@@ -171,6 +198,10 @@ updateProgressBar(orderStatus);
       </div>
     </div>
   </section>
+
+  <script>
+    
+  </script>
   
   
   <% } %>
@@ -178,16 +209,36 @@ updateProgressBar(orderStatus);
 <div class="card-footer p-3">
   <div class="d-flex justify-content-lg-center gap-5">
     <h5 class="fw-normal mb-0"><a href="#!" style="color: #BF7DC1;">Track</a></h5>
-    <h5 class="fw-normal mb-0"><a href="#!" style="color: #BF7DC1;">Cancel All Orders</a></h5>
+    <% if(order.status=='pending' || order.status=='Shipped'){ %>
+    <h5 class="fw-normal mb-0"><a href="/cancel/order?orderId=<%=order._id%>" style="color: #BF7DC1;">Cancel All</a></h5>
+    <% }else if(order.status=='Delivered') {%>
+      <h5 class="fw-normal mb-0"><a href="" style="color: #BF7DC1;">Return All</a></h5>
+      <% } %>
     <% if(order.PaymentMethod=='cod'){ %>
+      <% if(order.status!="Canceled"){ %>
     <h5 class="fw-normal mb-0"><a href="#!" style="color: #BF7DC1;">Pre-pay <span style="color: white; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
+    <% }else{ %> 
+      <h5 class="fw-normal mb-0"><a href="#!" style="color: crimson; font-weight: 500; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Order Canceled</a></h5>
+      <% } %>
     <% }else{ %>
-      <h5 class="fw-normal mb-0"><a href="#!" style="color: green;">Payment Completed</a></h5>
+      <% if(order.status=='Canceled'){ %>
+        <h5 class="fw-normal mb-0"><a href="#!" style="color: green;">Credited to Wallet <span style="color: aliceblue;"><%=order.totalAmount  %></span></a></h5>
+      <% }else{ %>
+        <h5 class="fw-normal mb-0"><a href="#!" style="color: green;">Payment Completed</a></h5>
+        <% } %>
       <% } %>
     <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i class="fas fa-ellipsis-v"></i></a></h5>
   </div>
 </div>
 <% } %>
+
+<script>
+  if('<%=order.status%>'=='Shipped'){
+    document.getElementById("step2").classList.add('active')
+  }else if('<%=order.status%>'=='pending'){
+    document.getElementById("step2").classList.remove('active')
+  }
+</script>
 
 
   <!-- Add the following CSS to your styles.css file --> 
@@ -262,16 +313,16 @@ z-index: -1;
 }
 
 #progressbar-1 li:nth-child(2):after {
-left:50%
+left:10%
 }
 
 #progressbar-1 li:nth-child(1):after {
-left: 25%;
+left: 19%;
 width: 121%
 }
 
 #progressbar-1 li:nth-child(3):after {
-  left: -60%;
+  left: -51%;
 width: 141%;
 }
 
@@ -284,3 +335,24 @@ background: #BF7DC1;
 z-index: 0
 }
 </style>
+
+
+<% if(order.status=="Canceled"){ %>
+  <style>
+    #progressbar-1 li:after {
+      background: red;
+    }
+    #progressbar-1 li:before {
+      background-color: rgb(81, 15, 15);
+    }
+  </style>
+  <% }else if(order.status=='Delivered'){ %>
+    <style>
+      #progressbar-1 li:after {
+        background: lightgreen;
+      }
+      #progressbar-1 li:before {
+        background-color: lightgreen;
+      }
+    </style>
+  <% } %>

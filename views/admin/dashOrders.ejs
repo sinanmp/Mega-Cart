@@ -108,7 +108,7 @@
                                                                 <%=orders[i].status %>
                                                             </span></td>
                                                         <% }else if(orders[i].status=='Shipped' ){ %>
-                                                            <td><span class="status shipped">
+                                                            <td><span class="status pending">
                                                                     <%=orders[i].status %>
                                                                 </span></td>
                                                             <% }else if(orders[i].status=='Delivered' ){ %>
@@ -118,7 +118,7 @@
                                                                     </span></td>
                                                                 <% }else if(orders[i].status=='Canceled' ){ %>
                                                                     <td><span class="status"
-                                                                            style="background-color: red;">
+                                                                            style="background-color: lightcoral;">
                                                                             <%=orders[i].status %>
                                                                         </span></td>
                                                                     <% }else if(orders[i].status=='Returned' ){ %>
@@ -177,19 +177,36 @@
                                                                                                         </label>
                                                                                                     </div>
                                                                                                     <div
+                                                                                                    class="form-check">
+                                                                                                    <input
+                                                                                                        class="form-check-input"
+                                                                                                        type="radio"
+                                                                                                        name="exampleRadios"
+                                                                                                        id="option2"
+                                                                                                        value="Shipped"
+                                                                                                        <%=orders[i].status==='Shipped'
+                                                                                                        ? 'checked'
+                                                                                                        : '' %>>
+                                                                                                    <label
+                                                                                                        class="form-check-label"
+                                                                                                        for="option2">
+                                                                                                        Shipped
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                                    <div
                                                                                                         class="form-check">
                                                                                                         <input
                                                                                                             class="form-check-input"
                                                                                                             type="radio"
                                                                                                             name="exampleRadios"
-                                                                                                            id="option2"
+                                                                                                            id="option3"
                                                                                                             value="Delivered"
                                                                                                             <%=orders[i].status==='Delivered'
                                                                                                             ? 'checked'
                                                                                                             : '' %>>
                                                                                                         <label
                                                                                                             class="form-check-label"
-                                                                                                            for="option2">
+                                                                                                            for="option3">
                                                                                                             Delivered
                                                                                                         </label>
                                                                                                     </div>
@@ -199,14 +216,14 @@
                                                                                                             class="form-check-input"
                                                                                                             type="radio"
                                                                                                             name="exampleRadios"
-                                                                                                            id="option3"
+                                                                                                            id="option4"
                                                                                                             value="Canceled"
                                                                                                             <%=orders[i].status==='Canceled'
                                                                                                             ? 'checked'
                                                                                                             : '' %>>
                                                                                                         <label
                                                                                                             class="form-check-label"
-                                                                                                            for="option3">
+                                                                                                            for="option4">
                                                                                                             Canceled
                                                                                                         </label>
                                                                                                     </div>
@@ -216,14 +233,14 @@
                                                                                                             class="form-check-input"
                                                                                                             type="radio"
                                                                                                             name="exampleRadios"
-                                                                                                            id="option4"
+                                                                                                            id="option5"
                                                                                                             value="Returned"
                                                                                                             <%=orders[i].status==='Returned'
                                                                                                             ? 'checked'
                                                                                                             : '' %>>
                                                                                                         <label
                                                                                                             class="form-check-label"
-                                                                                                            for="option4">
+                                                                                                            for="option5">
                                                                                                             Returned
                                                                                                         </label>
                                                                                                     </div>
