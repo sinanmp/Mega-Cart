@@ -759,10 +759,114 @@ exports.singleCancel = async (req, res) => {
         await orderDb.updateOne({"products._id": req.query.prId },{$set:{status:'Canceled'}})
       }
       console.log(data);
-      res.send(data);
+      res.redirect("/order/list/user")
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal Server Error");
     }
   };
   
+
+
+  exports.returnOrder=async(req,res)=>{
+    const id= req.query.id
+    const prId = req.query.prId
+    try {
+        let ReturnedOrder=true
+
+        await orderDb.updateOne(
+            { "products._id": prId },
+            { $set: { "products.$.IndividualStatus": "Returned" } }
+          );
+
+          const data = await orderDb.findOne({ "products._id": prId });
+          await orderDb.updateOne({_id:id},{$set:{status:'Canceled'}})
+          for(let i=0;i<data.products.length; i++){
+            if(data.products[i].IndividualStatus=='Returned'){ 
+                console.log("staus returned")
+            }else{
+                ReturnedOrder=false
+            }
+          }
+
+          if(ReturnedOrder==true){
+            await orderDb.updateOne({"products._id": req.query.prId },{$set:{status:'Returned'}})
+          }
+
+
+
+          if(data.takingFromWallet>0 && data.PaymentMethod=='Online'){
+            const transaction = {
+                date: new Date(),
+                category: 'deposit',
+                amount: data.takingFromWallet+data.totalAmount,
+                description: "Order Returned"
+            };
+            await userDb.findOneAndUpdate(
+                { email: req.session.isAuth },
+                {
+                    $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet+data.totalAmount) },
+                    $push: { 'wallet.transactions': transaction }
+                },
+                { new: true }
+            );
+        }
+         else if(data.PaymentMethod=="complete from Wallet"){
+            const transaction = {
+                date: new Date(),
+                category: 'deposit',
+                amount: data.takingFromWallet,
+                description: "Order Returned"
+            };
+            console.log(data.takingFromWallet, data.PaymentMethod , 'its coming ')
+            await userDb.findOneAndUpdate(
+                { email: req.session.isAuth },
+                {
+                    $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
+                    $push: { 'wallet.transactions': transaction }
+                },  
+                { new: true }   
+            );
+
+         
+        }else if(data.PaymentMethod=="cod" && data.takingFromWallet>0){
+            const transaction = {
+                date: new Date(),
+                category: 'deposit',
+                amount: data.takingFromWallet,
+                description: "Order Returned"
+            };
+            await userDb.findOneAndUpdate(
+                { email: req.session.isAuth },
+                {
+                    $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
+                    $push: { 'wallet.transactions': transaction }
+                },
+                { new: true }
+            );
+        }else if(data.PaymentMethod=='Online'){
+            const transaction = {
+                date: new Date(),
+                category: 'deposit',
+                amount: data.totalAmount,
+                description: "Order Returned"
+            };
+            await userDb.findOneAndUpdate(
+                { email: req.session.isAuth },
+                {
+                    $inc: { 'wallet.totalAmount': parseInt(data.totalAmount) },
+                    $push: { 'wallet.transactions': transaction }
+                },
+                { new: true }
+            ); 
+        }
+
+          res.redirect("/user/orders")
+
+
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+
+  }

@@ -85,15 +85,23 @@
       <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">DELIVERED</span></li>
     </ul>
   </div>
-  <% }else{ %>
+  <% }else if(order.status=="Returned"){ %>
     <div style="display: flex; justify-content: center; color: red;">
       <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4 w-50">
         <li class="step0 " id="step1"><span style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
         <li  class="step0  text-center" id="step2"><span>SHIPPED</span></li>
-        <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">Canceled</span></li>
+        <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">Returned</span></li>
       </ul>
     </div>
-    <% } %>
+    <% }else{ %>
+      <div style="display: flex; justify-content: center; color: red;">
+        <ul id="progressbar-1" class="mx-0 mt-0 mb-5 px-0 pt-0 pb-4 w-50">
+          <li class="step0 " id="step1"><span style="margin-left: 22px; margin-top: 12px;">PLACED</span></li>
+          <li  class="step0  text-center" id="step2"><span>SHIPPED</span></li>
+          <li class="step0 text-muted text-end" id="step3"><span style="margin-right: 22px;">Canceled</span></li>
+        </ul>
+      </div>
+      <% } %>
 
 
 
@@ -149,21 +157,25 @@
                 <div class="d-flex justify-content-between">
                   <div class="border-start h-100"></div>
                   <% if(order.status=='Canceled'){ %>
-                    <h5 class="fw-normal mb-0"><a style="color: lightcoral;" href="#">Canceled</a></h5>
+                    <h5 class="fw-normal mb-0"><a style="color: lightcoral;" href="">Canceled</a></h5>
                     <%} else if(order.status=="Delivered"){ %>
-                      <h5 class="fw-normal mb-0"><a href="">Return</a></h5>
-                  <% }else{ %>
-                    <h5 class="fw-normal mb-0"><a href="/cancel/order?productId=<%=order.products[i]._id%>&orderId=<%=order._id%>">Cancel</a></h5>
-                    <% } %>
+                      <h5 class="fw-normal mb-0"><a href="/return/order?prId=<%=order.products[i]._id%>&id=<%=order._id%>">Return</a></h5>
+                  <% }else if(order.status=='Returned'){ %>
+                    <h5 class="fw-normal mb-0"><a href="">Returned</a></h5>
+                    <% }else{ %>
+                      <h5 class="fw-normal mb-0"><a href="/cancel/order?productId=<%=order.products[i]._id%>&orderId=<%=order._id%>">Cancel</a></h5>
+                      <% } %>
                   <div class="border-start h-100"></div>
                   <% if(order.PaymentMethod=='cod') {%>
                   <h5 class="fw-normal mb-0"><a href="#!">Pre-pay <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
                   <% }else{ %>
                     <% if(order.status=='Canceled'){ %>
                       <h5 class="fw-normal mb-0"><a style="color:lightcoral;" href="/wallet">Credited To Wallet <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
-                      <% }else{ %>
-                    <h5 class="fw-normal mb-0"><a style="color:lightgreen;" href="#!">Payment Completed <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
-                    <% } %>
+                      <% }else if(order.status=="Returned"){ %>
+                        <h5 class="fw-normal mb-0"><a style="color:lightcoral;" href="/wallet">Credited To Wallet <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
+                    <% }else{ %>
+                      <h5 class="fw-normal mb-0"><a style="color:lightgreen;" href="#!">Payment Completed <span style="color: black; font-size: 15px; margin-left: 5px;"><%= new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR',maximumFractionDigits: 0 }).format(order.totalAmount) %></span></a></h5>
+                      <% } %>
                     <% } %>
                   <div class="border-start h-100"></div>
                   <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i class="fas fa-ellipsis-v"></i></a>
@@ -353,6 +365,15 @@ z-index: 0
       }
       #progressbar-1 li:before {
         background-color: lightgreen;
+      }
+    </style>
+  <% }else if(order.status=='Returned'){ %>
+    <style>
+      #progressbar-1 li:after {
+        background: lightsalmon;
+      }
+      #progressbar-1 li:before {
+        background-color: lightsalmon;
       }
     </style>
   <% } %>
