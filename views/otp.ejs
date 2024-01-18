@@ -79,21 +79,24 @@
           <body>
 
             <form action="/verify/api" method="post">
-              <div class="otp-field mb-1">
+              <div class="otp-field mb-4">
                 <input type="number" name="otp1" />
                 <input type="number" name="otp2" disabled />
                 <input type="number" name="otp3" disabled />
                 <input type="number" name="otp4" disabled />
               </div>
-              <div class="otp-timer mb-3" id="otp-timer">Time remaining:</div>
+              <!-- <div class="otp-timer mb-3" id="otp-timer">Time remaining:</div>
               <a href="/resend/otp?email=<%=user %>" class="mb-3" id="resend" onclick="resendlife()"
                 style="display: none;">
                 <p style="color: black;">resend OTP</p>
-              </a>
+              </a> -->
 
               <button type="submit" style="background-color: #392539; color: white;" class="btn  mb-3">
                 Verify
               </button>
+              <% if(invalid){ %>
+                <p style="color: red;">incorrect otp</p>
+                <% } %>
             </form>
 
           </body>
@@ -103,8 +106,8 @@
 
 
 
-          <p class="resend text-muted mb-0">
-            Didn't receive code? <a href="">Request again</a>
+          <p class="resend text-muted mb-0" style="color: #007bff;">
+            Didn't receive code? <div class="otp-timer mb-3" id="otp-timer">Time remaining:</div> <a href="/resend/otp?email=<%=user %>" id="resend" style="display: none;">Request again</a>
           </p>
         </div>
       </div>
@@ -127,7 +130,7 @@
 
 
 <script>
-  var timeLeft = 59
+  var timeLeft = 30
 
 
   var elem = document.getElementById('otp-timer');

@@ -118,7 +118,8 @@
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown" >
                 <% for(let i=0;i<catogories.length;i++){ %>
                   <li>
-                    <a class="dropdown-item" style="background-color: #756275;" href="/our-store?search=<%= searchQuery %>&catFilter=<%= catogories[i].name %>"><%=catogories[i].name  %></a>
+                    <a class="dropdown-item" style="background-color: #756275;" href="/our-store?search=<%= searchQuery %>&catFilter=<%= catogories[i].name %>"><%= catogories[i].name.charAt(0).toUpperCase() + catogories[i].name.slice(1).toLowerCase() %>
+                    </a>
                   </li>
                   <% } %>
               </ul>
@@ -185,7 +186,7 @@
                         <% for(let i=0; i < catogories.length; i++) { %>
                             <li>
                                 <a href="/our-store?search=<%= searchQuery %>&catFilter=<%= catogories[i].name %>" class="text-dark">
-                                    <%= catogories[i].name %>
+                                  <%= catogories[i].name.charAt(0).toUpperCase() + catogories[i].name.slice(1).toLowerCase() %>
                                 </a>
                             </li>
                         <% } %>

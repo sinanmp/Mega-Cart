@@ -43,7 +43,7 @@
 							<%=i+1 %>
 						</th>
 						<td>
-							<%=category[i].name %>
+							<%= category[i].name.charAt(0).toUpperCase() + category[i].name.slice(1).toLowerCase() %>
 						</td>
 						<td>
 							<a href='/delete/cat?catName=<%=category[i].name %>'>

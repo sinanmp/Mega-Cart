@@ -394,7 +394,7 @@ exports.cancelMain = async (req, res) => {
         console.log(orderId)
         // Fetch order data
         const data = await orderDb.findOne({ _id: orderId });
-        console.log(data);
+        console.log(data.takingFromWallet, data.PaymentMethod , 'its coming ')
 
         if (!data ) {
             console.log("Error: No products found in the order");
@@ -414,18 +414,49 @@ exports.cancelMain = async (req, res) => {
           }
           
 
-        const transaction = {
-            date: new Date(),
-            category: 'deposit',
-            amount: data.totalAmount,
-            description: "Order Cancelled"
-        };
-
         console.log(data.products.price);
+          
+            if(data.takingFromWallet>0 && data.PaymentMethod=='Online'){
+                const transaction = {
+                    date: new Date(),
+                    category: 'deposit',
+                    amount: data.takingFromWallet+data.totalAmount,
+                    description: "Order Cancelled"
+                };
+                await userDb.findOneAndUpdate(
+                    { email: req.session.isAuth },
+                    {
+                        $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet+data.totalAmount) },
+                        $push: { 'wallet.transactions': transaction }
+                    },
+                    { new: true }
+                );
+            }
+             else if(data.PaymentMethod=="complete from Wallet"){
+                const transaction = {
+                    date: new Date(),
+                    category: 'deposit',
+                    amount: data.takingFromWallet,
+                    description: "Order Cancelled"
+                };
+                console.log(data.takingFromWallet, data.PaymentMethod , 'its coming ')
+                await userDb.findOneAndUpdate(
+                    { email: req.session.isAuth },
+                    {
+                        $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
+                        $push: { 'wallet.transactions': transaction }
+                    },  
+                    { new: true }   
+                );
 
-        if (data.takingFromWallet > 0 || data.PaymentMethod=='Online') {
-
-            if(data.takingFromWallet>0){
+             
+            }else if(data.PaymentMethod=="cod" && data.takingFromWallet>0){
+                const transaction = {
+                    date: new Date(),
+                    category: 'deposit',
+                    amount: data.takingFromWallet,
+                    description: "Order Cancelled"
+                };
                 await userDb.findOneAndUpdate(
                     { email: req.session.isAuth },
                     {
@@ -434,35 +465,24 @@ exports.cancelMain = async (req, res) => {
                     },
                     { new: true }
                 );
-            }else  if(data.PaymentMethod=="Online" && data.takingFromWallet==0){
+            }else if(data.PaymentMethod=='Online'){
+                const transaction = {
+                    date: new Date(),
+                    category: 'deposit',
+                    amount: data.totalAmount,
+                    description: "Order Cancelled"
+                };
                 await userDb.findOneAndUpdate(
                     { email: req.session.isAuth },
                     {
                         $inc: { 'wallet.totalAmount': parseInt(data.totalAmount) },
                         $push: { 'wallet.transactions': transaction }
-                    },  
-                    { new: true }   
-                );
-
-             
-            }else if(data.PaymentMethod=="Online" && data.takingFromWallet>0){
-                await userDb.findOneAndUpdate(
-                    { email: req.session.isAuth },
-                    {
-                        $inc: { 'wallet.totalAmount': parseInt(data.totalAmount-data.takingFromWallet) },
-                        $push: { 'wallet.transactions': transaction }
                     },
                     { new: true }
-                );
+                ); 
             }
-       
 
-            // Redirect after successful update
             res.redirect(`/user/orders`);
-        } else {
-            // Redirect if no wallet transaction is needed
-            res.redirect(`/user/orders`);
-        }
     } catch (error) {
         console.error("Error:", error);
         res.status(500).send("Internal Server Error");
@@ -493,10 +513,51 @@ exports.changeStatus=async(req,res)=>{
         amount: data.totalAmount,
         description: "Order Cancelled"
     };
-       console.log(data + "  this is data from status");
+
+    
             if(status=='Canceled'){
-                if(data.takingFromWallet>0){
-                    console.log("its coming properly")
+                console.log("its coming inside the cancel condition")
+                if(data.takingFromWallet>0 && data.PaymentMethod=='Online'){
+                    const transaction = {
+                        date: new Date(),
+                        category: 'deposit',
+                        amount: data.takingFromWallet+data.totalAmount,
+                        description: "Order Cancelled"
+                    };
+                    await userDb.findOneAndUpdate(
+                        { email: req.session.isAuth },
+                        {
+                            $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet+data.totalAmount) },
+                            $push: { 'wallet.transactions': transaction }
+                        },
+                        { new: true }
+                    );
+                }
+                 else if(data.PaymentMethod=="complete from Wallet"){
+                    const transaction = {
+                        date: new Date(),
+                        category: 'deposit',
+                        amount: data.takingFromWallet,
+                        description: "Order Cancelled"
+                    };
+                    console.log(data.takingFromWallet, data.PaymentMethod , 'its coming ')
+                    await userDb.findOneAndUpdate(
+                        { email: req.session.isAuth },
+                        {
+                            $inc: { 'wallet.totalAmount': parseInt(data.takingFromWallet) },
+                            $push: { 'wallet.transactions': transaction }
+                        },  
+                        { new: true }   
+                    );
+    
+                 
+                }else if(data.PaymentMethod=="cod" && data.takingFromWallet>0){
+                    const transaction = {
+                        date: new Date(),
+                        category: 'deposit',
+                        amount: data.takingFromWallet,
+                        description: "Order Cancelled"
+                    };
                     await userDb.findOneAndUpdate(
                         { email: req.session.isAuth },
                         {
@@ -505,28 +566,23 @@ exports.changeStatus=async(req,res)=>{
                         },
                         { new: true }
                     );
-                }else  if(data.PaymentMethod=="Online" && data.takingFromWallet==0){
+                }else if(data.PaymentMethod=='Online'){
+                    const transaction = {
+                        date: new Date(),
+                        category: 'deposit',
+                        amount: data.totalAmount,
+                        description: "Order Cancelled"
+                    };
                     await userDb.findOneAndUpdate(
                         { email: req.session.isAuth },
                         {
                             $inc: { 'wallet.totalAmount': parseInt(data.totalAmount) },
                             $push: { 'wallet.transactions': transaction }
-                        },  
-                        { new: true }   
-                    );
-    
-                 
-                }else if(data.PaymentMethod=="Online" && data.takingFromWallet>0){
-                    await userDb.findOneAndUpdate(
-                        { email: req.session.isAuth },
-                        {
-                            $inc: { 'wallet.totalAmount': parseInt(data.totalAmount-data.takingFromWallet) },
-                            $push: { 'wallet.transactions': transaction }
                         },
                         { new: true }
-                    );
+                    ); 
                 }
-           
+    
                 }
             res.redirect("/admin-order")
     } catch (error) {

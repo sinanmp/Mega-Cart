@@ -129,11 +129,9 @@ exports.create = (req, res) => {
         });
         users.save()
           .then(data => {
-            setTimeout(() => {
               //calling function for otp and sending user email
               sendOTPVerificationeEmail(data.email);
-              res.render("otp", { user: email });
-            }, 1000);
+              res.redirect("/user/verify");
 
           })
           .catch(err => {
@@ -323,32 +321,39 @@ exports.singlePrd = (req, res) => {
 //ort verification route
 exports.verify = (req, res) => {
   const bodyOtp = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4
+  console.log(bodyOtp)
   otpDb.findOne({ otp: bodyOtp })
     .then(data => {
-      console.log(data.expiresAt)
-      if (data.expiresAt > Date.now()) {
-        userDb.findOne({ email: data.email })
-          .then(userData => {
-            console.log(userData)
-            userDb.updateOne({ email: data.email }, { $set: { status: "Active", verified: true } })
-              .then(data => {
-                otpDb.deleteOne({ otp: bodyOtp }).then(data => {
-                  console.log(userData.email);
-                  req.session.isAuth = userData.email
-                  res.redirect('/');
+      if(data){
+        if (data.expiresAt > Date.now()) {
+          userDb.findOne({ email: data.email })
+            .then(userData => {
+              console.log(userData)
+              userDb.updateOne({ email: data.email }, { $set: { status: "Active", verified: true } })
+                .then(data => {
+                  otpDb.deleteOne({ otp: bodyOtp }).then(data => {
+                    console.log(userData.email);
+                    req.session.isAuth = userData.email
+                    res.redirect('/');
+                  }).catch(err => {
+                    res.send(err)
+                  })
                 }).catch(err => {
                   res.send(err)
                 })
-              }).catch(err => {
-                res.send(err)
-              })
-          })
-      } else {
-        res.send("otp time finished")
-        console.log("else error")
+            })
+        } else {
+          res.send("otp time finished")
+          console.log("else error")
+        }
+      }else{
+        req.session.invalidOtp=true
+        res.redirect("/user/verify")
       }
+
     }).catch(err => {
       console.log(err)
+      res.send(err)
     })
 
 }
@@ -357,7 +362,13 @@ exports.verify = (req, res) => {
 exports.userverify = (req, res) => {
   const qemail = req.query.email
   sendOTPVerificationeEmail(qemail);
-  res.render("otp", { user: qemail });
+  res.render("otp", { user: qemail ,invalid:req.session.invalidOtp},(error,html)=>{
+    if(error){
+      return res.send("server Error").status(500)
+    }
+    delete req.session.invalidOtp
+    res.send(html)
+  });
 }
 
 

@@ -40,8 +40,9 @@ exports.addCategory = (req, res) => {
 
 
 exports.addCatPost = (req, res) => {
+    const category = req.body.categoryName.toLowerCase();
     cat = new catogorydb({
-        name: req.body.categoryName
+        name: category
     })
 
     cat.save()

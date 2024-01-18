@@ -13,7 +13,6 @@ router.get('/', userController.userHome)//home
 router.get('/login', userServices.login)
 router.get('/signup', userServices.signup);
 router.get("/userDetails",isAuthMiddleware, userServices.userDeatails)
-router.get("/otp", userServices.otpRender)
 
 
 router.get("/take/productPrice",userController.takeProductPrice)
