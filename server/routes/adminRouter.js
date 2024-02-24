@@ -30,15 +30,7 @@ router.post("/get/chart",adminController.getChart)
 
 
 //product managment
-router.get("/admin-products", adminAuthMiddleware.adminIsAuth, productController.products)
-router.post("/api/add-product", upload, productController.addProduct);
-router.get("/updateProduct", productController.updateProcduct)
-router.post("/api/update/product", productController.productUpdate)
-router.get("/api/delete/product", productController.deleteProduct)
-router.get("/unlist/api", productController.unlist)
-router.get("/remove/unlist", productController.removeUnlist)
-router.get("/api/block", adminController.block);
-router.get("/user-details", adminServices.usersDetails);
+ 
 
 //order managment
 router.post("/change/status", orderController.changeStatus)

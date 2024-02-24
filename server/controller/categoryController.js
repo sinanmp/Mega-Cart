@@ -40,17 +40,27 @@ exports.addCategory = (req, res) => {
 
 
 exports.addCatPost = (req, res) => {
-    const category = req.body.categoryName.toLowerCase();
+    const category = req.body.categoryName.toLowerCase();   
+
+   
     cat = new catogorydb({
         name: category
     })
 
-    cat.save()
-        .then(data => {
-            res.redirect("/category/api")
-        }).catch(err => {
+    catogorydb.findOne({name:category})
+    .then(data=>{
+        if(data){
             res.send("<script>alert('This catogery is already You Added!'); window.location='/add/category';</script>");
-        })
+        }else{
+            cat.save()
+            .then(data => {
+                res.redirect("/category/api")
+            }).catch(err => {
+                res.send("<script>alert('something wrong in server side!'); window.location='/add/category';</script>");
+            })
+        }
+    })
+
 }
 
 

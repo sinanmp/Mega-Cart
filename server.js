@@ -26,10 +26,8 @@ app.use(session({
 
 
 app.use(methodOverride('_method'));
-  
 
 const PORT = process.env.PORT || 5000;
-
 app.use(bodyparser.urlencoded({ extended: true }));
 
 //setting view engine 

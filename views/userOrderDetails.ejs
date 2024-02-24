@@ -159,7 +159,7 @@
                   <% if(order.status=='Canceled'){ %>
                     <h5 class="fw-normal mb-0"><a style="color: lightcoral;" href="">Canceled</a></h5>
                     <%} else if(order.status=="Delivered"){ %>
-                      <h5 class="fw-normal mb-0"><a href="/return/order?prId=<%=order.products[i]._id%>&id=<%=order._id%>">Return</a></h5>
+                      <h5 class="fw-normal mb-0"><a href="/return/order?prId=<%=order.products[i]._id%>&&id=<%=order._id%>">Return</a></h5>
                   <% }else if(order.status=='Returned'){ %>
                     <h5 class="fw-normal mb-0"><a href="">Returned</a></h5>
                     <% }else{ %>
