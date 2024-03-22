@@ -3,6 +3,7 @@ const app = express();
 const dotenv = require("dotenv");
 const bodyparser = require("body-parser");
 const path = require("path");
+const cors = require('cors')
 dotenv.config()
 const methodOverride = require('method-override');
 const connectDB = require("./server/database/connection");
