@@ -42,6 +42,7 @@ app.use("/img", express.static(path.join(__dirname, "assets/img")));
 app.use("/primg", express.static(path.join(__dirname, "images")));
 
 app.use("/", require("./server/routes/userRouter"));
+app.use("/", require("./server/routes/tudoRouter"));
 app.use("/", require("./server/routes/adminRouter"))
 
 app.all('*',(req,res)=>{
