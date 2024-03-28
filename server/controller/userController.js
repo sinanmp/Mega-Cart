@@ -391,6 +391,8 @@ exports.ourStore = (req, res) => {
   if(req.query.fromapp){
     productDb.find().then(data=>{
       res.json(data)
+    }).catch(error=>{
+      res.json(error)
     })
   }
 
