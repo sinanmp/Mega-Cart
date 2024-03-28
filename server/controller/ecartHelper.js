@@ -74,7 +74,7 @@ exports.ecartLogin=async(req,res)=>{
 
 exports.addtocart=async(req,res)=>{
     try {
-       const data = await userDb.updateOne({email:req.query.email} ,{$push:{ecartCart:req.query.productId}})
+       const data = await userDb.updateOne({email:req.body.email} ,{$push:{ecartCart:req.body.productId}})
         res.send("product added to cart",data)
     } catch (error) {
         res.send(error)

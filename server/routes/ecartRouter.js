@@ -8,7 +8,7 @@ router.post('/addProduct',ecartController.addProduct)
 router.get("/getProducts",ecartController.getProducts)
 router.post("/ecartUser",ecartController.ecartUser)
 router.post("/ecartLogin",ecartController.ecartLogin)
-router.get('/ecartAddToCart',ecartController.addtocart)
+router.post('/ecartAddToCart',ecartController.addtocart)
 router.get("/ecartCartPage",ecartController.cart)
 
 module.exports = router;
