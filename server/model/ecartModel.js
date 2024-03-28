@@ -11,5 +11,5 @@ const EcartSchema = new mongoose.Schema({
       catogery:String
 });
 
-const ecartDb = new mongoose.model("ecartDb", CouponSchema);
+const ecartDb = new mongoose.model("ecartDb", EcartSchema);
 module.exports = ecartDb;
