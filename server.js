@@ -54,6 +54,7 @@ app.use("/primg", express.static(path.join(__dirname, "images")));
 app.use("/", require("./server/routes/userRouter"));
 app.use("/", require("./server/routes/tudoRouter"));
 app.use("/", require("./server/routes/adminRouter"))
+app.use("/", require("./server/routes/ecartRouter"))
 
 app.all('*',(req,res)=>{
   const url= req.url
