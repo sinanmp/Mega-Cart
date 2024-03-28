@@ -45,6 +45,9 @@ var schema = new mongoose.Schema({
                 description:String
             }
         ]
+    },
+    ecartCart : {
+        type: Array
     }
     
 

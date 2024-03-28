@@ -69,3 +69,38 @@ exports.ecartLogin=async(req,res)=>{
         res.send(error)
     }
 }
+
+
+
+exports.addtocart=async(req,res)=>{
+    try {
+        await userDb.updateOne({email:req.query.email} ,{$push:{ecartCart:req.query.productId}})
+        res.send("product added to cart")
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+
+
+exports.cart=async(req,res)=>{
+    try {
+        const email = req.query.email
+        const data = await userDb.findOne({email:email})
+        const products = data.ecartCart
+        const productDetails = await ecartDb.aggregate([
+            {
+                $lookup: {
+                  from: "ecartDb", 
+                  localField: "ecartCart",
+                  foreignField: "_id",
+                  as: "productDetails"
+                }
+              }
+        ])
+        res.json(productDetails)
+    } catch (error) {
+        res.send(error)
+    }
+}
+
