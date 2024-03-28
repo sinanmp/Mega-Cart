@@ -18,7 +18,7 @@ exports.addProduct=async(req,res)=>{
         await newProduct.save()
         res.json("product successfully saved")
     } catch (error) {
-        res.send(error)
+        res.send('error from catch' ,error)
     }
 }
 
