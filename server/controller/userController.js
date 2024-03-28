@@ -387,6 +387,14 @@ exports.resendOtp = (req, res) => {
 
 //our store route for users
 exports.ourStore = (req, res) => {
+
+  if(req.query.fromapp){
+    productDb.find().then(data=>{
+      res.json(data)
+    })
+  }
+
+
   const catFilter = req.query.catFilter;
   const searchQuery = req.query.search;
   const min=req.query.min
