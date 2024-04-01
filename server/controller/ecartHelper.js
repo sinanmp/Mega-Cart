@@ -92,17 +92,14 @@ exports.cart=async(req,res)=>{
         const email = req.query.email
         const data = await userDb.findOne({email:email})
         const products = data.ecartCart
-        const productDetails = await ecartDb.aggregate([
-            {
-                $lookup: {
-                  from: "ecartDb", 
-                  localField: "ecartCart",
-                  foreignField: "_id",
-                  as: "productDetails"
-                }
-              }
-        ])
-        res.json(productDetails)
+        const cartDatas = []
+
+        for(let i = 0 ; i< products.length ; i++){
+            let data = await ecartDb.findOne({_id:products[i]})
+            cartDatas.push(data)
+        }
+
+        res.json(cartDatas.length)
     } catch (error) {
         res.send(error)
     }
