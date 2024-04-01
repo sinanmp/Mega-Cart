@@ -5,4 +5,4 @@ const EcartBanner = new mongoose.Schema({
 });
 
 const EBanner = new mongoose.model("Ebanner",EcartBanner);
-module.exports = Ebanner;
+module.exports = EBanner;
