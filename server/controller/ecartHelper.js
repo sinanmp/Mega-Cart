@@ -124,3 +124,13 @@ exports.addBanner = async(req,res)=>{
     }
  
 }
+
+
+exports.getBanner=async(req,res)=>{
+    try {
+        const data = await EbannerDb.find()
+        res.json(data)
+    } catch (error) {
+        res.send(error)
+    }
+}

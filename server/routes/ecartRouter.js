@@ -12,6 +12,7 @@ router.post('/ecartAddToCart',ecartController.addtocart)
 router.get("/ecartCartPage",ecartController.cart)
 
 router.post("/addBanner",ecartController.addBanner)
+router.get("/getBanner",ecartController.getBanner)
 
 
 module.exports = router;
