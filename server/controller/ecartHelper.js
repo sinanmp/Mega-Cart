@@ -1,7 +1,6 @@
 const ecartDb = require("../model/ecartModel")
 const userDb = require("../model/userModel")
-
-
+const EbannerDb = require("../model/ecartBanner")
 
 exports.addProduct=async(req,res)=>{
     try {
@@ -109,3 +108,19 @@ exports.cart=async(req,res)=>{
     }
 }
 
+
+
+exports.addBanner = async(req,res)=>{
+    try {
+        const imageUrl = req.body.imageUrl
+        const newUrl = new EbannerDb({
+            imageUrl : imageUrl
+        })
+        await newUrl.save()
+        res.send("imageUrl addedd successfully")
+    
+    } catch (error) {
+        res.send(error)
+    }
+ 
+}

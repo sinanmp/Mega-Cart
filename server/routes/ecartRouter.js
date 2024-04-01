@@ -11,4 +11,7 @@ router.post("/ecartLogin",ecartController.ecartLogin)
 router.post('/ecartAddToCart',ecartController.addtocart)
 router.get("/ecartCartPage",ecartController.cart)
 
+router.post("/addBanner",ecartController.addBanner)
+
+
 module.exports = router;
