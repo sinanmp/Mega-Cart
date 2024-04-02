@@ -99,7 +99,7 @@ exports.cart=async(req,res)=>{
             cartDatas.push(data)
         }
 
-        res.json(cartDatas.length)
+        res.json(cartDatas)
     } catch (error) {
         res.send(error)
     }
