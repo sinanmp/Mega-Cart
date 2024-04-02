@@ -131,3 +131,21 @@ exports.getBanner=async(req,res)=>{
         res.send(error)
     }
 }
+
+
+exports.removeFromCart = async (req, res) => {
+    try {
+        const result = await userDb.updateOne(
+            { email: req.body.email },
+            { $pull: { ecartCart: req.body.productId } }
+        );
+
+        if (result.modifiedCount === 0) {
+            return res.status(404).send('Product not found in cart');
+        }
+
+        res.send('Product removed from cart');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
