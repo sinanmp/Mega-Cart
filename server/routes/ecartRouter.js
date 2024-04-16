@@ -13,6 +13,6 @@ router.get("/ecartCartPage",ecartController.cart)
 
 router.post("/addBanner",ecartController.addBanner)
 router.get("/getBanner",ecartController.getBanner)
-router.post("/ecartRemoveCart",ecartController.removeFromCart)
+router.delete("/ecartRemoveCart",ecartController.removeFromCart)
 
 module.exports = router;
