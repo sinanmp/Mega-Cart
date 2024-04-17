@@ -14,5 +14,6 @@ router.get("/ecartCartPage",ecartController.cart)
 router.post("/addBanner",ecartController.addBanner)
 router.get("/getBanner",ecartController.getBanner)
 router.delete("/ecartRemoveCart",ecartController.removeFromCart)
+router.patch('/quantityUpdate',ecartController.updateCount)
 
 module.exports = router;

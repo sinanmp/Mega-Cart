@@ -8,7 +8,8 @@ const EcartSchema = new mongoose.Schema({
       dicPrice:Number,
       imageUrl:String,
       discription:String,
-      catogery:String
+      catogery:String,
+      quantity:Number
 });
 
 const ecartDb = new mongoose.model("ecartDb", EcartSchema);

@@ -4,7 +4,7 @@ const EbannerDb = require("../model/ecartBanner")
 
 exports.addProduct=async(req,res)=>{
     try {
-       const {pname , price ,dicPrice ,imageUrl, discription,catogery} = req.body
+       const {pname , price ,dicPrice ,imageUrl, discription,catogery , quantity} = req.body
 
         const newProduct = new ecartDb({
             pname : pname ,
@@ -12,7 +12,8 @@ exports.addProduct=async(req,res)=>{
             dicPrice : dicPrice ,
             imageUrl :imageUrl ,
             discription : discription ,
-            catogery : catogery
+            catogery : catogery,
+            quantity:quantity
         })
         await newProduct.save()
         res.json("product successfully saved")
@@ -130,7 +131,7 @@ exports.getBanner=async(req,res)=>{
     } catch (error) {
         res.send(error)
     }
-}
+}      
 
 
 exports.removeFromCart = async (req, res) => {
@@ -147,3 +148,20 @@ exports.removeFromCart = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+
+exports.updateCount=async(req,res)=>{
+    try {
+        if(req.query.action == 1){
+            const prData = await ecartDb.findOne({_id:req.body.productId})
+            await ecartDb.updateOne({_id:req.body.productId} ,{$set:{quantity:prData.quantity+1}})
+            res.send("quantity increased")
+        }else{
+            const prData = await ecartDb.findOne({_id:req.body.productId})
+            await ecartDb.updateOne({_id:req.body.productId} ,{$set:{quantity:prData.quantity-1}})
+            res.send("quantity decreased")
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
